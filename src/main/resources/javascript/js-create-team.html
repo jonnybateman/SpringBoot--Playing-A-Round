@@ -1,0 +1,14 @@
+<script  th:inline="javascript">
+
+/*
+ * If the gameId input field is empty then do not submit the form.
+ */
+function isTeamNameEmpty() {
+  var teamName = document.getElementById("teamName").value;
+  if (!teamName) { // If team name is null or empty...
+    return false;
+  }
+  return true;
+}
+
+</script>

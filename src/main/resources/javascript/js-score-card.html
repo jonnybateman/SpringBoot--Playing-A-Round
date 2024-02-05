@@ -1,0 +1,163 @@
+<script  th:inline="javascript">
+
+// Get the document's root element so that css variables can be utilized.
+var root = document.documentElement;
+var styles = getComputedStyle(root);
+
+// Get the team id from model attribute, if it is available.
+var teamId = /*[[${teamId}]]*/ {};
+
+if (teamId != null || teamId != "") {
+  // Create cookie for the supplied team id.
+  setCookie(getCookieNameTeamId(), teamId);
+}
+
+// Set margin height for first element below nav bar.
+var navHeight = document.querySelector("nav").offsetHeight;
+var divScorecardCourse = document.getElementById("divScorecardCourse");
+divScorecardCourse.style.cssText = "margin-top: " + (navHeight + 50) + "px;";
+
+// Set position from bottom for set pin location icon.
+var footerHeight = document.getElementsByClassName("footer")[0].offsetHeight;
+var setPinLocation = document.getElementById("setPinLocation");
+setPinLocation.style.bottom = (footerHeight + 30) + "px";
+
+// Set the cookies for default hole on page load.
+setCookie(getCookieNameHoleNo(), 1);
+setCookie(getCookieNameHoleId(), document.getElementById("hole1").dataset.holeId);
+                // element attribute data-hole-id  => holeId
+
+// Highlight hole 1 as the current hole.
+document.getElementById("hole1").style.backgroundColor = styles.getPropertyValue('--table-body-bg-color');
+document.getElementById("inputHole1").readOnly = false;
+
+// Setup event listeners for 'next' and 'previous' hole buttons.
+var prevHoleButton = document.getElementById("prevHole");
+prevHoleButton.addEventListener("click", function() {
+  // Highlight the new current hole and set value of hole number cookie accordingly.
+  let cHoleNo = parseInt(getCookie(getCookieNameHoleNo()));
+  if (cHoleNo > 1) {
+    setCookie(getCookieNameHoleNo(), cHoleNo - 1);
+
+    document.getElementById("hole" + (cHoleNo - 1)).style.backgroundColor =
+        styles.getPropertyValue('--table-body-bg-color');
+    document.getElementById("hole" + cHoleNo).style.backgroundColor =
+      styles.getPropertyValue('--table-header-bg-color');
+    document.getElementById("inputHole" + (cHoleNo - 1)).readOnly = false;
+    document.getElementById("inputHole" + (cHoleNo)).readOnly = true;
+  }
+});
+
+var nextHoleButton = document.getElementById("nextHole");
+nextHoleButton.addEventListener("click", function() {
+  // Highlight the new current hole and set value of hole number cookie accordingly.
+  let cHoleNo = parseInt(getCookie(getCookieNameHoleNo()));
+  let currHole = document.getElementById("hole" + (cHoleNo + 1));
+  if (cHoleNo < 18) {
+    setCookie(getCookieNameHoleNo(), cHoleNo + 1);
+
+    currHole.style.backgroundColor = styles.getPropertyValue('--table-body-bg-color');
+    document.getElementById("hole" + cHoleNo).style.backgroundColor =
+        styles.getPropertyValue('--table-header-bg-color');
+    document.getElementById("inputHole" + (cHoleNo + 1)).readOnly = false;
+    document.getElementById("inputHole" + (cHoleNo)).readOnly = true;
+  }
+
+  // If we do not have hole location data query database to see if it is now available.
+  if (currHole.dataset.locLat == null) {
+    $.ajax({
+      type: "GET",
+      url: "/getHoleLocationData",
+      dataType: "json",
+      data: {"holeId": (cHoleNo + 1)},
+      success: function(result) {
+        if (result.getLocLat() != null) {
+          currHole.dataset.locLat = result.getLocLat();
+          currHole.dataset.locLat = result.getLocLong();
+        }
+      }
+    });
+  }
+
+});
+
+// Create click handler for setPinLocation icon.
+setPinLocation.addEventListener("click", function() {
+  // Get the current GPS coordinates.
+  if (navigator.geolocation) {
+    // getCurrentPosition method retrieves the current position of the user's
+    // browser and calls the callback function (first parameter of method)
+    // passing the position object. From the position object, we extract the
+    // latitude and longitude
+    navigator.geolocation.getCurrentPosition(function(position) {
+          // Send latitiude and longitude to the app controller.
+          $.ajax({
+            type: "post",
+            url: "/addLocationToHole",
+            dataType: "json",
+            data: {"holeId": document.getElementById("hole" + getCookie(getCookieNameHoleNo())).dataset.holeId, 
+                   "lat": position.coords.latitude,
+                   "lon": position.coords.longitude},
+            success: function(result) {
+              if (result == true) {
+                alert("Pin location data saved.")
+              } else {
+                alert("Pin location data could not be saved.");
+              }
+            }  
+          });
+        },
+        showError);
+  } else {
+    alert("Sorry, geolocation not supported by this browser.");
+  }
+});
+
+/*
+ * Show any errors raised when attempting to use geo location.
+ */
+function showError(error) {
+  switch(error.code) {
+    case error.PERMISSION_DENIED:
+      alert("User denied the request for Geolocation.");
+      break;
+    case error.POSITION_UNAVAILABLE:
+      alert("Location information is unavailable.");
+      break;
+    case error.TIMEOUT:
+      alert("The request to get user location timed out.");
+      break;
+    case error.UNKNOWN_ERROR:
+      alert("An unknown error occurred.");
+      break;
+  }
+}
+
+/*
+ * Calculate the distance in yards between two sets of GPS coordinates.
+ */
+function calculateYardage(lat1, long1, lat2, long2) {
+  if ((lat1 == lat2) && (long1 == long2)) {
+    return 0;
+  } else {
+    var radLat1 = Math.PI * lat1/180;
+    var radLat2 = Math.PI * lat2/180;
+    var theta = lon1 - lon2;
+    var radTheta = Math.PI * theta/180; 
+    var dist = Math.sin(radLat1) * Math.sin(radLat2) + Math.cos(radLat1) * Math.cos(radLat2) * Math.cos(radTheta);
+
+    if (dist > 1) {
+      dist = 1;
+    }
+
+    dist = Math.acos(dist);
+    dist = dist * 180/Math.PI;
+    dist = dist * 60 * 1.1515;
+    var yardage = dist * 1760;
+    return yardage;
+  }
+
+  return null;
+}
+
+</script>

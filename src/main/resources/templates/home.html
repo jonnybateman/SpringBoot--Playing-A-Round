@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Playing-A-Round-Home</title>
+    <div th:replace="~{/fragments/head}" />
+  </head>
+
+  <body>
+    <!-- Display the title navigation bar -->
+    <section id="title">
+      <div th:replace="~{/fragments/navbar}" />
+    </section>
+
+    <section id="content">
+      <!--   <div class="d-flex body-home justify-content-center">-->
+      <div class="btn-group-vertical" role="group">
+        <button type="button" class="btn btn-home-group rounded-bottom"
+          th:onclick="|window.location.href='/create-course'|">Add Course...</button>
+    
+        <button type="button" class="btn btn-home-group rounded-top rounded-bottom"
+          th:onclick="|window.location.href='/create-game'|">Create Game...</button>
+    
+        <button type="button" class="btn btn-home-group rounded-top"
+          th:onclick="|window.location.href='/select-game'|">Join Game...</button>
+      </div>
+    </section>
+
+    <section id="footer">
+      <div th:replace="~{/fragments/footer}" />
+    </section>
+  </body>
+</html>

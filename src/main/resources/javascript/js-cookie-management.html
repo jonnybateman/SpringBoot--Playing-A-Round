@@ -1,0 +1,60 @@
+<script  th:inline="javascript">
+
+const cExpires = 8*60*60*1000;  // Cookie will expires in 8 hours.
+const cNameTeamId = "cTeamId";
+const cHoleNo = "cHoleNo";
+const cHoleId = "cHoleId";
+
+function getCookieNameTeamId() {
+  return cNameTeamId;
+}
+
+function getCookieNameHoleNo() {
+  return cHoleNo;
+}
+
+function getCookieNameHoleId() {
+  return cHoleId;
+}
+
+/*
+ * Set the specified cookie with the supplied value.
+ */
+function setCookie(cName, cValue) {
+  const dateTime = new Date();
+  dateTime.setTime(dateTime.getTime() + cExpires);
+  let expires = "expires=" + dateTime.toUTCString;
+  document.cookie = cName + "=" + cValue + ";" + expires + ";path=/";
+}
+
+/*
+ * Method to retrieve the value for a particular cookie in the cookies document string.
+ */
+function getCookie(cName) {
+  let cookieName = cName + "=";
+  let decodedCookie = decodeURIComponent(document.cookie);
+  let cookieArray = decodedCookie.split(';');
+
+  for (let i=0; i<cookieArray.length; i++) {
+    let currentCookie = cookieArray[i];
+    if (currentCookie.charAt(0) == ' ') { // remove space at beginning if cookie string if there is one.
+      currentCookie = currentCookie.substring(1);
+    }
+    if (currentCookie.indexOf(cookieName) == 0) {
+      return currentCookie.substring(cookieName.length, currentCookie.length);
+    }
+  }
+
+  return "";
+}
+
+/*
+ * Delete a specific cookie from the document.cookie string.
+ */
+function deleteCookie(cName) {
+  if (getCookie(cName) != "") {
+    document.cookie = cName + "=; Path=/; expires=Thu, 01 Jan 1970 00:00:01 UTC;";
+  }
+}
+
+</script>

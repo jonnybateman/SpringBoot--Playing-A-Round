@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <title>Bootstrap Login Page</title>
+  <div th:replace="~{/fragments/head}" />
+</head>
+
+<body>
+  <!-- Display the title navigation bar -->
+  <section id="title">
+    <div th:replace="~{/fragments/header}" />
+  </section>
+
+  <div class="container card-container">
+    
+    <div id="loginbox" class="form-center card-login-width">
+      <div class="card card-font">
+        <div class="card-header">
+          Sign In
+        </div>
+
+        <div class="card-body">
+          <div class="card-text">
+
+            <!-- Login Form -->
+            <!-- @ symbol denotes the root path for the application. -->
+            <form action="" th:action="@{/authenticateTheUser}" method="POST" class="form-horizontal">
+
+              <!-- Place for messages: error, alert etc ... -->
+              <!-- When authentication fails, by default Spring Security will send user back to login page. -->
+              <div class="form-group">
+                <div class="col-xs-15">
+                  <div>
+                    <!-- Check for login error -->
+                    <!-- If authentication fails Spring automatically appends an 'error' parameter
+                         to the URL. We can check for that and display an error message if that
+                         is the case. -->
+                    <div th:if="${param.error}">
+                      <div class="alert alert-danger col-xs-offset-1 col-xs-10">
+                        Invalid username and password.
+                      </div>
+                    </div>
+
+                    <!-- Check for logout -->
+                    <!-- When a logout is processed, by default Spring Security will...
+                                                 Invalidate user's HTTP session and remove session cookies
+                                                 Send user back to login page
+                                                 Append a logout parameter to the URL -->
+                    <div th:if="${param.logout}">
+                      <div class="alert alert-danger col-xs-offset-1 col-xs-10">
+                        You have been logged out.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- User name -->
+              <div style="margin-bottom: 25px;" class="input-group">
+                <input type="text" name="username" placeholder="username"
+                    class="form-control field card-input-text" />
+              </div>
+
+              <!-- Password -->
+              <div style="margin-bottom: 25px;" class="input-group">
+                <input type="password" name="password" placeholder="password"
+                    class="form-control field card-input-text" />
+              </div>
+
+              <!-- Login/Submit Button -->
+              <!-- Wiil submit user data to the authentication URL set up in SecurityConfig. -->
+              <!-- The authentication processing URL will be handled by Spring Security Filters. No coding required.-->
+              <div style="margin-top: 10px;">
+                <div class="col-sm-6">
+                  <button type="submit" class="btn btn-form">Login</button>
+                </div>
+              </div>
+
+            </form>
+
+          </div>
+        </div>
+      </div>
+
+      <br>
+      <a th:href="@{/showFormAddUser}" class="btn btn-form btn-md mb-3" style="margin-left: 20px;">
+        Register User
+      </a>
+    </div>
+  </div>
+
+  <section id="footer">
+    <div th:replace="~{/fragments/footer}" />
+  </section>
+</body>
+
+</html>

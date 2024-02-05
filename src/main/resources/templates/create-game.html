@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <title>Create Game Page</title>
+  <div th:replace="~{/fragments/head}" />
+</head>
+
+<body>
+  <!-- Display the title navigation bar -->
+  <section id="title">
+    <div th:replace="~{/fragments/navbar}" />
+  </section>
+
+  <div class="container">
+    
+    <div id="loginbox" class="form-center card-game-width">
+      <div class="card card-font">
+        <div class="card-header">
+          Create Game
+        </div>
+  
+        <div class="card-body">
+          <div class="card-text">
+
+            <div id="feedback"></div>
+            
+            <!-- Check for authentication error by checking the 'createGameError' model attribute. -->
+            <!-- If authentication fails display error message contained in the model attribute. -->
+            <div th:if="${createGameError != null}">
+              <div id="error" th:text="${createGameError}" class="alert alert-danger col-xs-offset-1 col-xs-10">
+              </div>
+            </div>
+  
+            <!-- Create Game Form -->
+            <!-- @ symbol denotes the root path for the application. -->
+            <form action="" th:action="@{/createNewGame}" method="POST" class="form-horizontal"
+                th:object="${createGameData}">
+
+              <!-- Select course -->
+              <div style="margin-bottom: 25px;" class="input-group">
+                <input id="courseName" th:field="*{courseName}" type="text" name="courseName" placeholder="Search course"
+                    class="form-control field rounded-top rounded-bottom card-input-text" />
+              </div>
+  
+              <!-- Set game name -->
+              <div style="margin-bottom: 25px;" class="input-group">
+                <input id="gameName" type="text" name="gameName" th:field="*{gameName}" placeholder="Game name"
+                    class="form-control field card-input-text" />
+              </div>
+  
+              <!-- Create Game Button -->
+              <!-- Will submit the data to the appropriate URL set up in the AppController. Will commit the -->
+              <!-- data to the database. -->
+              <div style="margin-top: 10px;">
+                <div class="col-sm-6">
+                  <button type="submit" class="btn btn-form">Create</button>
+                </div>
+              </div>
+  
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section id="footer">
+    <div th:replace="~{/fragments/footer}" />
+  </section>
+
+  <div th:replace="~{../javascript/js-create-game}" />
+
+</body>
+
+</html>

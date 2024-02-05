@@ -1,0 +1,10 @@
+<script  th:inline="javascript">
+
+function hasJoinedGame() {
+  if (getCookie(getCookieNameTeamId()) == "") {
+    return false;
+  }
+  return true;
+}
+
+</script>

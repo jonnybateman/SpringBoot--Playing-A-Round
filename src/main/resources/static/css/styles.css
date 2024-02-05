@@ -1,0 +1,344 @@
+:root {
+  --navbar-bg-color: #419197;
+  --body-bg-color: #DAFFFB;
+  --navbar-text-color: #D0E7D2;
+  --btn-highlight-color: red;
+  --btn-color: #419197;
+  --btn-form-color: #005B41;
+  --hover-color: #005B41;
+  --border-color: #005B41;
+  --card-header-bg-color: #005B41;
+  --card-bg-color: #419197;
+  --card-text-color: #D0E7D2;
+  --info-text-color: #005B41;
+  --banner-bg-color: #005B41;
+  --banner-text-color: #D0E7D2;
+  --table-header-bg-color: #005B41;
+  --table-body-bg-color: #419197;
+  --table-text-color: #D0E7D2;
+}
+
+body {
+  background-image: url('../img/bg-img.jpeg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+/*
+ * Multi-Page - Classes
+ */
+
+/* Bootstrap class */
+.btn {
+  display: inline-block;
+  padding: 1.0rem 1.5rem;
+  font-family: "Montserrat";
+  transition: .5s ease;
+}
+
+.btn-form {
+  background-color: var(--btn-form-color);
+  color: var(--navbar-text-color);
+  box-shadow: 0 0 1rem var(--navbar-text-color);
+  font-size: 2rem;
+}
+
+/* Customised BootStrap class */
+.card {
+  border-radius: 1rem;
+  border-width: 3px;
+  border-color: var(--border-color);
+  background-color: var(--card-bg-color);
+  overflow: hidden;
+}
+
+.card-container {
+  height: 85%;
+}
+
+.card-font {
+  font-family: "Montserrat";
+  color: var(--card-text-color);
+}
+
+.card-header {
+  background-color: var(--card-header-bg-color);
+  border-radius: 1rem 1rem 0 0;
+  overflow: hidden;
+  font-size: 3.0rem;
+  padding: 1.0rem 1.5rem;
+}
+
+.card-text {
+  font-size: 30px;
+}
+
+.card-input-text {
+  font-size: 30px;
+}
+
+.card-width {
+  width: 60%;
+}
+
+.dropdown-list-items {
+  position: absolute;
+  border: 1px solid var(--border-color);
+  z-index: 99;
+  /*position the autocomplete items to be the same width as the container:*/
+  top: 100%;
+  left: 0;
+  right: 0;
+}
+
+.dropdown-list-items div {
+  padding: 10px;
+  cursor: pointer;
+  background-color: var(--card-bg-color);
+  border-bottom: 1px solid var(--card-bg-color); 
+}
+
+.footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 5%;
+  padding: 20px;
+  background-color: var(--navbar-bg-color);
+  color: var(--navbar-text-color);
+  text-align: center;
+}
+
+.form-center {
+  position: fixed;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+.div-center-horizontal {
+  position: absolute;
+  left: 50%;
+}
+
+.form-width {
+  width: 60%;
+}
+
+/*
+ * Navigation Bar
+ */
+
+nav {
+  height: 10%;
+}
+
+#nav-navbar {
+  background-color: var(--bg-color);
+  margin-bottom: 50px;
+}
+
+/* Customised BootStrap class */
+.navbar {
+  background-color: var(--navbar-bg-color);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 2rem 9%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 100;
+}
+
+.a-navbar-brand {
+  color: var(--navbar-text-color);
+  font-family: "ubuntu";
+  font-size: 3.0rem;
+  font-weight: bold;
+  margin-left: 20px;
+}
+
+/* Bootstrap class */
+.offcanvas {
+  background-color: var(--navbar-bg-color);
+  color: var(--navbar-text-color);
+}
+
+/* Bootstrap class */
+.offcanvas-title {
+  font-family: "ubuntu";
+  font-size: 3.0rem;
+}
+
+/* Bootstrap class */
+.offcanvas-body {
+  background-color: var(--navbar-bg-color);
+}
+
+/* Bootstrap class */
+.nav-item {
+  padding: 0 18px;
+  transition: .5s ease;
+}
+
+/* Bootstrap class */
+.nav-item a:hover {
+  color: var(--hover-color);
+  text-shadow: 0 0 1rem var(--hover-color);
+}
+
+/* Bootstrap class */
+.nav-link {
+  color: var(--navbar-text-color);
+  font-family: "Montserrat";
+  font-size: 2.5rem;
+}
+
+.btn-logout {
+  background: var(--btn-highlight-color  );
+  color: var(--navbar-text-color);
+  box-shadow: 0 0 1rem var(--navbar-text-color);
+  font-size: 2rem;
+}
+
+/*
+ * Loging Page - Classes
+ */
+
+ .card-login-width {
+  width: 60%;
+}
+
+/*
+ * Home Page - Classes
+ */
+
+/* Bootstrap class */
+.btn-group-vertical {
+  position: absolute;
+    top: 45%;
+    left: 36%;
+    margin-top: -50px;
+    margin-left: -50px;
+    width: 40%;
+    height: 300px;
+}
+
+.btn-home-group {
+  background: var(--btn-color);
+  color: var(--navbar-text-color);
+  box-shadow: 0 0 1rem var(--navbar-text-color);
+  margin-bottom: 60px;
+  padding: 1rem 1.5rem;
+  font-size: 2rem;
+}
+
+/*
+ * Create Game Page
+ */
+
+.card-game-width {
+  width: 80%;
+}
+
+/*
+ * Create Course Page
+ */
+
+.card-course-width {
+  width: 90%; 
+}
+
+.card-scrollable {
+  overflow-y:auto;
+}
+
+.col-width-hole {
+  width: 20%
+}
+
+.col-text-center {
+  text-align: center;
+  vertical-align: middle;
+}
+
+/*
+ * Join-Game page
+ */
+
+.card-join-game-margin {
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 4rem;
+}
+
+.instruction {
+  color: var(--info-text-color);
+}
+
+.container-scrollable {
+  overflow-y: scroll;
+}
+
+.fa-circle-plus {
+  color: var(--info-text-color);
+}
+
+.instruction-table {
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/*
+ * Scorecard Page
+ */
+
+.banner {
+  background-color: var(--banner-bg-color);
+  color: var(--banner-text-color);
+  border-radius: 1rem;
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 20px;
+}
+
+.scorecard-table {
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: var(--table-body-bg-color);
+}
+
+.scorecard-text {
+  font-size:xx-large;
+  color: var(--table-text-color);
+}
+
+.btn-scorecard {
+  background: var(--btn-color);
+  color: var(--navbar-text-color);
+  box-shadow: 0 0 1rem var(--navbar-text-color);
+  padding: 1rem 1.5rem;
+}
+
+#range {
+  text-align: center;
+  font-size: 4rem;
+}
+
+.clickable-button {
+  cursor: pointer;
+}
+
+.clickable-button:active {
+  color: red;
+  transition-duration: 200ms;
+}

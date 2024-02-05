@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <title>Create Course Page</title>
+  <div th:replace="~{/fragments/head}" />
+</head>
+
+<body>
+  <!-- Display the title navigation bar -->  
+  <div th:replace="~{/fragments/navbar}" />
+  
+  <div class="container card-container">
+    
+    <div id="addCourseBox" class="form-center card-course-width">
+      <div id="cardContainer" class="card card-font">
+        <div class="card-header d-flex align-items-center justify-content-center">
+          Create Course
+        </div>
+
+        <div class="card-body card-scrollable">
+          <div class="card-text">
+
+            <!-- For field validation feedback -->
+            <div id="feedback"></div>
+
+            <!-- Check for authentication error by checking the 'createCourseError' model attribute. -->
+            <!-- If authentication fails display error message contained in the model attribute. -->
+            <div th:if="${createCourseError != null}">
+              <div id="error" th:text="${createCourseError}" class="alert alert-danger col-xs-offset-1 col-xs-10">
+              </div>
+            </div>
+
+            <form action="" th:action="@{/createNewCourse}" method="POST" class="form-horizontal"
+                th:object="${courseDataWrapperLoad}">
+
+              <!-- Course name -->
+              <div style="margin-bottom: 25px;" class="input-group">
+                <input id="courseName" type="text" name="courseName" placeholder="Course name"
+                    class="form-control field card-input-text"
+                    th:value="${courseDataWrapperLoad.getCourseName}" />
+              </div>
+
+              <!-- Hole data -->
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th>Yards</th>
+                    <th>Par</th>
+                    <th>Stroke Index</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr th:each="hole, stat : *{holeDataList}">
+                    <th class="col-width-hole col-text-center" th:text="${'Hole ' + hole.getHole()}"></th>
+                    <input type="hidden" th:value="${hole.getHole()}"
+                        th:field="*{holeDataList[__${stat.index}__].hole}" />
+                    <td>
+                      <input type="number" min="90" max="600" step="1"
+                          class="form-control field field-yards card-input-text"
+                          th:value="${hole.getYards()}"
+                          th:field="*{holeDataList[__${stat.index}__].yards}" />
+                    </td>
+                    <td>
+                      <input type="number" min="3" max="5" step="1"
+                          class="form-control field field-par card-input-text"
+                          th:field="*{holeDataList[__${stat.index}__].par}"
+                          th:value="${hole.getPar()}" />
+                    </td>
+                    <td>
+                      <input type="number" min="1" max="18" step="1"
+                          class="form-control field field-si card-input-text"
+                          th:field="*{holeDataList[__${stat.index}__].si}"
+                          th:value="${hole.getSi()}"/>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <div style="margin-top: 10px;">
+                <div class="col-sm-6">
+                  <button type="submit" class="btn btn-form">Submit</button>
+                </div>
+              </div>
+            </form>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  
+  </div>
+
+  <section>
+    <div th:replace="~{/fragments/footer}" />
+  </section>
+
+  <div th:replace="~{../javascript/js-create-course}" />
+
+</body>
+</html>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+    xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+  <head>
+    <title>cqueltech.com - Playing-A-Round Access Denied</title>
+    <div th:replace="~{/fragments/head}" />
+  </head>
+
+  <body>
+    <div th:replace="~{/fragments/header}" />
+    <div class="form-center form-width col-md-offset-2 col-sm-6 col-sm-offset-2">
+      <div class="card font-card">
+        <div class="card-body card-text">
+          Access Denied - You are not authorized to access this resource.
+          <hr>
+          <a style="color: var(--card-text-color);" th:href="@{/showMyLoginPage}">Login Page</a>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

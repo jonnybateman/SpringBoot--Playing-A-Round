@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <title>Create Team Page</title>
+  <div th:replace="~{/fragments/head}" />
+</head>
+
+<body>
+  <!-- Display the title navigation bar -->  
+  <div th:replace="~{/fragments/navbar}" />
+
+  <div class="container card-container">
+    
+    <div id="createteambox" class="form-center card-width">
+      <div class="card card-font">
+        <div class="card-header">
+          Create Team
+        </div>
+
+        <div class="card-body">
+          <div class="card-text">
+
+            <!-- Login Form -->
+            <!-- @ symbol denotes the root path for the application. -->
+            <form action="" th:action="@{/createNewTeam}" method="POST" class="form-horizontal"
+                th:object="${teamData}" onclick="return isTeamNameEmpty()">
+
+              <!-- Team name -->
+              <div style="margin-bottom: 25px;" class="input-group" th:data-value="${gameId}">
+                <input id="teamName" type="text" name="teamName" placeholder="team name" th:field="*{teamName}"
+                    class="form-control field card-input-text" />
+              </div>
+
+              <!-- Username -->
+              <div style="margin-bottom: 25px;" class="input-group">
+                <input type="text" name="username" th:value="${username}"
+                    class="form-control field card-input-text" th:field="*{username}" readonly>
+              </div>
+
+              <!-- Game Id -->
+              <div style="margin-bottom: 25px;" class="input-group">
+                <input type="hidden" name="gameId" th:value="${gameId}" th:field="*{gameId}"
+                    class="form-control field card-input-text" readonly />
+              </div>
+
+              <!-- Login/Submit Button -->
+              <!-- Wiil submit user data to the authentication URL set up in SecurityConfig. -->
+              <!-- The authentication processing URL will be handled by Spring Security Filters. No coding required.-->
+              <div style="margin-top: 10px;">
+                <div class="col-sm-6">
+                  <button type="submit" class="btn btn-form">Create</button>
+                </div>
+              </div>
+
+            </form>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <section id="footer">
+    <div th:replace="~{/fragments/footer}" />
+  </section>
+
+  <div th:replace="~{../javascript/js-create-team}" />
+</body>
+
+</html>

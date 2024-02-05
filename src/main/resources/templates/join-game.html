@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <title>Join Game Page</title>
+  <div th:replace="~{/fragments/head}" />
+</head>
+
+<body>
+  <!-- Display the title navigation bar -->  
+  <div th:replace="~{/fragments/navbar}" />
+  
+  <!-- Setup user instruction and create team icon. Container also used to store the game id. -->
+  <div id="instructionContainer" th:data-value="${gameId}">
+    <table class="instruction-table">
+      <tr>
+        <td style="text-align: left;">
+          <h1 id="instruction" class="instruction">Select existing team or create new team...</h1>
+        </td>
+        <td style="text-align: right;">
+          <!--<a class="fa-solid fa-circle-plus fa-5x" th:href="@{/create-team}"></a>-->
+          <button type="button" class="fa-solid fa-circle-plus fa-5x"
+              style="background-color: transparent; border: none;" th:onclick="|window.location.href='/create-team?gameId=${gameId}'|"></button>
+        </td>
+      </tr>
+    </table>
+  </div>
+  
+  <!-- Create a card for each team contained in the teamsList model attribute. -->
+  <div id="teamContainer" class="container-scrollable">
+    <div class="card card-font card-game-width card-join-game-margin" th:each="team : ${teamsList}"
+      th:data-value="${team.teamId}">
+      <div class="card-header">
+        <span th:text="${team.teamName}"></span>
+      </div>
+      <div class="card-body">
+        <div id="cardBodyContent" class="card-text" th:each="player : ${team.players}">
+          <span th:text="'Player: ' + ${player}"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!--</div>-->
+  
+  <div id="footer" th:replace="~{/fragments/footer}" />
+  
+  <div th:replace="~{../javascript/js-join-game}" />
+
+</body>
+
+</html>

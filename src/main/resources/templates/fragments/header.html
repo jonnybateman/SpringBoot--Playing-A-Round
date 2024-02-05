@@ -1,0 +1,20 @@
+<nav class="navbar fixed-top">
+  <div class="container-fluid">
+    <a class="navbar-brand a-navbar-brand" href="#">Playing-A-Round</a>
+    <button class="navbar-toggler navbar-toggler-button" type="button" data-bs-toggle="offcanvas"
+        data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+      <span class="fa-solid fa-bars fa-2x"></span>
+    </button>
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Menu</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body">
+        <form class="form-inline" style="margin-left: 18px;" action="#" th:action="@{/logout}" method="POST">
+          <input class="btn btn-logout btn-md mb-3" type="submit" value="Logout" />
+        </form>
+      </div>
+    </div>
+  </div>
+</nav>

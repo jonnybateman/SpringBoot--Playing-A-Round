@@ -1,0 +1,49 @@
+<div th:replace="~{../javascript/js-navbar}" />
+<nav class="navbar fixed-top">
+  <div class="container-fluid">
+    <a class="navbar-brand a-navbar-brand" href="/home">Playing-A-Round</a>
+    <button class="navbar-toggler navbar-toggler-button" type="button" data-bs-toggle="offcanvas"
+        data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+      <span class="fa-solid fa-bars fa-3x"></span>
+    </button>
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+      <div class="offcanvas-header">
+        <h2 class="offcanvas-title" id="offcanvasNavbarLabel">Menu</h2>
+        <i class="fa-solid fa-xmark fa-4x" data-bs-dismiss="offcanvas"></i>
+      </div>
+      <div class="offcanvas-body">
+        <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+          <li class="nav-item">
+            <a class="nav-link" href="/home" onclick="deleteCookie(getCookieNameTeamId())">End Game</a>
+          </li>
+          <br>
+          <li class="nav-item">
+            <a class="nav-link" href="/score-card" onclick="return hasJoinedGame()">Scorecard</a>
+          </li>
+          <br>
+          <li class="nav-item">
+            <a class="nav-link" href="/home" onclick="return hasJoinedGame()">Strokeplay</a>
+          </li>
+          <br>
+          <li class="nav-item">
+            <a class="nav-link" href="/home" onclick="return hasJoinedGame()">Matchplay</a>
+          </li>
+          <br>
+          <li class="nav-item">
+            <a class="nav-link" href="/home" onclick="return hasJoinedGame()">Daytona</a>
+          </li>
+          <br>
+          <li class="nav-item">
+            <a class="nav-link" href="/home" onclick="return hasJoinedGame()">Stableford</a>
+          </li>
+        </ul>
+        <br>
+        <br>
+        <form class="form-inline" style="margin-left: 18px;" action="#" th:action="@{/logout}"
+            onclick="deleteCookie(getCookieNameTeamId())" method="POST">
+          <input class="btn btn-logout btn-md mb-3" type="submit" value="Logout" />
+        </form>
+      </div>
+    </div>
+  </div>
+</nav>

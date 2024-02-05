@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <title>Score Card Page</title>
+  <div th:replace="~{/fragments/head}" />
+</head>
+
+<body>
+  <!-- Display the title navigation bar -->
+  <section id="title">
+    <div th:replace="~{/fragments/navbar}" />
+  </section>
+
+  <div id="divScorecardCourse" class="banner">
+    <h1 th:text="${scorecardData.get(0).getCourseName()}"></h1>
+  </div>
+  <div id="divScorecardTeam" class="banner" style="margin-top: 30px;">
+    <h1 th:text="${playerDetails.getTeamName()}"></h1>
+  </div>
+
+  <div class="scorecard-table scorecard-text card" style="margin-top: 50px;">
+    <table class="table table-bordered scorecard-text">
+      
+        <tr style="background-color: var(--table-header-bg-color);">
+          <th>Hole</th>
+          <th id="hole1" th:attr="data-hole-id=${scorecardData.get(0).getHoleId()},
+              data-loc-lat=${scorecardData.get(0).getLocLat()},
+              data-loc-long=${scorecardData.get(0).getLocLong()}">1</th>
+          <th id="hole2" th:attr="data-hole-id=${scorecardData.get(1).getHoleId()},
+              data-loc-lat=${scorecardData.get(1).getLocLat()},
+              data-loc-long=${scorecardData.get(1).getLocLong()}">2</th>
+          <th id="hole3" th:attr="data-hole-id=${scorecardData.get(2).getHoleId()},
+              data-loc-lat=${scorecardData.get(2).getLocLat()},
+              data-loc-long=${scorecardData.get(2).getLocLong()}">3</th>
+          <th id="hole4" th:attr="data-hole-id=${scorecardData.get(3).getHoleId()},
+              data-loc-lat=${scorecardData.get(3).getLocLat()},
+              data-loc-long=${scorecardData.get(3).getLocLong()}">4</th>
+          <th id="hole5" th:attr="data-hole-id=${scorecardData.get(4).getHoleId()},
+              data-loc-lat=${scorecardData.get(4).getLocLat()},
+              data-loc-long=${scorecardData.get(4).getLocLong()}">5</th>
+          <th id="hole6" th:attr="data-hole-id=${scorecardData.get(5).getHoleId()},
+              data-loc-lat=${scorecardData.get(5).getLocLat()},
+              data-loc-long=${scorecardData.get(5).getLocLong()}">6</th>
+          <th id="hole7" th:attr="data-hole-id=${scorecardData.get(6).getHoleId()},
+              data-loc-lat=${scorecardData.get(6).getLocLat()},
+              data-loc-long=${scorecardData.get(6).getLocLong()}">7</th>
+          <th id="hole8" th:attr="data-hole-id=${scorecardData.get(7).getHoleId()},
+              data-loc-lat=${scorecardData.get(7).getLocLat()},
+              data-loc-long=${scorecardData.get(7).getLocLong()}">8</th>
+          <th id="hole9" th:attr="data-hole-id=${scorecardData.get(8).getHoleId()},
+              data-loc-lat=${scorecardData.get(8).getLocLat()},
+              data-loc-long=${scorecardData.get(8).getLocLong()}">9</th>
+          <th id="outScore">Out</th>
+        </tr>
+        <tr>
+          <th>Yards</th>
+          <th id="yards1" th:text="${scorecardData.get(0).getYards()}"></th>
+          <th id="yards2" th:text="${scorecardData.get(1).getYards()}"></th>
+          <th id="yards3" th:text="${scorecardData.get(2).getYards()}"></th>
+          <th id="yards4" th:text="${scorecardData.get(3).getYards()}"></th>
+          <th id="yards5" th:text="${scorecardData.get(4).getYards()}"></th>
+          <th id="yards6" th:text="${scorecardData.get(5).getYards()}"></th>
+          <th id="yards7" th:text="${scorecardData.get(6).getYards()}"></th>
+          <th id="yards8" th:text="${scorecardData.get(7).getYards()}"></th>
+          <th id="yards9" th:text="${scorecardData.get(8).getYards()}"></th>
+        </tr>
+        <tr>
+          <th>S.I.</th>
+          <th id="si1" th:text="${scorecardData.get(0).getSi()}"></th>
+          <th id="si2" th:text="${scorecardData.get(1).getSi()}"></th>
+          <th id="si3" th:text="${scorecardData.get(2).getSi()}"></th>
+          <th id="si4" th:text="${scorecardData.get(3).getSi()}"></th>
+          <th id="si5" th:text="${scorecardData.get(4).getSi()}"></th>
+          <th id="si6" th:text="${scorecardData.get(5).getSi()}"></th>
+          <th id="si7" th:text="${scorecardData.get(6).getSi()}"></th>
+          <th id="si8" th:text="${scorecardData.get(7).getSi()}"></th>
+          <th id="si9" th:text="${scorecardData.get(8).getSi()}"></th>
+        </tr>
+        <tr>
+          <th>Par</th>
+          <th id="par1" th:text="${scorecardData.get(0).getPar()}"></th>
+          <th id="par2" th:text="${scorecardData.get(1).getPar()}"></th>
+          <th id="par3" th:text="${scorecardData.get(2).getPar()}"></th>
+          <th id="par4" th:text="${scorecardData.get(3).getPar()}"></th>
+          <th id="par5" th:text="${scorecardData.get(4).getPar()}"></th>
+          <th id="par6" th:text="${scorecardData.get(5).getPar()}"></th>
+          <th id="par7" th:text="${scorecardData.get(6).getPar()}"></th>
+          <th id="par8" th:text="${scorecardData.get(7).getPar()}"></th>
+          <th id="par9" th:text="${scorecardData.get(8).getPar()}"></th>
+        </tr>
+        <tr>
+          <th></th>
+          <th><input id="inputHole1" type="number" min="0" max="12" readonly /></th>
+          <th><input id="inputHole2" type="number" min="0" max="12" readonly /></th>
+          <th><input id="inputHole3" type="number" min="0" max="12" readonly /></th>
+          <th><input id="inputHole4" type="number" min="0" max="12" readonly /></th>
+          <th><input id="inputHole5" type="number" min="0" max="12" readonly /></th>
+          <th><input id="inputHole6" type="number" min="0" max="12" readonly /></th>
+          <th><input id="inputHole7" type="number" min="0" max="12" readonly /></th>
+          <th><input id="inputHole8" type="number" min="0" max="12" readonly /></th>
+          <th><input id="inputHole9" type="number" min="0" max="12" readonly /></th>
+          <th><input id="inputIn" type="number" min="0" max="90" readonly /></th>
+        </tr>
+        <tr style="background-color: var(--table-header-bg-color);">
+          <th>Hole</th>
+          <th id="hole10" th:attr="data-hole-id=${scorecardData.get(9).getHoleId()},
+              data-loc-lat=${scorecardData.get(9).getLocLat()},
+              data-loc-long=${scorecardData.get(9).getLocLong()}">10</th>
+          <th id="hole11" th:attr="data-hole-id=${scorecardData.get(10).getHoleId()},
+              data-loc-lat=${scorecardData.get(10).getLocLat()},
+              data-loc-long=${scorecardData.get(10).getLocLong()}">11</th>
+          <th id="hole12" th:attr="data-hole-id=${scorecardData.get(11).getHoleId()},
+              data-loc-lat=${scorecardData.get(11).getLocLat()},
+              data-loc-long=${scorecardData.get(11).getLocLong()}">12</th>
+          <th id="hole13" th:attr="data-hole-id=${scorecardData.get(12).getHoleId()},
+              data-loc-lat=${scorecardData.get(12).getLocLat()},
+              data-loc-long=${scorecardData.get(12).getLocLong()}">13</th>
+          <th id="hole14" th:attr="data-hole-id=${scorecardData.get(13).getHoleId()},
+              data-loc-lat=${scorecardData.get(13).getLocLat()},
+              data-loc-long=${scorecardData.get(13).getLocLong()}">14</th>
+          <th id="hole15" th:attr="data-hole-id=${scorecardData.get(14).getHoleId()},
+              data-loc-lat=${scorecardData.get(14).getLocLat()},
+              data-loc-long=${scorecardData.get(14).getLocLong()}">15</th>
+          <th id="hole16" th:attr="data-hole-id=${scorecardData.get(15).getHoleId()},
+              data-loc-lat=${scorecardData.get(15).getLocLat()},
+              data-loc-long=${scorecardData.get(15).getLocLong()}">16</th>
+          <th id="hole17" th:attr="data-hole-id=${scorecardData.get(16).getHoleId()},
+              data-loc-lat=${scorecardData.get(16).getLocLat()},
+              data-loc-long=${scorecardData.get(16).getLocLong()}">17</th>
+          <th id="hole18" th:attr="data-hole-id=${scorecardData.get(17).getHoleId()},
+              data-loc-lat=${scorecardData.get(17).getLocLat()},
+              data-loc-long=${scorecardData.get(17).getLocLong()}">18</th>
+          <th id="inScore">In</th>
+        </tr>
+        <tr>
+          <th>Yards</th>
+          <th id="yards10" th:text="${scorecardData.get(9).getYards()}"></th>
+          <th id="yards11" th:text="${scorecardData.get(10).getYards()}"></th>
+          <th id="yards12" th:text="${scorecardData.get(11).getYards()}"></th>
+          <th id="yards13" th:text="${scorecardData.get(12).getYards()}"></th>
+          <th id="yards14" th:text="${scorecardData.get(13).getYards()}"></th>
+          <th id="yards15" th:text="${scorecardData.get(14).getYards()}"></th>
+          <th id="yards16" th:text="${scorecardData.get(15).getYards()}"></th>
+          <th id="yards17" th:text="${scorecardData.get(16).getYards()}"></th>
+          <th id="yards18" th:text="${scorecardData.get(17).getYards()}"></th>
+        </tr>
+        <tr>
+          <th>S.I.</th>
+          <th id="si10" th:text="${scorecardData.get(9).getSi()}"></th>
+          <th id="si11" th:text="${scorecardData.get(10).getSi()}"></th>
+          <th id="si12" th:text="${scorecardData.get(11).getSi()}"></th>
+          <th id="si13" th:text="${scorecardData.get(12).getSi()}"></th>
+          <th id="si14" th:text="${scorecardData.get(13).getSi()}"></th>
+          <th id="si15" th:text="${scorecardData.get(14).getSi()}"></th>
+          <th id="si16" th:text="${scorecardData.get(15).getSi()}"></th>
+          <th id="si17" th:text="${scorecardData.get(16).getSi()}"></th>
+          <th id="si18" th:text="${scorecardData.get(17).getSi()}"></th>
+        </tr>
+        <tr>
+          <th>Par</th>
+          <th id="par10" th:text="${scorecardData.get(9).getPar()}"></th>
+          <th id="par11" th:text="${scorecardData.get(10).getPar()}"></th>
+          <th id="par12" th:text="${scorecardData.get(11).getPar()}"></th>
+          <th id="par13" th:text="${scorecardData.get(12).getPar()}"></th>
+          <th id="par14" th:text="${scorecardData.get(13).getPar()}"></th>
+          <th id="par15" th:text="${scorecardData.get(14).getPar()}"></th>
+          <th id="par16" th:text="${scorecardData.get(15).getPar()}"></th>
+          <th id="par17" th:text="${scorecardData.get(16).getPar()}"></th>
+          <th id="par18" th:text="${scorecardData.get(17).getPar()}"></th>
+        </tr>
+        <tr>
+          <th></th>
+          <th><input id="inputHole10" type="number" min="0" max="12" readonly /></th>
+          <th><input id="inputHole11" type="number" min="0" max="12" readonly /></th>
+          <th><input id="inputHole12" type="number" min="0" max="12" readonly /></th>
+          <th><input id="inputHole13" type="number" min="0" max="12" readonly /></th>
+          <th><input id="inputHole14" type="number" min="0" max="12" readonly /></th>
+          <th><input id="inputHole15" type="number" min="0" max="12" readonly /></th>
+          <th><input id="inputHole16" type="number" min="0" max="12" readonly /></th>
+          <th><input id="inputHole17" type="number" min="0" max="12" readonly /></th>
+          <th><input id="inputHole18" type="number" min="0" max="12" readonly /></th>
+          <th><input id="inputOut" type="number" min="0" max="90" readonly /></th>
+        </tr>
+      <tbody>
+
+      </tbody>
+    </table>
+  </div>
+
+  <table style="width: 90%; margin-left: auto; margin-right: auto; margin-top: 50px;">
+    <tr>
+      <th style="width: 20%;"><i id="prevHole"
+          class="fa-solid fa-backward fa-5x clickable-button"></i>
+      </th>
+      <th style="width: 50%; vertical-align: middle; text-align: center;">
+        <button type="button" class="btn btn-scorecard" th:onclick="">
+          <span><i class="fa-solid fa-golf-ball-tee fa-4x"></i></span>
+          <span style="margin-left: 30px; margin-right: 30px;">
+              <i class="fa-solid fa-right-long fa-4x"></i>
+          </span>
+          <span><i class="fa-solid fa-flag fa-4x"></i></span>
+        </button>
+      </th>
+      <th style="width: 20%; text-align: right;"><i id="nextHole"
+          class="fa-solid fa-forward fa-5x clickable-button"></i>
+      </th>
+    </tr>
+  </table>
+
+  <div class="banner" style="margin-top: 50px;">
+    <h1 id="range">167 yards to pin</h1>
+  </div>
+
+  <div>
+    <span class="clickable-button">
+    <i id="setPinLocation" class="fa-solid fa-location-crosshairs fa-6x"
+        style="position: fixed; right: 5%;"></i>
+    </span>
+  </div>
+
+  <section id="footer">
+    <div th:replace="~{/fragments/footer}" />
+  </section>
+
+  <div th:replace="~{../javascript/js-score-card}" />
+</body>
+
+</html>
