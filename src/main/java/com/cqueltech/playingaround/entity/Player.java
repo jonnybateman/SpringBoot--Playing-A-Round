@@ -10,8 +10,13 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.util.HashSet;
+import java.util.Set;
+import jakarta.persistence.CascadeType;
 
 @Entity
 @Table(name = "players")
@@ -33,59 +38,16 @@ public class Player {
   @Column(name="username")
   private String username;
 
-  @Column(name = "score_h1")
-  private int scoreH1;
+  // One-to-many unidirectional join
+  @OneToMany(cascade = {CascadeType.ALL}, orphanRemoval = true)
+  @JoinColumn(name = "player_id")
+  private Set<HoleScore> scores = new HashSet<>();
 
-  @Column(name = "score_h2")
-  private int scoreH2;
+  @Column(name = "drive_distance")
+  private int driveDistance;
 
-  @Column(name = "score_h3")
-  private int scoreH3;
-
-  @Column(name = "score_h4")
-  private int scoreH4;
-
-  @Column(name = "score_h5")
-  private int scoreH5;
-
-  @Column(name = "score_h6")
-  private int scoreH6;
-
-  @Column(name = "score_h7")
-  private int scoreH7;
-
-  @Column(name = "score_h8")
-  private int scoreH8;
-
-  @Column(name = "score_h9")
-  private int scoreH9;
-
-  @Column(name = "score_h10")
-  private int scoreH10;
-
-  @Column(name = "score_h11")
-  private int scoreH11;
-
-  @Column(name = "score_h12")
-  private int scoreH12;
-
-  @Column(name = "score_h13")
-  private int scoreH13;
-
-  @Column(name = "score_h14")
-  private int scoreH14;
-
-  @Column(name = "score_h15")
-  private int scoreH15;
-
-  @Column(name = "score_h16")
-  private int scoreH16;
-
-  @Column(name = "score_h17")
-  private int scoreH17;
-
-  @Column(name = "score_h18")
-  private int scoreH18;
+  @Column(name = "handicap_index")
+  private float handicapIndex;
 
   /*
    * Define class constructors
@@ -97,7 +59,7 @@ public class Player {
     this.username = username;
   }
 
-  public Player(int id, String username) {
+  public Player(Integer id, String username) {
     this.id = id;
     this.username = username;
   }
@@ -110,7 +72,7 @@ public class Player {
     return id;
   }
 
-  public void setId(int id) {
+  public void setId(Integer id) {
     this.id = id;
   }
 
@@ -130,148 +92,20 @@ public class Player {
     this.username = username;
   }
 
-  public int getScoreH1() {
-    return scoreH1;
+  public int getDriveDistance() {
+    return driveDistance;
   }
 
-  public void setScoreH1(int scoreH1) {
-    this.scoreH1 = scoreH1;
+  public void setDriveDistance(Integer driveDistance) {
+    this.driveDistance = driveDistance;
   }
 
-  public int getScoreH2() {
-    return scoreH2;
+  public float getHandicapIndex() {
+    return handicapIndex;
   }
 
-  public void setScoreH2(int scoreH2) {
-    this.scoreH2 = scoreH2;
-  }
-
-  public int getScoreH3() {
-    return scoreH3;
-  }
-
-  public void setScoreH3(int scoreH3) {
-    this.scoreH3 = scoreH3;
-  }
-
-  public int getScoreH4() {
-    return scoreH4;
-  }
-
-  public void setScoreH4(int scoreH4) {
-    this.scoreH4 = scoreH4;
-  }
-
-  public int getScoreH5() {
-    return scoreH5;
-  }
-
-  public void setScoreH5(int scoreH5) {
-    this.scoreH5 = scoreH5;
-  }
-
-  public int getScoreH6() {
-    return scoreH6;
-  }
-
-  public void setScoreH6(int scoreH6) {
-    this.scoreH6 = scoreH6;
-  }
-
-  public int getScoreH7() {
-    return scoreH7;
-  }
-
-  public void setScoreH7(int scoreH7) {
-    this.scoreH7 = scoreH7;
-  }
-
-  public int getScoreH8() {
-    return scoreH8;
-  }
-
-  public void setScoreH8(int scoreH8) {
-    this.scoreH8 = scoreH8;
-  }
-
-  public int getScoreH9() {
-    return scoreH9;
-  }
-
-  public void setScoreH9(int scoreH9) {
-    this.scoreH9 = scoreH9;
-  }
-
-  public int getScoreH10() {
-    return scoreH10;
-  }
-
-  public void setScoreH10(int scoreH10) {
-    this.scoreH10 = scoreH10;
-  }
-
-  public int getScoreH11() {
-    return scoreH11;
-  }
-
-  public void setScoreH11(int scoreH11) {
-    this.scoreH11 = scoreH11;
-  }
-
-  public int getScoreH12() {
-    return scoreH12;
-  }
-
-  public void setScoreH12(int scoreH12) {
-    this.scoreH12 = scoreH12;
-  }
-
-  public int getScoreH13() {
-    return scoreH13;
-  }
-
-  public void setScoreH13(int scoreH13) {
-    this.scoreH13 = scoreH13;
-  }
-
-  public int getScoreH14() {
-    return scoreH14;
-  }
-
-  public void setScoreH14(int scoreH14) {
-    this.scoreH14 = scoreH14;
-  }
-
-  public int getScoreH15() {
-    return scoreH15;
-  }
-
-  public void setScoreH15(int scoreH15) {
-    this.scoreH15 = scoreH15;
-  }
-
-  public int getScoreH16() {
-    return scoreH16;
-  }
-
-  public void setScoreH16(int scoreH16) {
-    this.scoreH16 = scoreH16;
-  }
-
-  public int getScoreH17() {
-    return scoreH17;
-  }
-
-  public void setScoreH17(int scoreH17) {
-    this.scoreH17 = scoreH17;
-  }
-
-  public int getScoreH18() {
-    return scoreH18;
-  }
-
-  public void setScoreH18(int scoreH18) {
-    this.scoreH18 = scoreH18;
+  public void setHandicapIndex(float handicapIndex) {
+    this.handicapIndex = handicapIndex;
   }
   
 }

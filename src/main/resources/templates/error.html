@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <title>Playing-A-Round-Error</title>
+  <div th:replace="~{/fragments/head}" />
+</head>
+
+<body style="background: var(--body-bg-color);">
+  <!-- Display the title navigation bar -->
+  <section id="title">
+    <div th:replace="~{/fragments/header}" />
+  </section>
+
+  <div class="error-page-text">
+    <p id="errorPageHeading">ERROR!</p>
+    <hr>
+    <p th:text="'Status Code: ' + ${errorResponse.getStatus()}"></p>
+    <p th:text="'Message: ' + ${errorResponse.getMessage()}"></p>
+    <p th:text="'Timestamp: ' + ${errorResponse.getTimestamp()}"></p>
+    <p style="white-space: pre-wrap;" th:text="${errorResponse.getStackTrace()}"></p>
+    <hr>
+    <a href="/home">home</a>
+  </div>
+
+  <section id="footer">
+    <div th:replace="~{/fragments/footer}" />
+  </section>
+
+  <div th:replace="~{../javascript/js-error}" />
+
+</body>
+</html>

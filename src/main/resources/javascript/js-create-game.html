@@ -8,6 +8,17 @@
   // Apply course drop down div to it's parent inputCourse.
   inputCourse.parentNode.append(divCourseList);
 
+  // Apply username and handicap cookie values to the appropriate elements in
+  // the navigation panel.
+  document.getElementById("username").innerHTML = "User: " + getCookie(getCookieNameUser());
+  let handicap = getCookie(getCookieNameHandicap());
+  if (handicap == 0.0) {
+    document.getElementById("handicap").innerHTML = "Handicap: 0.0";
+  } else {
+    document.getElementById("handicap").innerHTML =
+      "Handicap: " + (handicap == 'null' ? '' : handicap);
+  }
+
   /*
    * Create an input event listener for the form text field 'course'.
    * Each time there is a change to the input of 'course' text field

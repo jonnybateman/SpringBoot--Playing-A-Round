@@ -9,7 +9,11 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.NamedStoredProcedureQueries;
+import jakarta.persistence.NamedStoredProcedureQuery;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.ParameterMode;
+import jakarta.persistence.StoredProcedureParameter;
 import jakarta.persistence.Table;
 import java.util.HashSet;
 import java.util.Set;
@@ -18,6 +22,22 @@ import jakarta.persistence.Column;
 
 @Entity
 @Table(name="teams")
+@NamedStoredProcedureQueries({
+  @NamedStoredProcedureQuery(name = "procUpdateDaytona", procedureName = "proc_update_daytona",
+      parameters = {@StoredProcedureParameter(mode = ParameterMode.IN, name = "teamId", type = Integer.class),
+                    @StoredProcedureParameter(mode = ParameterMode.IN, name = "playerId", type = Integer.class),
+                    @StoredProcedureParameter(mode = ParameterMode.IN, name = "hole", type = Integer.class),
+                    @StoredProcedureParameter(mode = ParameterMode.IN, name = "score", type = Integer.class)
+      }
+  ),
+  @NamedStoredProcedureQuery(name = "procUpdateStableford", procedureName = "proc_update_stableford",
+      parameters = {@StoredProcedureParameter(mode = ParameterMode.IN, name = "teamId", type = Integer.class),
+                    @StoredProcedureParameter(mode = ParameterMode.IN, name = "gameId", type = Integer.class),
+                    @StoredProcedureParameter(mode = ParameterMode.IN, name = "hole", type = Integer.class),
+                    @StoredProcedureParameter(mode = ParameterMode.IN, name = "score", type = Integer.class)
+      }
+  )
+})
 public class Team {
 
   /*
@@ -48,7 +68,7 @@ public class Team {
   private String daytona;
 
   @Column(name="stableford")
-  private int stableford;
+  private String stableford;
 
   @OneToMany(cascade = {CascadeType.ALL}, orphanRemoval = true)
   @JoinColumn(name = "team_id")
@@ -64,6 +84,8 @@ public class Team {
     this.gameId = gameId;
     this.teamName = teamName;
     this.matchplayMode = matchplayMode;
+    this.daytona = "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0";
+    this.stableford = "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0";
   }
 
   /*
@@ -126,11 +148,11 @@ public class Team {
     this.daytona = daytona;
   }
 
-  public int getStableford() {
+  public String getStableford() {
     return stableford;
   }
 
-  public void setStableford(int stableford) {
+  public void setStableford(String stableford) {
     this.stableford = stableford;
   }
 

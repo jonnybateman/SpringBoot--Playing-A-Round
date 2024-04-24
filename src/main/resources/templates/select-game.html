@@ -8,11 +8,11 @@
 
 <body>
   <!-- Display the title navigation bar -->  
-  <div th:replace="~{/fragments/navbar}" />
+  <div th:replace="~{/fragments/header}" />
 
   <div class="container">
-    <div id="selectgamebox" class="form-center card-game-width">
-      <div class="card card-font">
+    <div id="selectgamebox" class="form-center card-game-width" style="height: auto;">
+      <div id="selectGameCard" class="card card-font">
         <div class="card-header">
           Select Game
         </div>
@@ -29,10 +29,12 @@
             </div>
 
             <!-- Select Game Form -->
-            <form action="" th:action="@{/join-game}" method="POST" class="form-horizontal"
-                th:object="${gameData}" onclick="return isGameIdEmpty()">
+            <!--<form action="" th:action="@{/team-selection}" method="POST" class="form-horizontal"
+                th:object="${gameData}" onclick="return isGameIdEmpty()"> -->
+            <form id="gameForm" action="" th:action="@{/team-selection}" method="POST" class="form-horizontal"
+                th:object="${gameData}" onsubmit="event.preventDefault(); isGameIdEmpty();">
         
-              <!-- Select course -->
+              <!-- Select game -->
               <div style="margin-bottom: 25px;" class="input-group">
                 <input id="gameName" th:field="*{gameName}" type="text" name="gameName" placeholder="Search for game"
                     class="form-control field card-input-text" />
@@ -45,7 +47,7 @@
               <!-- Will submit the data to the appropriate URL set up in the AppController. -->
               <div style="margin-top: 10px;">
                 <div class="col-sm-6">
-                  <button type="submit" class="btn btn-form">Select</button>
+                  <button id="selectButton" type="submit" class="btn btn-form">Select</button>
                 </div>
               </div>
 

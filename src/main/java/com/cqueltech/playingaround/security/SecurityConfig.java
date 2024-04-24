@@ -10,9 +10,14 @@ import javax.sql.DataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import java.util.HashMap;
+import java.util.Map;
 
 @Configuration
 public class SecurityConfig {
@@ -54,6 +59,9 @@ public class SecurityConfig {
             // Ensures directories are accessible even when user has not bee authenticated.
             .requestMatchers("/css/**").permitAll()
             .requestMatchers("/img/**").permitAll()
+            // Allow anyone to access the register new user page.
+            .requestMatchers("/register-user").permitAll()
+            .requestMatchers("/authenticateNewUser").permitAll()
             .requestMatchers("/login-redirect").hasAuthority("GOLFER")
             .requestMatchers("/home").hasAuthority("GOLFER")
             .requestMatchers("/access-denied").hasAuthority("GOLFER")
@@ -63,7 +71,8 @@ public class SecurityConfig {
             .requestMatchers("/join-game").hasAuthority("GOLFER")
             .requestMatchers("/create-team").hasAuthority("GOLFER")
             .requestMatchers("/score-card").hasAuthority("GOLFER")
-            //.requestMatchers("/addLocationToHole").hasAuthority("GOLFER")
+            .requestMatchers("/daytona").hasAuthority("GOLFER")
+            .requestMatchers("/matchplay").hasAuthority("GOLFER")
             // Any request to the app must be authenticated
             .anyRequest().authenticated())
         // Customize the form login process.
@@ -84,5 +93,20 @@ public class SecurityConfig {
             .accessDeniedPage("/access-denied"));
 
     return http.build();
+  }
+
+  /*
+   * Define the PasswordEncoder as a bean for our application. Will be used to
+   * encrypt/decrypt passwords when registering/authorising users.
+   */
+  @Bean
+  public PasswordEncoder passwordEncoder() {
+
+    String idForEncode = "bcrypt";
+    Map<String, PasswordEncoder> encoders = new HashMap<>();
+    encoders.put(idForEncode, new BCryptPasswordEncoder());
+
+    //return new BCryptPasswordEncoder();
+    return new DelegatingPasswordEncoder(idForEncode, encoders);
   }
 }

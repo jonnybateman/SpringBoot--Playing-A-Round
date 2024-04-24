@@ -16,7 +16,7 @@
     <h1 th:text="${scorecardData.get(0).getCourseName()}"></h1>
   </div>
   <div id="divScorecardTeam" class="banner" style="margin-top: 30px;">
-    <h1 th:text="${playerDetails.getTeamName()}"></h1>
+    <h1 th:text="${playerDetails.getGameName() + ' - ' + playerDetails.getTeamName()}"></h1>
   </div>
 
   <div class="scorecard-table scorecard-text card" style="margin-top: 50px;">
@@ -91,16 +91,27 @@
         </tr>
         <tr>
           <th></th>
-          <th><input id="inputHole1" type="number" min="0" max="12" readonly /></th>
-          <th><input id="inputHole2" type="number" min="0" max="12" readonly /></th>
-          <th><input id="inputHole3" type="number" min="0" max="12" readonly /></th>
-          <th><input id="inputHole4" type="number" min="0" max="12" readonly /></th>
-          <th><input id="inputHole5" type="number" min="0" max="12" readonly /></th>
-          <th><input id="inputHole6" type="number" min="0" max="12" readonly /></th>
-          <th><input id="inputHole7" type="number" min="0" max="12" readonly /></th>
-          <th><input id="inputHole8" type="number" min="0" max="12" readonly /></th>
-          <th><input id="inputHole9" type="number" min="0" max="12" readonly /></th>
-          <th><input id="inputIn" type="number" min="0" max="90" readonly /></th>
+          <th><input id="inputHole1" type="number" min="0" max="12"
+              onfocus="holeInputOnFocusEvent()" onblur="holeInputOnBlurEvent()"
+              th:value="${scoresHelper.getHoleScore(scores, 1)}" readonly /></th>
+          <th><input id="inputHole2" type="number" min="0" max="12" onblur="holeInputOnBlurEvent()"
+              th:value="${scoresHelper.getHoleScore(scores, 2)}" readonly /></th>
+          <th><input id="inputHole3" type="number" min="0" max="12" onblur="holeInputOnBlurEvent()"
+              th:value="${scoresHelper.getHoleScore(scores, 3)}" readonly /></th>
+          <th><input id="inputHole4" type="number" min="0" max="12" onblur="holeInputOnBlurEvent()"
+              th:value="${scoresHelper.getHoleScore(scores, 4)}" readonly /></th>
+          <th><input id="inputHole5" type="number" min="0" max="12" onblur="holeInputOnBlurEvent()"
+              th:value="${scoresHelper.getHoleScore(scores, 5)}" readonly /></th>
+          <th><input id="inputHole6" type="number" min="0" max="12" onblur="holeInputOnBlurEvent()"
+              th:value="${scoresHelper.getHoleScore(scores, 6)}" readonly /></th>
+          <th><input id="inputHole7" type="number" min="0" max="12" onblur="holeInputOnBlurEvent()"
+              th:value="${scoresHelper.getHoleScore(scores, 7)}" readonly /></th>
+          <th><input id="inputHole8" type="number" min="0" max="12" onblur="holeInputOnBlurEvent()"
+              th:value="${scoresHelper.getHoleScore(scores, 8)}" readonly /></th>
+          <th><input id="inputHole9" type="number" min="0" max="12" onblur="holeInputOnBlurEvent()"
+              th:value="${scoresHelper.getHoleScore(scores, 9)}" readonly /></th>
+          <th><input id="inputOut" type="number" min="0" max="90" readonly
+              th:value="0" /></th>
         </tr>
         <tr style="background-color: var(--table-header-bg-color);">
           <th>Hole</th>
@@ -171,16 +182,26 @@
         </tr>
         <tr>
           <th></th>
-          <th><input id="inputHole10" type="number" min="0" max="12" readonly /></th>
-          <th><input id="inputHole11" type="number" min="0" max="12" readonly /></th>
-          <th><input id="inputHole12" type="number" min="0" max="12" readonly /></th>
-          <th><input id="inputHole13" type="number" min="0" max="12" readonly /></th>
-          <th><input id="inputHole14" type="number" min="0" max="12" readonly /></th>
-          <th><input id="inputHole15" type="number" min="0" max="12" readonly /></th>
-          <th><input id="inputHole16" type="number" min="0" max="12" readonly /></th>
-          <th><input id="inputHole17" type="number" min="0" max="12" readonly /></th>
-          <th><input id="inputHole18" type="number" min="0" max="12" readonly /></th>
-          <th><input id="inputOut" type="number" min="0" max="90" readonly /></th>
+          <th><input id="inputHole10" type="number" min="0" max="12" onblur="holeInputOnBlurEvent()"
+              th:value="${scoresHelper.getHoleScore(scores, 10)}" readonly /></th>
+          <th><input id="inputHole11" type="number" min="0" max="12" onblur="holeInputOnBlurEvent()"
+              th:value="${scoresHelper.getHoleScore(scores, 11)}" readonly /></th>
+          <th><input id="inputHole12" type="number" min="0" max="12" onblur="holeInputOnBlurEvent()"
+              th:value="${scoresHelper.getHoleScore(scores, 12)}" readonly /></th>
+          <th><input id="inputHole13" type="number" min="0" max="12" onblur="holeInputOnBlurEvent()"
+              th:value="${scoresHelper.getHoleScore(scores, 13)}" readonly /></th>
+          <th><input id="inputHole14" type="number" min="0" max="12" onblur="holeInputOnBlurEvent()"
+              th:value="${scoresHelper.getHoleScore(scores, 14)}" readonly /></th>
+          <th><input id="inputHole15" type="number" min="0" max="12" onblur="holeInputOnBlurEvent()"
+              th:value="${scoresHelper.getHoleScore(scores, 15)}" readonly /></th>
+          <th><input id="inputHole16" type="number" min="0" max="12" onblur="holeInputOnBlurEvent()"
+              th:value="${scoresHelper.getHoleScore(scores, 16)}" readonly /></th>
+          <th><input id="inputHole17" type="number" min="0" max="12" onblur="holeInputOnBlurEvent()"
+              th:value="${scoresHelper.getHoleScore(scores, 17)}" readonly /></th>
+          <th><input id="inputHole18" type="number" min="0" max="12" onblur="holeInputOnBlurEvent()"
+              th:value="${scoresHelper.getHoleScore(scores, 18)}" readonly /></th>
+          <th><input id="inputIn" type="number" min="0" max="90" readonly
+              th:value="0" /></th>
         </tr>
       <tbody>
 
@@ -190,33 +211,36 @@
 
   <table style="width: 90%; margin-left: auto; margin-right: auto; margin-top: 50px;">
     <tr>
-      <th style="width: 20%;"><i id="prevHole"
-          class="fa-solid fa-backward fa-5x clickable-button"></i>
+      <th style="width: 20%; text-align: left;">
+        <span class="span-btn-scorecard">
+        <i id="prevHole" class="fa-solid fa-backward fa-5x fa-fw clickable-button"></i>
+        </span>
       </th>
-      <th style="width: 50%; vertical-align: middle; text-align: center;">
-        <button type="button" class="btn btn-scorecard" th:onclick="">
-          <span><i class="fa-solid fa-golf-ball-tee fa-4x"></i></span>
-          <span style="margin-left: 30px; margin-right: 30px;">
-              <i class="fa-solid fa-right-long fa-4x"></i>
-          </span>
-          <span><i class="fa-solid fa-flag fa-4x"></i></span>
-        </button>
+      <th style="width: 20%; text-align: right;">
+        <span class="span-btn-scorecard">
+        <i id="measureDrive" class="fa-solid fa-golf-ball-tee fa-fw fa-5x clickable-button"></i>
+        </span>
       </th>
-      <th style="width: 20%; text-align: right;"><i id="nextHole"
-          class="fa-solid fa-forward fa-5x clickable-button"></i>
+      <th style="width: 20%; text-align: center;">
+        <span class="span-btn-scorecard">
+        <i id="setPinLocation" class="fa-solid fa-location-crosshairs fa-fw fa-5x clickable-button"></i>
+        </span>
+      </th>
+      <th style="width: 20%; text-align: left;">
+        <span class="span-btn-scorecard">
+        <i id="rangeToPin" class="fa-solid fa-flag fa-fw fa-5x clickable-button"></i>
+        </div>
+      </th>
+      <th style="width: 20%; text-align: right;">
+        <span class="span-btn-scorecard">
+        <i id="nextHole" class="fa-solid fa-forward  fa-fw fa-5x clickable-button"></i>
+        </span>
       </th>
     </tr>
   </table>
 
   <div class="banner" style="margin-top: 50px;">
-    <h1 id="range">167 yards to pin</h1>
-  </div>
-
-  <div>
-    <span class="clickable-button">
-    <i id="setPinLocation" class="fa-solid fa-location-crosshairs fa-6x"
-        style="position: fixed; right: 5%;"></i>
-    </span>
+    <h1 id="range">- - - yards</h1>
   </div>
 
   <section id="footer">

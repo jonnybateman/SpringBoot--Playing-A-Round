@@ -1,12 +1,32 @@
 <script  th:inline="javascript">
 
 const cExpires = 8*60*60*1000;  // Cookie will expires in 8 hours.
+const cNameUser = "cUser";
+const cHandicap = "cHandicap";
+const cNameGameId = "cGameId";
 const cNameTeamId = "cTeamId";
+const cNameTeamName = "cTeamName";
 const cHoleNo = "cHoleNo";
 const cHoleId = "cHoleId";
 
+function getCookieNameUser() {
+  return cNameUser;
+}
+
+function getCookieNameHandicap() {
+  return cHandicap;
+}
+
+function getCookieNameGameId() {
+  return cNameGameId;
+}
+
 function getCookieNameTeamId() {
   return cNameTeamId;
+}
+
+function getCookieNameTeamName() {
+  return cNameTeamName;
 }
 
 function getCookieNameHoleNo() {
@@ -54,6 +74,17 @@ function getCookie(cName) {
 function deleteCookie(cName) {
   if (getCookie(cName) != "") {
     document.cookie = cName + "=; Path=/; expires=Thu, 01 Jan 1970 00:00:01 UTC;";
+  }
+}
+
+/*
+ * Delete all cookies affiliated with this application.
+ */
+function deleteAllCookies() {
+  var cookiePairs = document.cookie.split(";"); 
+  for (let i=0; i<cookiePairs.length; i++) {
+    let cookiePair = cookiePairs[i].split("=");
+    document.cookie = cookiePair[0].trim() + "=; Path=/; expires=Thu, 01 Jan 1970 00:00:01 UTC;";
   }
 }
 

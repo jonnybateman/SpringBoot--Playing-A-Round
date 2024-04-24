@@ -15,6 +15,17 @@
   var teamContainer = document.getElementById("teamContainer");
   teamContainer.style.cssText = 
       "height: " + teamContainerHeight + "px;";
+  
+  // Apply username and handicap cookie values to the appropriate elements in
+  // the navigation panel.
+  document.getElementById("username").innerHTML = "User: " + getCookie(getCookieNameUser());
+  let handicap = getCookie(getCookieNameHandicap());
+  if (handicap == 0.0) {
+    document.getElementById("handicap").innerHTML = "Handicap: 0.0";
+  } else {
+    document.getElementById("handicap").innerHTML =
+      "Handicap: " + (handicap == 'null' ? '' : handicap);
+  }
 
   // Create touch event listeners for team cards.
   var teamsArray = document.getElementsByClassName("card");
@@ -37,30 +48,13 @@
           data: {"teamId": teamId, "gameId": instructionContainer.dataset.value},
           success: function(result) {
             if (result == true) {
-              window.location.href = "/score-card?gameId=" + instructionContainer.dataset.value;
+              window.location.href = "/score-card?gameId=" + instructionContainer.dataset.value +
+                  "&teamId=" + teamId;
             }
           }  
         });
       });
     }
-  }
-
-  /*
-   * Function to call controller 'create-team' mapping passing the game id held
-   * in the instructionContainer element.
-   */
-  function showCreateTeam() {
-
-    $.ajax({
-      type: "GET",
-      //url: "/showCreateTeam",
-      url: "/create-team",
-      dataType: "html",
-      data: { "gameId": instructionContainer.dataset.value },
-      success: function(result) {
-        //$('#result').html();
-      }
-    });
   }
 
 </script>

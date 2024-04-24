@@ -8,7 +8,7 @@
 
 <body>
   <!-- Display the title navigation bar -->  
-  <div th:replace="~{/fragments/navbar}" />
+  <div th:replace="~{/fragments/header}" />
   
   <div class="container card-container">
     
@@ -39,6 +39,20 @@
                 <input id="courseName" type="text" name="courseName" placeholder="Course name"
                     class="form-control field card-input-text"
                     th:value="${courseDataWrapperLoad.getCourseName}" />
+              </div>
+
+              <!-- Course Rating -->
+              <div style="margin-bottom: 25px;" class="input-group">
+                <input id="courseRating" type="number" step="0.1" name="courseRating" placeholder="Course Rating"
+                    class="form-control field card-input-text"
+                    th:value="${courseDataWrapperLoad.getCourseRating}" />
+              </div>
+
+              <!-- Slope Rating -->
+              <div style="margin-bottom: 25px;" class="input-group">
+                <input id="slopeRating" type="number" name="slopeRating" placeholder="Slope Rating"
+                    class="form-control field card-input-text"
+                    th:value="${courseDataWrapperLoad.getSlopeRating}" />
               </div>
 
               <!-- Hole data -->

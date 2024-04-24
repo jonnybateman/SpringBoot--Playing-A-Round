@@ -3,17 +3,21 @@
     <a class="navbar-brand a-navbar-brand" href="#">Playing-A-Round</a>
     <button class="navbar-toggler navbar-toggler-button" type="button" data-bs-toggle="offcanvas"
         data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
-      <span class="fa-solid fa-bars fa-2x"></span>
+      <span class="fa-solid fa-bars fa-3x"></span>
     </button>
     <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
       <div class="offcanvas-header">
-        <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Menu</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        <h2 class="offcanvas-title" id="offcanvasNavbarLabel">Menu</h2>
+        <i class="fa-solid fa-xmark fa-4x" data-bs-dismiss="offcanvas"></i>
       </div>
       <div class="offcanvas-body">
         <form class="form-inline" style="margin-left: 18px;" action="#" th:action="@{/logout}" method="POST">
           <input class="btn btn-logout btn-md mb-3" type="submit" value="Logout" />
         </form>
+        <div style="position: fixed; bottom: 40px;">
+          <h1 id="username" class="offcanvas-text"></h1>
+          <h1 id="handicap" class="offcanvas-text" style="margin-top: 20px;"></h1>
+        </div>
       </div>
     </div>
   </div>

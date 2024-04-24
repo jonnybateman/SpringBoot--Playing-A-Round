@@ -1,9 +1,53 @@
 <script  th:inline="javascript">
 
-function hasJoinedGame() {
-  if (getCookie(getCookieNameTeamId()) == "") {
+let handicap = getCookie(getCookieNameHandicap());
+document.getElementById("username").innerHTML = "User: " + getCookie(getCookieNameUser());
+document.getElementById("handicap").innerHTML =
+    "Handicap: " + (handicap == 'null' ? '' : handicap);
+
+function endGame() {
+  let gameId = getCookie(getCookieNameGameId());
+  let teamId = getCookie(getCookieNameTeamId());
+
+  // Delete cookies associated with the game.
+  deleteCookie(getCookieNameGameId());
+  deleteCookie(getCookieNameTeamId());
+  deleteCookie(getCookieNameTeamName());
+  deleteCookie(getCookieNameHoleNo());
+  deleteCookie(getCookieNameHoleId());
+
+  if (gameId == "") {
+    document.getElementById("endGame").href += "?gameId=0&teamId=0";
+  } else {
+    document.getElementById("endGame").href += "?gameId=" + gameId + "&teamId=" + teamId;
+  }
+
+  return true;
+}
+
+function hasJoinedGame(link) {
+  if (getCookie(getCookieNameGameId()) == "") {
     return false;
   }
+
+  switch (link) {
+    case "scorecard":
+      document.getElementById("scorecard").href +=
+          "?gameId=" + getCookie(getCookieNameGameId()) +
+          "&teamId=" + getCookie(getCookieNameTeamId());
+    case "strokeplay":
+      document.getElementById("strokeplay").href += "?gameId=" + getCookie(getCookieNameGameId());
+    case "matchplay":
+      document.getElementById("matchplay").href +=
+          "?gameId=" + getCookie(getCookieNameGameId()) +
+          "&teamId=" + getCookie(getCookieNameTeamId()) +
+          "&teamName=" + getCookie(getCookieNameTeamName());
+    case "daytona":
+      document.getElementById("daytona").href += "?gameId=" + getCookie(getCookieNameGameId());
+    case "stableford":
+      document.getElementById("stableford").href += "?gameId=" + getCookie(getCookieNameGameId());
+  }
+  
   return true;
 }
 

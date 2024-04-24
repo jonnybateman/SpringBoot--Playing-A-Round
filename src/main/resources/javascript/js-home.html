@@ -1,0 +1,14 @@
+<script  th:inline="javascript">
+
+// Set the username cookie.
+let user = /*[[${user}]]*/ {};
+setCookie(getCookieNameUser(), user);
+
+// Set the handicap cookie for user.
+let handicap = /*[[${handicap}]]*/ {};
+setCookie(getCookieNameHandicap(), handicap);
+
+document.getElementById("username").innerHTML = "User: " + user;
+document.getElementById("handicap").innerHTML = "Handicap: " + (handicap == null ? "" : handicap);
+
+</script>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <title>Daytona Scores Page</title>
+  <div th:replace="~{/fragments/head}" />
+</head>
+
+<body>
+  <!-- Display the title navigation bar -->
+  <section id="title">
+    <div th:replace="~{/fragments/navbar}" />
+  </section>
+
+  <div id="container" class="container-scrollable">
+    <div th:each="team : ${matchplayTeamsScoresList}">
+      
+        <table class="table-matchplay">
+          
+          <tr th:id="${team.name}" class="tr-matchplay">
+            <td class="cell">
+            </td>
+            <td class="cell">
+            </td>
+            <td class="cell">
+            </td>
+          </tr>
+        </table>
+      
+    </div>
+  </div>
+
+  <div id="footer" th:replace="~{/fragments/footer}" />
+
+  <div th:replace="~{../javascript/js-matchplay}" />
+
+</body>
+
+</html>

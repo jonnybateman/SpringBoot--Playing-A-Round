@@ -9,6 +9,7 @@ package com.cqueltech.playingaround.dto;
 import java.util.List;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 public class CourseDataWrapperDTO {
 
@@ -18,6 +19,12 @@ public class CourseDataWrapperDTO {
   
   @NotEmpty
   private String courseName;
+
+  @NotNull
+  private Float courseRating;
+
+  @NotNull
+  private Integer slopeRating;
 
   @Valid
   private List<HoleDataDTO> holeDataList;
@@ -38,6 +45,22 @@ public class CourseDataWrapperDTO {
 
   public void setCourseName(String courseName) {
     this.courseName = courseName;
+  }
+
+  public Float getCourseRating() {
+    return courseRating;
+  }
+
+  public void setCourseRating(Float courseRating) {
+    this.courseRating = courseRating;
+  }
+
+  public Integer getSlopeRating() {
+    return slopeRating;
+  }
+
+  public void setSlopeRating(Integer slopeRating) {
+    this.slopeRating = slopeRating;
   }
 
   public List<HoleDataDTO> getHoleDataList() {

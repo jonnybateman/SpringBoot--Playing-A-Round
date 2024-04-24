@@ -49,7 +49,7 @@ public class Hole {
              cascade = {CascadeType.ALL})
   private Course course;
 
-  /*
+  /*  
    * Define class instructors
    */
 

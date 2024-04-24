@@ -8,7 +8,7 @@
   <body>
     <!-- Display the title navigation bar -->
     <section id="title">
-      <div th:replace="~{/fragments/navbar}" />
+      <div th:replace="~{/fragments/header}" />
     </section>
 
     <section id="content">
@@ -28,5 +28,7 @@
     <section id="footer">
       <div th:replace="~{/fragments/footer}" />
     </section>
+
+    <div th:replace="~{../javascript/js-home}" />
   </body>
 </html>

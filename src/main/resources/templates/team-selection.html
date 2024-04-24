@@ -2,13 +2,13 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-  <title>Join Game Page</title>
+  <title>Team Selection Page</title>
   <div th:replace="~{/fragments/head}" />
 </head>
 
 <body>
   <!-- Display the title navigation bar -->  
-  <div th:replace="~{/fragments/navbar}" />
+  <div th:replace="~{/fragments/header}" />
   
   <!-- Setup user instruction and create team icon. Container also used to store the game id. -->
   <div id="instructionContainer" th:data-value="${gameId}">
@@ -45,7 +45,7 @@
   
   <div id="footer" th:replace="~{/fragments/footer}" />
   
-  <div th:replace="~{../javascript/js-join-game}" />
+  <div th:replace="~{../javascript/js-team-selection}" />
 
 </body>
 

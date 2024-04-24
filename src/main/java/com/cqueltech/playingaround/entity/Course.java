@@ -32,6 +32,12 @@ public class Course {
   @Column(name="course_name")
   private String courseName;
 
+  @Column(name="course_rating")
+  private float courseRating;
+
+  @Column(name="slope_rating")
+  private int slopeRating;
+
   @OneToMany(cascade = {CascadeType.ALL}, orphanRemoval = true)
   @JoinColumn(name = "course_id")
   private Set<Hole> holes = new HashSet<>();
@@ -90,5 +96,21 @@ public class Course {
   public void setGames(Set<Game> games) {
     this.games = games;
   }
+
+  public float getCourseRating() {
+    return courseRating;
+  }
+
+  public void setCourseRating(float courseRating) {
+    this.courseRating = courseRating;
+  }
+
+  public int getSlopeRating() {
+    return slopeRating;
+  }
+
+  public void setSlopeRating(int slopeRating) {
+    this.slopeRating = slopeRating;
+  } 
 
 }

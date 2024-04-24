@@ -193,6 +193,12 @@ nav {
   text-shadow: 0 0 1rem var(--hover-color);
 }
 
+.offcanvas-text {
+  color: var(--navbar-text-color);
+  font-family: "ubuntu";
+  font-size: 2.5rem;
+}
+
 /* Bootstrap class */
 .nav-link {
   color: var(--navbar-text-color);
@@ -322,23 +328,108 @@ nav {
   color: var(--table-text-color);
 }
 
-.btn-scorecard {
-  background: var(--btn-color);
-  color: var(--navbar-text-color);
-  box-shadow: 0 0 1rem var(--navbar-text-color);
-  padding: 1rem 1.5rem;
-}
-
 #range {
   text-align: center;
   font-size: 4rem;
 }
 
+.span-btn-scorecard {
+  /* display: inline-block; required to give span a background */
+  display: inline-block;
+  background-color: var(--btn-color);
+  border-radius: 1rem;
+  padding: 10px;
+}
+
 .clickable-button {
   cursor: pointer;
+  
 }
 
 .clickable-button:active {
   color: red;
   transition-duration: 200ms;
+}
+
+/*
+ * Daytona and Strokeplay Pages
+ */
+
+.card-daytona-strokeplay {
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 40px;
+}
+
+.table-daytona-strokeplay {
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 1rem;
+  background-color: var(--table-body-bg-color);
+}
+
+.table-text-daytona-strokeplay {
+  font-size:xx-large;
+  color: var(--table-text-color);
+}
+
+/*
+ * Matchplay Page
+ */
+
+.table-matchplay {
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+  /* Separate the rows of the table by 2rem */
+  border-collapse: separate;
+  border-spacing: 0 2em;
+}
+
+.tr-matchplay {
+  border: 2px var(--border-color) solid;
+  font-family: "Montserrat";
+  color: var(--card-text-color);
+  font-size: 3rem;
+  word-break: break-all;
+}
+
+.cell {
+  text-align: center;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.cell:nth-child(1) {
+  width: 43%;
+  background-color: var(--border-color);
+  /* border radius cannot be specified at the table or tr levels */
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+
+.cell:nth-child(2) {
+  width: 14%;
+  background-color: var(--card-bg-color);
+}
+
+.cell:nth-child(3) {
+  width: 43%;
+  background-color: var(--border-color);
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+/*
+ * Error Page
+ */
+
+.error-page-text {
+  font-family: "ubuntu";
+  font-size: 2.5rem;
+  margin-left: 20px;
+  margin-right: 20px;
+  word-break: break-all;
 }

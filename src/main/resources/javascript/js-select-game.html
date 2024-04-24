@@ -1,12 +1,26 @@
 <script  th:inline="javascript">
 
+  var divGameCard = document.getElementById("selectGameCard");
   var divFeedback = document.getElementById("feedback");
   var inputGame = document.getElementById("gameName");
   var inputGameId = document.getElementById("gameId");
+  var cardSelectButtonHeight = document.getElementById("selectButton").offsetHeight;
+  var gameForm = document.getElementById("gameForm");
   var divGameList = document.createElement("DIV");
   divGameList.setAttribute("id", "game-list");
   // Apply game drop down div to it's parent inputGame.
   inputGame.parentNode.append(divGameList);
+
+  // Apply username and handicap cookie values to the appropriate elements in
+  // the navigation panel.
+  document.getElementById("username").innerHTML = "User: " + getCookie(getCookieNameUser());
+  let handicap = getCookie(getCookieNameHandicap());
+  if (handicap == 0.0) {
+    document.getElementById("handicap").innerHTML = "Handicap: 0.0";
+  } else {
+    document.getElementById("handicap").innerHTML =
+      "Handicap: " + (handicap == 'null' ? '' : handicap);
+  }
 
   /*
    * Create an input event listener for the form text field 'gameName'.
@@ -51,15 +65,15 @@
       data: {search: searchString},
       success: function(result) {
         // result contains a JSON array of game names.
-        //    [{courseName: "course-name-1", gameName: "game-name-1"},
-        //          {courseName: "course-name-2", gameName: "game-name-2"},...]
+        //    [{gameId: "game-id-1", gameName: "game-name-1"},
+        //          {gameId: "game-id-2", gameName: "game-name-2"},...]
 
         divFeedback.setAttribute("class", "alert alert-danger col-xs-offset-1 col-xs-10");
 
         if (result != null && result.length > 0) {
           divGameList.setAttribute("class", "dropdown-list-items");
 
-          // Add course names to divCourseList drop down list.
+          // Add game names to divGameList drop down list.
           for (var i=0; i<result.length; i++) {
             var divGame = document.createElement("DIV");
             //divGame.setAttribute("class", "course-item");
@@ -80,6 +94,11 @@
 
           // Set message in feedback div telling user to select applicable list from drop down.
           divFeedback.innerHTML = "Select game...";
+
+          // Adjust the height of the card to accomodate the dropdown list.
+          var gameListHeight = divGameList.offsetHeight;
+          divGameCard.setAttribute("style", "height: " +
+              (divGameCard.offsetHeight + gameListHeight - cardSelectButtonHeight) + "px");
         } else {
           divFeedback.innerHTML = "No matching games.";
         }
@@ -99,6 +118,10 @@
       // Remove feedback div.
       divFeedback.innerHTML = "";
       divFeedback.setAttribute("class", "");
+
+      // Reduce height of card.
+      //divGameCard.setAttribute("style", "height: " + divGameCardInitialHeight + "px");
+      divGameCard.setAttribute("style", "height: auto");
     }
   }
 
@@ -106,11 +129,36 @@
    * If the gameId input field is empty then do not submit the form.
    */
   function isGameIdEmpty() {
-    var gameId = document.getElementById("gameId").value;
+    let gameId = document.getElementById("gameId").value;
     if (gameId == "" || gameId == 0 || gameId == null) {
-      return false;
+      // Game name may have been specified in full by user and not selected from drop
+      // down list. See if game can be retrieved from user input.
+      let searchString = document.getElementById("gameName").value;
+      console.log("searchString:" + searchString + ";");
+      if (searchString != null && searchString != "") {
+        $.ajax({
+          type: "GET",
+          url: "/retrieveGame",
+          contentType: "application/json",
+          dataType: "json",
+          data: { gameName: searchString },
+          success: function (result) {
+            // Result is not null so success.
+            // A single game was found with matching game name. Set the game id so it will
+            // be submitted with the form within the gameData object.
+            inputGameId.value = result.gameId;
+            gameForm.submit();
+          },
+          error: function (result) {
+            // Result is null.
+            divFeedback.setAttribute("class", "alert alert-danger col-xs-offset-1 col-xs-10");
+            divFeedback.innerHTML = "No matching game...";
+          }
+        });
+      }
+    } else {
+      gameForm.submit();
     }
-    return true;
   }
 
 </script>

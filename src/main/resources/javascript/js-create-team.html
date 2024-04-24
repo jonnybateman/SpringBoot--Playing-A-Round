@@ -1,5 +1,16 @@
 <script  th:inline="javascript">
 
+// Apply username and handicap cookie values to the appropriate elements in
+// the navigation panel.
+document.getElementById("username").innerHTML = "User: " + getCookie(getCookieNameUser());
+let handicap = getCookie(getCookieNameHandicap());
+if (handicap == 0.0) {
+  document.getElementById("handicap").innerHTML = "Handicap: 0.0";
+} else {
+  document.getElementById("handicap").innerHTML =
+  "Handicap: " + (handicap == 'null' ? '' : handicap);
+}
+
 /*
  * If the gameId input field is empty then do not submit the form.
  */

@@ -1,26 +1,37 @@
 <script  th:inline="javascript">
 
+var oldHoleScore;
+
 // Get the document's root element so that css variables can be utilized.
 var root = document.documentElement;
 var styles = getComputedStyle(root);
 
-// Get the team id from model attribute, if it is available.
-var teamId = /*[[${teamId}]]*/ {};
+// Get the player id from model attribute.
+var playerId = /*[[${playerDetails.playerId}]]*/ {};
 
-if (teamId != null || teamId != "") {
-  // Create cookie for the supplied team id.
-  setCookie(getCookieNameTeamId(), teamId);
-}
+// Get the team id from model attribute and set it as a cookie.
+var teamId = /*[[${playerDetails.teamId}]]*/ {};
+setCookie(getCookieNameTeamId(), teamId);
+
+// Get the game id from model attribute and set it as a cookie.
+var gameId = /*[[${scorecardData[0].gameId}]]*/ {};
+setCookie(getCookieNameGameId(), gameId);
+
+// Set the cookie for the team name.
+var teamName = /*[[${playerDetails.teamName}]]*/ {};
+setCookie(getCookieNameTeamName(), teamName);
+
+// Get the player scores from the model attribute.
+var scores = /*[[${scores}]]*/ {};
+
+// Calculate the Out and In score totals for the hole scores and assign to the
+// applicable input fields in the web view.
+calculateOutInTotals();
 
 // Set margin height for first element below nav bar.
 var navHeight = document.querySelector("nav").offsetHeight;
 var divScorecardCourse = document.getElementById("divScorecardCourse");
 divScorecardCourse.style.cssText = "margin-top: " + (navHeight + 50) + "px;";
-
-// Set position from bottom for set pin location icon.
-var footerHeight = document.getElementsByClassName("footer")[0].offsetHeight;
-var setPinLocation = document.getElementById("setPinLocation");
-setPinLocation.style.bottom = (footerHeight + 30) + "px";
 
 // Set the cookies for default hole on page load.
 setCookie(getCookieNameHoleNo(), 1);
@@ -28,7 +39,8 @@ setCookie(getCookieNameHoleId(), document.getElementById("hole1").dataset.holeId
                 // element attribute data-hole-id  => holeId
 
 // Highlight hole 1 as the current hole.
-document.getElementById("hole1").style.backgroundColor = styles.getPropertyValue('--table-body-bg-color');
+document.getElementById("hole1").style.backgroundColor =
+    styles.getPropertyValue('--table-body-bg-color');
 document.getElementById("inputHole1").readOnly = false;
 
 // Setup event listeners for 'next' and 'previous' hole buttons.
@@ -36,15 +48,33 @@ var prevHoleButton = document.getElementById("prevHole");
 prevHoleButton.addEventListener("click", function() {
   // Highlight the new current hole and set value of hole number cookie accordingly.
   let cHoleNo = parseInt(getCookie(getCookieNameHoleNo()));
+  
   if (cHoleNo > 1) {
+    let currHole = document.getElementById("hole" + (cHoleNo - 1));
     setCookie(getCookieNameHoleNo(), cHoleNo - 1);
 
-    document.getElementById("hole" + (cHoleNo - 1)).style.backgroundColor =
-        styles.getPropertyValue('--table-body-bg-color');
+    currHole.style.backgroundColor = styles.getPropertyValue('--table-body-bg-color');
     document.getElementById("hole" + cHoleNo).style.backgroundColor =
-      styles.getPropertyValue('--table-header-bg-color');
+        styles.getPropertyValue('--table-header-bg-color');
     document.getElementById("inputHole" + (cHoleNo - 1)).readOnly = false;
     document.getElementById("inputHole" + (cHoleNo)).readOnly = true;
+    document.getElementById("range").innerHTML = "- - - yards";
+
+    // If we do not have pin location data for hole, query database to see if it is now available.
+    if (currHole.dataset.locLat == null) {
+      $.ajax({
+        type: "GET",
+        url: "/getPinLocationData",
+        dataType: "json",
+        data: { "holeId": currHole.dataset.holeId },
+        success: function (result) {
+          if (result.locLat != null) {
+            currHole.dataset.locLat = result.locLat;
+            currHole.dataset.locLong = result.locLong;
+          }
+        }
+      });
+    }
   }
 });
 
@@ -52,8 +82,9 @@ var nextHoleButton = document.getElementById("nextHole");
 nextHoleButton.addEventListener("click", function() {
   // Highlight the new current hole and set value of hole number cookie accordingly.
   let cHoleNo = parseInt(getCookie(getCookieNameHoleNo()));
-  let currHole = document.getElementById("hole" + (cHoleNo + 1));
+  
   if (cHoleNo < 18) {
+    let currHole = document.getElementById("hole" + (cHoleNo + 1));
     setCookie(getCookieNameHoleNo(), cHoleNo + 1);
 
     currHole.style.backgroundColor = styles.getPropertyValue('--table-body-bg-color');
@@ -61,62 +92,154 @@ nextHoleButton.addEventListener("click", function() {
         styles.getPropertyValue('--table-header-bg-color');
     document.getElementById("inputHole" + (cHoleNo + 1)).readOnly = false;
     document.getElementById("inputHole" + (cHoleNo)).readOnly = true;
-  }
+    document.getElementById("range").innerHTML = "- - - yards";
 
-  // If we do not have hole location data query database to see if it is now available.
-  if (currHole.dataset.locLat == null) {
-    $.ajax({
-      type: "GET",
-      url: "/getHoleLocationData",
-      dataType: "json",
-      data: {"holeId": (cHoleNo + 1)},
-      success: function(result) {
-        if (result.getLocLat() != null) {
-          currHole.dataset.locLat = result.getLocLat();
-          currHole.dataset.locLat = result.getLocLong();
+    // If we do not have pin location data for hole, query database to see if it is now available.
+    if (currHole.dataset.locLat == null) {
+      $.ajax({
+        type: "GET",
+        url: "/getPinLocationData",
+        dataType: "json",
+        data: { "holeId": currHole.dataset.holeId },
+        success: function (result) {
+          if (result.locLat != null) {
+            currHole.dataset.locLat = result.locLat;
+            currHole.dataset.locLong = result.locLong;
+          }
         }
-      }
-    });
+      });
+    }
   }
-
 });
 
 // Create click handler for setPinLocation icon.
-setPinLocation.addEventListener("click", function() {
-  // Get the current GPS coordinates.
-  if (navigator.geolocation) {
-    // getCurrentPosition method retrieves the current position of the user's
-    // browser and calls the callback function (first parameter of method)
-    // passing the position object. From the position object, we extract the
-    // latitude and longitude
-    navigator.geolocation.getCurrentPosition(function(position) {
+var setPinLocation = document.getElementById("setPinLocation");
+setPinLocation.addEventListener("click", function () {
+  if (confirm("Do you want to set pin location?")) {
+    var hole = document.getElementById("hole" + getCookie(getCookieNameHoleNo()));
+    // If hole has no location data for pin.
+    if (hole.dataset.locLat == null) {
+      // Get the current GPS coordinates.
+      if (navigator.geolocation) {
+        // getCurrentPosition method retrieves the current position of the user's
+        // browser and calls the callback function (first parameter of method)
+        // passing the position object. From the position object, we extract the
+        // latitude and longitude
+        navigator.geolocation.getCurrentPosition(function (position) {
           // Send latitiude and longitude to the app controller.
           $.ajax({
             type: "post",
             url: "/addLocationToHole",
             dataType: "json",
-            data: {"holeId": document.getElementById("hole" + getCookie(getCookieNameHoleNo())).dataset.holeId, 
-                   "lat": position.coords.latitude,
-                   "lon": position.coords.longitude},
-            success: function(result) {
+            data: {
+              "holeId": hole.dataset.holeId,
+              "lat": position.coords.latitude,
+              "lon": position.coords.longitude
+            },
+            success: function (result) {
               if (result == true) {
                 alert("Pin location data saved.")
               } else {
                 alert("Pin location data could not be saved.");
               }
-            }  
+            }
           });
         },
-        showError);
+          showError);
+      } else {
+        alert("Sorry, geolocation not supported by this browser.");
+      }
+    }
+  }
+});
+
+// Create click listener for measureDrive icon.
+var measureDriveFlag = false;
+var driveLocLat;
+var driveLocLong;
+var measureDrive = document.getElementById("measureDrive");
+measureDrive.addEventListener("click", function() {
+  if (!measureDriveFlag) {
+    if (confirm("Do you want to measure your drive?")) {
+      // Get the GPS location for drive position.
+      navigator.geolocation.getCurrentPosition(function (position) {;
+        driveLocLat = position.coords.latitude;
+        driveLocLong = position.coords.longitude;
+        measureDrive.classList.remove("fa-golf-ball-tee");
+        measureDrive.classList.add("fa-arrows-to-circle");
+        measureDriveFlag = true;
+      });
+    }
   } else {
-    alert("Sorry, geolocation not supported by this browser.");
+    // Get the GPS location for where the ball ended up and calculate distance.
+    navigator.geolocation.getCurrentPosition(function(position) {
+      // Calculate drive distance
+      let distance = Math.round(calculateYardage(driveLocLat,
+                                      driveLocLong,
+                                      position.coords.latitude,
+                                      position.coords.longitude));
+      
+      // Display the distance driven on scorecard.
+      document.getElementById("range").innerHTML = "Drive: " + distance + " yards";
+
+      // Post the distance to the database. If the distance is longer than the
+      // current longest drive for the player then the distance value will be
+      // updated in the database.
+      $.ajax({
+        type: "post",
+        url: "/setLongestDrive",
+        dataType: "json",
+        data: { "playerId": playerId,
+                "distance": distance
+              },
+        success: function(result) {
+        }
+      });
+      measureDrive.classList.remove("fa-arrows-to-circle");
+      measureDrive.classList.add("fa-golf-ball-tee");
+      measureDriveFlag = false;
+    });
+  }
+});
+
+/*
+ * If pin location data is available display the distance to pin in yards.
+ */
+var rangeToPin = document.getElementById("rangeToPin");
+rangeToPin.addEventListener("click", function() {
+  let pinLocLat = document.getElementById("hole" + getCookie(getCookieNameHoleNo())).dataset.locLat;
+  let pinLocLong = document.getElementById("hole" + getCookie(getCookieNameHoleNo())).dataset.locLong;
+
+  // Calculate the the distance to pin if we have pin location data.
+  if (pinLocLat != null) {
+    // If GeoLocation is available calculate distance to the pin.
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function(position) {
+            let yardage = calculateYardage(position.coords.latitude,
+                                           position.coords.longitude,
+                                           Number(pinLocLat),
+                                           Number(pinLocLong));
+
+            if (yardage != null) {
+              document.getElementById("range").innerHTML = Math.round(yardage) + " yards to pin";
+            } else {
+              document.getElementById("range").innerHTML = "Range data not available";
+            }
+          },
+          showError
+      );
+    } else {
+      document.getElementById("range").innerHTML = "Sorry, geolocation not supported";
+    }
+  } else {
+    document.getElementById("range").innerHTML = "Range data not available";
   }
 });
 
 /*
  * Show any errors raised when attempting to use geo location.
  */
-function showError(error) {
+ function showError(error) {
   switch(error.code) {
     case error.PERMISSION_DENIED:
       alert("User denied the request for Geolocation.");
@@ -142,7 +265,7 @@ function calculateYardage(lat1, long1, lat2, long2) {
   } else {
     var radLat1 = Math.PI * lat1/180;
     var radLat2 = Math.PI * lat2/180;
-    var theta = lon1 - lon2;
+    var theta = long1 - long2;
     var radTheta = Math.PI * theta/180; 
     var dist = Math.sin(radLat1) * Math.sin(radLat2) + Math.cos(radLat1) * Math.cos(radLat2) * Math.cos(radTheta);
 
@@ -154,10 +277,75 @@ function calculateYardage(lat1, long1, lat2, long2) {
     dist = dist * 180/Math.PI;
     dist = dist * 60 * 1.1515;
     var yardage = dist * 1760;
+    console.log("Yardage:" + yardage);
     return yardage;
   }
 
   return null;
+}
+
+/*
+ * Calculate the Out and In score totals for the player.
+ */
+function calculateOutInTotals() {
+
+  let scoreOut = 0;
+  let scoreIn = 0;
+
+  for (let i=1; i<=9; i++) {
+    let score = Number(eval("document.getElementById('inputHole" + i + "').value"));
+    scoreOut += (score === null ? 0 : score);
+  }
+  document.getElementById('inputOut').value = scoreOut;
+
+  for (let i=10; i<=18; i++) {
+    let score = Number(eval("document.getElementById('inputHole" + i + "').value"));
+    scoreIn += (score === null ? 0 : score);
+  }
+  document.getElementById('inputIn').value = scoreIn;
+}
+
+/*
+ * When a hole input has focus set the variable currentHoleScore to the value of the
+ * input. The variable can then be compared to the new value entered during the
+ * onblur event. If the values are the same no need to send to the app controller.
+ */
+function holeInputOnFocusEvent() {
+  // Get the hole number.
+  let holeNo = getCookie(getCookieNameHoleNo());
+  // Get the score set for the hole.
+  oldHoleScore = document.getElementById("inputHole" + (holeNo)).value;
+}
+
+/*
+ * When a hole input element loses focus send the score to the app controller
+ * so that it can be posted to the database.
+ */
+function holeInputOnBlurEvent() {
+
+  // Get the hole number.
+  let holeNo = getCookie(getCookieNameHoleNo());
+  // Get the score set for the hole.
+  let newHoleScore = document.getElementById("inputHole" + (holeNo)).value;
+
+  if (newHoleScore != null && newHoleScore > 0 && newHoleScore != oldHoleScore) {
+    // Calculate new Out and In totals
+    calculateOutInTotals();
+
+    // Send hole score to the app controller.
+    $.ajax({
+        type: "POST",
+        url: "/setHoleScore",
+        dataType: "json",
+        data: { "gameId": gameId,
+                "teamId": teamId,
+                "playerId": playerId,
+                "holeId": holeNo,
+                "score": newHoleScore
+              },
+        success: function(result) {}
+    });
+  }
 }
 
 </script>

@@ -1,13 +1,6 @@
 package com.cqueltech.playingaround.dto;
 
-import java.util.List;
-
-/*
- * A DTO (Data Transfer Object) class used by the AppController for making
- * player information, grouped by team, available to the join-game web view.
- */
-
-public class TeamsListDTO {
+public class GamePlayerDTO {
 
   /*
    * Define class variables
@@ -15,16 +8,16 @@ public class TeamsListDTO {
 
   private int teamId;
   private String teamName;
-  private List<String> players;
+  private String username;
 
   /*
    * Define class constructors
    */
-
-  public TeamsListDTO(int teamId, String teamName, List<String> players) {
+  
+  public GamePlayerDTO(int teamId, String teamName, String username) {
     this.teamId = teamId;
     this.teamName = teamName;
-    this.players = players;
+    this.username = username;
   }
 
   /*
@@ -47,12 +40,12 @@ public class TeamsListDTO {
     this.teamName = teamName;
   }
 
-  public List<String> getPlayers() {
-    return players;
+  public String getUsername() {
+    return username;
   }
 
-  public void setPlayers(List<String> players) {
-    this.players = players;
+  public void setUsername(String username) {
+    this.username = username;
   }
 
 }

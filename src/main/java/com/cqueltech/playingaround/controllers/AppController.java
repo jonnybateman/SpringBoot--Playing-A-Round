@@ -1,8 +1,8 @@
 package com.cqueltech.playingaround.controllers;
 
-import java.net.Authenticator.RequestorType;
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,41 +15,79 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import com.cqueltech.playingaround.config.HandicapIndexCalculator;
 import com.cqueltech.playingaround.dto.CourseDTO;
 import com.cqueltech.playingaround.dto.CourseDataWrapperDTO;
+import com.cqueltech.playingaround.dto.ScoresDTO;
 import com.cqueltech.playingaround.dto.GameDTO;
 import com.cqueltech.playingaround.dto.GameDataDTO;
-import com.cqueltech.playingaround.dto.GamePlayersDTO;
+import com.cqueltech.playingaround.dto.GamePlayerDTO;
+import com.cqueltech.playingaround.dto.PlayerDetailsDTO;
 import com.cqueltech.playingaround.dto.HoleDataDTO;
+import com.cqueltech.playingaround.dto.HoleScoreDTO;
 import com.cqueltech.playingaround.dto.ScorecardDTO;
 import com.cqueltech.playingaround.dto.TeamDTO;
-import com.cqueltech.playingaround.dto.TeamsListDTO;
+import com.cqueltech.playingaround.dto.TeamPlayersDTO;
 import com.cqueltech.playingaround.entity.Course;
+import com.cqueltech.playingaround.entity.HoleScore;
+import com.cqueltech.playingaround.helper.ScoresHelper;
 import com.cqueltech.playingaround.service.UserService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.extern.slf4j.Slf4j;
 
 @Controller
-@Slf4j
+//@Slf4j
 public class AppController {
 
   private UserService userService;
+  private HandicapIndexCalculator handicapIndexCalculator;
 
   /*
    * Inject the UserService using constructor injection. The UserService acts as
    * an intermediary layer between the controller and the DAO that accesses the
    * database.
+   * Inject the HandicapIndexCalculator using constructor injection.
    */
-  public AppController(UserService userService) {
+  @Autowired
+  public AppController(UserService userService, HandicapIndexCalculator handicapIndexCalculator) {
     this.userService = userService;
+    this.handicapIndexCalculator = handicapIndexCalculator;
   }
 
   /*
    * Show the default home page after login.
    */
   @GetMapping("/home")
-  public String showHome() {
+  public String showHome(Model model) {
+    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    model.addAttribute("user", auth.getName());
+
+    // Get handicap for the user.
+    Float handicap = userService.getHandicapIndex(auth.getName());
+    if (handicap != null) {
+      // Cast float to string so that if handicap is 0.0 then it will be displayed rather
+      // than an empty string in web view.
+      model.addAttribute("handicap", handicap.toString());
+    } else {
+      model.addAttribute("handicap", handicap);
+    }
+
     return "home";
+  }
+
+  /*
+   * Game has been ended calculate the handicap index for the player.
+   */
+  @GetMapping("/calculateHandicapIndex")
+  public String calculateHandicapIndex(@RequestParam int gameId,
+                                       @RequestParam int teamId) {
+
+    // Calculate the handicap index for the round and store it in the database.
+    handicapIndexCalculator.calculateHandicapIndex(gameId, teamId);
+
+    // Return to the home page from where a new game can be begun.
+    return "redirect:/home";
   }
 
   /*
@@ -182,11 +220,23 @@ public class AppController {
   }
 
   /*
-   * Mapping to validate the game string returned from 'select-game' view and display
-   * the 'join-game' view.
+   * Mapping to retrive a game using the specified game name from the select-game.html
+   * template's game form
    */
-  @PostMapping("/join-game")
-  public String joinGame(@Valid
+  @RequestMapping(value = "/retrieveGame", method = RequestMethod.GET)
+  public ResponseEntity<?> getGame(@RequestParam String gameName) {
+
+    GameDTO game = userService.getGame(gameName);
+    return ResponseEntity.ok(game);
+  }
+
+  /*
+   * Mapping to validate the game string returned from 'select-game' view and display
+   * the 'team-selection' or 'score-card' web views depending if the player has joined
+   * the game before.
+   */
+  @PostMapping("/team-selection")
+  public String selectTeam(@Valid
                          @ModelAttribute("gameData") GameDTO gameDTO,
                          BindingResult bindingResult,
                          Model model) {
@@ -200,45 +250,53 @@ public class AppController {
     // score-card template setting the necessary model attributes to pass course
     // and player data.
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-    GamePlayersDTO playerDetails = userService.getTeam(gameDTO.getGameId(), auth.getName());
+    PlayerDetailsDTO playerDetails = userService.getPlayerDetails(gameDTO.getGameId(), auth.getName());
 
     if (playerDetails != null) {
-      model.addAttribute("playerDetails", playerDetails);
+      // Retrieve scorecard data for the game.
       List<ScorecardDTO> scorecardData = userService.getScorecard(gameDTO.getGameId());
+      // Retrieve any existing hole score records for the player.
+      List<HoleScoreDTO> scores = userService.getPlayerScores(playerDetails.getTeamId(), auth.getName());
+
+      // Add model attributes to make the data we have retrieved available to web view.
+      model.addAttribute("playerDetails", playerDetails);
       model.addAttribute("scorecardData", scorecardData);
+      model.addAttribute("scores", scores);
+      model.addAttribute("scoresHelper", ScoresHelper.getInstance());
+      
       return "score-card";
     }
 
-    // Create model attribute to make game id available to join-game web view.
+    // Create model attribute to make game id available to team-selection template.
     model.addAttribute("gameId", gameDTO.getGameId());
 
-    // Get all teams that have so far been created for the game.
-    List<GamePlayersDTO> players = userService.getTeams(gameDTO.getGameId());
+    // Get all players that have so far been created for the game.
+    List<GamePlayerDTO> gamePlayers = userService.getGamePlayers(gameDTO.getGameId());
 
     // Transform the player list into list of objects, one for each team with
     // associated players.
-    List<TeamsListDTO> teams = new ArrayList<>();
-    if (players != null && players.size() > 0) {
-      int teamId = players.get(0).getTeamId();
-      String teamName = players.get(0).getTeamName();
-      List<String> playerList = new ArrayList<>();
+    List<TeamPlayersDTO> teams = new ArrayList<>();
+    if (gamePlayers != null && gamePlayers.size() > 0) {
+      int teamId = gamePlayers.get(0).getTeamId();
+      String teamName = gamePlayers.get(0).getTeamName();
+      List<String> teamPlayers = new ArrayList<>();
 
-      for (GamePlayersDTO player : players) {
-        if (teamId != player.getTeamId()) {
-          teams.add(new TeamsListDTO(teamId, teamName, new ArrayList<>(playerList)));
-          teamId = player.getTeamId();
-          teamName = player.getTeamName();
-          playerList.clear();  
+      for (GamePlayerDTO gamePlayer : gamePlayers) {
+        if (teamId != gamePlayer.getTeamId()) {
+          teams.add(new TeamPlayersDTO(teamId, teamName, teamPlayers));
+          teamId = gamePlayer.getTeamId();
+          teamName = gamePlayer.getTeamName();
+          teamPlayers = new ArrayList<>();
         }
-        playerList.add(player.getUsername());
+        teamPlayers.add(gamePlayer.getUsername());
       }
-      teams.add(new TeamsListDTO(teamId, teamName, playerList));
+      teams.add(new TeamPlayersDTO(teamId, teamName, teamPlayers));
     }
 
-    // Create model attribute to make teams list available to join-game web view.
+    // Create model attribute to make teams list available to team-selection web view.
     model.addAttribute("teamsList", teams);
 
-    return "join-game";
+    return "team-selection";
   }
 
   /*
@@ -246,8 +304,6 @@ public class AppController {
    */
   @RequestMapping(value = "/addPlayerToGame", method = RequestMethod.GET)
   public ResponseEntity<?> addUserToGame(@RequestParam int teamId) {
-
-    log.info("Team id:" + teamId);
 
     // Get the username of current user.
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -286,7 +342,11 @@ public class AppController {
     Integer teamId = userService.saveTeam(teamDTO);
 
     // Display score-card template
-    return "redirect:/score-card?gameId=" + teamDTO.getGameId();
+    if (teamId != null && teamId > 0) {
+      return "redirect:/score-card?gameId=" + teamDTO.getGameId() + "&teamId=" + teamId;
+    } else {
+      return "redirect:/create-team?gameId=" + teamDTO.getGameId();
+    }
   }
 
   /*
@@ -294,25 +354,39 @@ public class AppController {
    */
   @GetMapping("/score-card")
   public String showScoreCard(@RequestParam int gameId,
+                              @RequestParam int teamId,
                               Model model) {
 
-    // Get scorecard course
-    List<ScorecardDTO> scorecardData = userService.getScorecard(gameId);
-
-    // Get the player details, recorded hole scores, etc.
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-    GamePlayersDTO playerDetails = userService.getTeam(gameId, auth.getName());
 
-    // Create model attribute to make player and scorecard details available to
-    // score-card template.
+    // Get scorecard course data
+    List<ScorecardDTO> scorecardData = userService.getScorecard(gameId);
+    // Retrieve player game and team details.
+    PlayerDetailsDTO playerDetails = userService.getPlayerDetails(gameId, auth.getName());
+    // Retrieve any hole score records for player.
+    List<HoleScoreDTO> scores = userService.getPlayerScores(teamId, auth.getName());
+
+    // Create model attributes to make necessary details available to
+    // score-card web view.
     model.addAttribute("scorecardData", scorecardData);
     model.addAttribute("playerDetails", playerDetails);
+    model.addAttribute("scores", scores);
+    model.addAttribute("scoresHelper", ScoresHelper.getInstance());
 
     return "score-card";
   }
 
   /*
-   * Mapping to take GPS coordinates from mobile device and save them to the\
+   * Mapping to retrieve pin location data for current hole.
+   */
+  @RequestMapping(value = "/getPinLocationData", method = RequestMethod.GET)
+  public ResponseEntity<?> getPinLocationData(@RequestParam int holeId) {
+
+    return ResponseEntity.ok(userService.getPinLocationData(holeId));
+  }
+
+  /*
+   * Mapping to take GPS coordinates from mobile device and save them to the
    * applicable hole.
    */
   @RequestMapping(value = "/addLocationToHole", method = RequestMethod.POST)
@@ -329,4 +403,98 @@ public class AppController {
       return ResponseEntity.ok(false);
     }
   }
+
+  /*
+   * Mapping to set drive distance in database. If the new drive distance is
+   * greater than the existing drive distance then the distance value stored
+   * in the players table will be updated.
+   */
+  @RequestMapping(value = "/setLongestDrive", method = RequestMethod.POST)
+  public ResponseEntity<?> setLongestDrive(@RequestParam int playerId,
+                              @RequestParam int distance) {
+                              
+    userService.setLongestDrive(playerId, distance);
+    return ResponseEntity.ok(true);
+  }
+
+  /*
+   * Mapping which takes a hole score and posts it to the database. Trigger
+   * in the database will then update applicable game scores.
+   */
+  @RequestMapping(value = "/setHoleScore", method = RequestMethod.POST)
+  public ResponseEntity<?> setHoleScore(@RequestParam int gameId,
+                                        @RequestParam int teamId,
+                                        @RequestParam int playerId,
+                                        @RequestParam int holeId,
+                                        @RequestParam int score) {
+
+    userService.setHoleScore(gameId, teamId, playerId, holeId, score);
+    return ResponseEntity.ok(true);
+  }
+
+  /*
+   * Mapping to dislay the Daytona scoring template.
+   */
+  @GetMapping("/daytona")
+  public String showDaytona(@RequestParam int gameId,
+                            Model model) {
+
+    // Retrieve the Daytona scoring information for each team in the game.
+    List<ScoresDTO> daytonaTeamScoresList = userService.getDaytonaTeamScores(gameId);
+    model.addAttribute("teamScoresList", daytonaTeamScoresList);
+
+    return "daytona-stableford";
+  }
+
+  /*
+   * Mapping to display the strokeplay scoring template.
+   */
+  @GetMapping("/strokeplay")
+  public String showStrokeplay(@RequestParam int gameId,
+                               Model model) {
+
+    // Retrieve the strokeplay scoring data for each player in the game.
+    List<ScoresDTO> strokeplayPlayersScoresList = userService.getStrokeplayPlayersScores(gameId);
+    model.addAttribute("strokeplayPlayersScoresList", strokeplayPlayersScoresList);
+    
+    return "strokeplay";
+  }
+
+  /*
+   * Mapping to display the Matchplay scoring template.
+   */
+  @GetMapping("/matchplay")
+  public String showMatchplay(@RequestParam int gameId,
+                              @RequestParam int teamId,
+                              @RequestParam String teamName,
+                              Model model) {
+
+    // Retrieve the necessary scoring data for the Matchplay template.
+    List<ScoresDTO> matchplayTeamsScoresList = userService.getMatchplayTeamsScores(gameId, teamId);
+    ScoresDTO matchplayTeamScores = matchplayTeamsScoresList.stream().filter(
+        obj -> teamName.equals(obj.getName())).findFirst().orElse(null);
+    matchplayTeamsScoresList.removeIf(obj -> obj.getName().equals(teamName));
+
+    // Add the data objects as attributes to the Spring model to make available
+    // to the template.
+    model.addAttribute("matchplayTeamScores", matchplayTeamScores);
+    model.addAttribute("matchplayTeamsScoresList", matchplayTeamsScoresList);
+    
+    return "matchplay";
+  }
+
+  /*
+   * Mapping to dislay the Stableford scoring template.
+   */
+  @GetMapping("/stableford")
+  public String showStableford(@RequestParam int gameId,
+                              Model model) {
+  
+    // Retrieve the Stableford scoring information for each team in the game.
+    List<ScoresDTO> stablefordTeamScoresList = userService.getStablefordTeamScores(gameId);
+    model.addAttribute("teamScoresList", stablefordTeamScoresList);
+
+    return "daytona-stableford";
+  }
+
 }

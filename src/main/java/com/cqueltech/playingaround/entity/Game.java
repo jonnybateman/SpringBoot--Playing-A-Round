@@ -34,9 +34,6 @@ public class Game {
   @Column(name="game_name")
   private String gameName;
 
-  //@Column(name = "course_id")
-  //private Integer courseId;
-
   // Foreign key constraint for course_id
   @ManyToOne(fetch = FetchType.LAZY)
   private Course course;

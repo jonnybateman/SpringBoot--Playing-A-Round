@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <title>Strokeplay Scores Page</title>
+  <div th:replace="~{/fragments/head}" />
+</head>
+
+<body>
+  <!-- Display the title navigation bar -->
+  <section id="title">
+    <div th:replace="~{/fragments/navbar}" />
+  </section>
+
+  <!-- Create a card for each player contained in the playersList model attribute. -->
+  <div id="container" class="container-scrollable">
+    <div class="card card-font card-daytona-strokeplay" th:each="player : ${strokeplayPlayersScoresList}">
+      <div class="card-header">
+        <span th:text="${player.name}"></span>
+      </div>
+      <div class="card-body">
+        <div class="table-daytona-strokeplay">
+          <table class="table table-bordered table-text-daytona-strokeplay">
+            <tr style="background-color: var(--table-header-bg-color);">
+              <th>1</th>
+              <th>2</th>
+              <th>3</th>
+              <th>4</th>
+              <th>5</th>
+              <th>6</th>
+              <th>7</th>
+              <th>8</th>
+              <th>9</th>
+              <th>Out</th>
+            </tr>
+            <tr>
+              <th th:text="${player.scoreH1 == 0 ? '' : player.scoreH1}"></th>
+              <th th:text="${player.scoreH2 == 0 ? '' : player.scoreH2}"></th>
+              <th th:text="${player.scoreH3 == 0 ? '' : player.scoreH3}"></th>
+              <th th:text="${player.scoreH4 == 0 ? '' : player.scoreH4}"></th>
+              <th th:text="${player.scoreH5 == 0 ? '' : player.scoreH5}"></th>
+              <th th:text="${player.scoreH6 == 0 ? '' : player.scoreH6}"></th>
+              <th th:text="${player.scoreH7 == 0 ? '' : player.scoreH7}"></th>
+              <th th:text="${player.scoreH8 == 0 ? '' : player.scoreH8}"></th>
+              <th th:text="${player.scoreH9 == 0 ? '' : player.scoreH9}"></th>
+              <th th:text="${player.strokeplayOut == 0 ? '&#8203' : player.strokeplayOut}"></th>
+            </tr>
+            <tr style="background-color: var(--table-header-bg-color);">
+              <th>10</th>
+              <th>11</th>
+              <th>12</th>
+              <th>13</th>
+              <th>14</th>
+              <th>15</th>
+              <th>16</th>
+              <th>17</th>
+              <th>18</th>
+              <th>In</th>
+            </tr>
+            <tr>
+              <th th:text="${player.scoreH10 == 0 ? '' : player.scoreH10}"></th>
+              <th th:text="${player.scoreH11 == 0 ? '' : player.scoreH11}"></th>
+              <th th:text="${player.scoreH12 == 0 ? '' : player.scoreH12}"></th>
+              <th th:text="${player.scoreH13 == 0 ? '' : player.scoreH13}"></th>
+              <th th:text="${player.scoreH14 == 0 ? '' : player.scoreH14}"></th>
+              <th th:text="${player.scoreH15 == 0 ? '' : player.scoreH15}"></th>
+              <th th:text="${player.scoreH16 == 0 ? '' : player.scoreH16}"></th>
+              <th th:text="${player.scoreH17 == 0 ? '' : player.scoreH17}"></th>
+              <th th:text="${player.scoreH18 == 0 ? '' : player.scoreH18}"></th>
+              <th th:text="${player.strokeplayIn == 0 ? '&#8203' : player.strokeplayIn}"></th>
+            </tr>
+          </table>
+        </div>
+      </div>
+    
+      <div class="card-text" style="font-weight: bold; font-size: xx-large; margin-right: 5%; margin-bottom: 1rem; text-align: right;"
+          th:text="${'Total: ' + player.scoreTotal}" />
+    </div>
+  </div>
+
+  <div id="footer" th:replace="~{/fragments/footer}" />
+
+  <div th:replace="~{../javascript/js-daytona-strokeplay}" />
+
+</body>
+
+</html>
