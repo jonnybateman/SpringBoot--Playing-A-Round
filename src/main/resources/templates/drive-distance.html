@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <title>Drive Distances Page</title>
+  <div th:replace="~{/fragments/head}" />
+</head>
+
+<body>
+  <!-- Display the title navigation bar -->
+  <section id="title">
+    <div th:replace="~{/fragments/navbar}" />
+  </section>
+  <div id="container" class="container-scrollable">
+    <table class="drive-distance-table">
+      <tr th:each="player : ${players}">
+        <td class="drive-distance-banner">
+          <div style="float: left;" th:text="${player.getUsername()}"></div>
+          <div style="float: right;" th:text="${player.getDistance() + ' yards'}"></div>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <div id="footer" th:replace="~{/fragments/footer}" />
+
+  <div th:replace="~{../javascript/js-drive-distance}" />
+
+</body>
+
+</html>

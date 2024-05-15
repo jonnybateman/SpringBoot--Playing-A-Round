@@ -241,10 +241,9 @@ CREATE TABLE `teams` (
   `game_id` int NOT NULL,
   `team_name` varchar(45) NOT NULL,
   `matchplay_mode` varchar(9) NOT NULL,
-  `holes_played` int,
   `matchplay` varchar(73),
   `daytona` varchar(73),
-  `stableford` int,
+  `stableford` varchar(35),
   PRIMARY KEY (`id`),
   KEY `FK_GAME_ID_idx` (`id`),
   CONSTRAINT `FK_GAME_ID` FOREIGN KEY (`game_id`)

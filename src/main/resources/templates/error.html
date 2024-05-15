@@ -20,7 +20,7 @@
     <p th:text="'Timestamp: ' + ${errorResponse.getTimestamp()}"></p>
     <p style="white-space: pre-wrap;" th:text="${errorResponse.getStackTrace()}"></p>
     <hr>
-    <a href="/home">home</a>
+    <a href="@{/home}">home</a>
   </div>
 
   <section id="footer">

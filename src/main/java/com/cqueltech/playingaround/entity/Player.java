@@ -47,7 +47,7 @@ public class Player {
   private int driveDistance;
 
   @Column(name = "handicap_index")
-  private float handicapIndex;
+  private Float handicapIndex;
 
   /*
    * Define class constructors
@@ -57,11 +57,13 @@ public class Player {
 
   public Player(String username) {
     this.username = username;
+    this.driveDistance = 0;
   }
 
   public Player(Integer id, String username) {
     this.id = id;
     this.username = username;
+    this.driveDistance = 0;
   }
 
   /*
@@ -100,11 +102,11 @@ public class Player {
     this.driveDistance = driveDistance;
   }
 
-  public float getHandicapIndex() {
+  public Float getHandicapIndex() {
     return handicapIndex;
   }
 
-  public void setHandicapIndex(float handicapIndex) {
+  public void setHandicapIndex(Float handicapIndex) {
     this.handicapIndex = handicapIndex;
   }
   

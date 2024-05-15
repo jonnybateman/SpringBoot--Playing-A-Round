@@ -1,11 +1,11 @@
 <nav class="navbar fixed-top">
   <div class="container-fluid">
-    <a class="navbar-brand a-navbar-brand" href="/home">Playing-A-Round</a>
+    <a class="navbar-brand a-navbar-brand" href="@{/home}">Playing-A-Round</a>
     <button class="navbar-toggler navbar-toggler-button" type="button" data-bs-toggle="offcanvas"
         data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
       <span class="fa-solid fa-bars fa-3x"></span>
     </button>
-    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+    <div class="offcanvas offcanvas-end w-50" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
       <div class="offcanvas-header">
         <h2 class="offcanvas-title" id="offcanvasNavbarLabel">Menu</h2>
         <i class="fa-solid fa-xmark fa-4x" data-bs-dismiss="offcanvas"></i>
@@ -13,33 +13,37 @@
       <div class="offcanvas-body">
         <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
           <li class="nav-item">
-            <a id="endGame" class="nav-link" href="/calculateHandicapIndex" onclick="return endGame()">Save Game</a>
+            <a id="endGame" class="nav-link" href="" onclick="return endGame()">Save/End Game</a>
           </li>
           <br>
           <li class="nav-item">
-            <a id="scorecard" class="nav-link" href="/score-card" onclick="return hasJoinedGame('scorecard')">Scorecard</a>
+            <a id="scorecard" class="nav-link" href="" onclick="return hasJoinedGame('scorecard')">Scorecard</a>
           </li>
           <br>
           <li class="nav-item">
-            <a id="strokeplay" class="nav-link" href="/strokeplay" onclick="return hasJoinedGame('strokeplay')">Strokeplay</a>
+            <a id="strokeplay" class="nav-link" href="" onclick="return hasJoinedGame('strokeplay')">Strokeplay</a>
           </li>
           <br>
           <li class="nav-item">
-            <a id="matchplay" class="nav-link" href="/matchplay" onclick="return hasJoinedGame('matchplay')">Matchplay</a>
+            <a id="matchplay" class="nav-link" href="" onclick="return hasJoinedGame('matchplay')">Matchplay</a>
           </li>
           <br>
           <li class="nav-item">
-            <a id="daytona" class="nav-link" href="/daytona" onclick="return hasJoinedGame('daytona');">Daytona</a>
+            <a id="daytona" class="nav-link" href="" onclick="return hasJoinedGame('daytona');">Daytona</a>
           </li>
           <br>
           <li class="nav-item">
-            <a id="stableford" class="nav-link" href="/stableford" onclick="return hasJoinedGame('stableford')">Stableford</a>
+            <a id="stableford" class="nav-link" href="" onclick="return hasJoinedGame('stableford')">Stableford</a>
+          </li>
+          <br>
+          <li class="nav-item">
+            <a id="driveDistance" class="nav-link" href="" onclick="return hasJoinedGame('drive-distance')">Drives</a>
           </li>
         </ul>
         <br>
         <br>
         <form class="form-inline" style="margin-left: 18px;" action="#" th:action="@{/logout}"
-            onclick="deleteAllCookies()" method="POST">
+            onclick="deleteAllSessionStorageValues()" method="POST">
           <input class="btn btn-logout btn-md mb-3" type="submit" value="Logout" />
         </form>
         <div style="position: fixed; bottom: 40px;">

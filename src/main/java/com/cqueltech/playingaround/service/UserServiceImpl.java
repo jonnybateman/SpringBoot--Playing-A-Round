@@ -17,6 +17,7 @@ import com.cqueltech.playingaround.dto.CommaDelimitedScoresDTO;
 import com.cqueltech.playingaround.dto.CourseDTO;
 import com.cqueltech.playingaround.dto.CourseDataWrapperDTO;
 import com.cqueltech.playingaround.dto.CourseParSiDTO;
+import com.cqueltech.playingaround.dto.DriveDistanceDTO;
 import com.cqueltech.playingaround.dto.ScoresDTO;
 import com.cqueltech.playingaround.dto.GameDTO;
 import com.cqueltech.playingaround.dto.GamePlayerDTO;
@@ -493,6 +494,15 @@ public class UserServiceImpl implements UserService {
     }
 
     return scoresDTOList;
+  }
+
+  /*
+   * Retrieve the longest recorded drive for each player.
+   */
+  @Override
+  public List<DriveDistanceDTO> getLongestDrives(int gameId) {
+
+    return userDAO.getLongestDrives(gameId);
   }
 
 }

@@ -1,14 +1,18 @@
 <script  th:inline="javascript">
 
 // Get value of cTeamId cookie to see if user has already joined a game.
-let cGameIdName = getCookieNameGameId();
-let cGameIdValue = getCookie(cGameIdName);
+let gameIdValue = getSessionStorageValue(getNameGameId());
 
 // Depending on cookie value redirect to applicable page.
-if (cGameIdValue == null || cGameIdValue == "") {
-  window.location.href = "/home";
+if (gameIdValue == null || gameIdValue == "") {
+  window.location.href = "[(@{/home})]";
 } else {
-  window.location.href = "/score-card?gameId=" + cGameIdValue;
+  let relativeUrl = "[(@{/score-card})]"
+  let objectUrl = new URL(relativeUrl, document.location);
+  // Add game id parameter to the URL.
+  objectUrl.searchParams.append("gameId", gameIdValue);
+  objectUrl.searchParams.append("teamId", getSessionStorageValue(getNameTeamId()));
+  window.location.href = objectUrl;
 }
 
 </script>

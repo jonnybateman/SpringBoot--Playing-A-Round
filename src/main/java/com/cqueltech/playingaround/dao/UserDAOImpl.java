@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import com.cqueltech.playingaround.dto.CourseDTO;
 import com.cqueltech.playingaround.dto.CourseParSiDTO;
+import com.cqueltech.playingaround.dto.DriveDistanceDTO;
 import com.cqueltech.playingaround.dto.CommaDelimitedScoresDTO;
 import com.cqueltech.playingaround.dto.GameDTO;
 import com.cqueltech.playingaround.dto.GamePlayerDTO;
@@ -498,5 +499,22 @@ public class UserDAOImpl implements UserDAO {
     query.setParameter("p2", playerId);
 
     query.executeUpdate();
+  }
+
+  /*
+   * Retrieve the longest recorded drive for each player from the database.
+   */
+  public List<DriveDistanceDTO> getLongestDrives(int gameId) {
+
+    // Define the HQL query to retrieve the necessary data.
+    TypedQuery<DriveDistanceDTO> query = entityManager.createQuery(
+        "SELECT new com.cqueltech.playingaround.dto.DriveDistanceDTO(" +
+            "p.username, p.driveDistance) " +
+        "FROM Team t JOIN t.players p " +
+        "WHERE t.gameId = " + gameId + " " +
+        "ORDER BY p.driveDistance DESC",
+        DriveDistanceDTO.class);
+
+     return query.getResultList();
   }
 }

@@ -316,16 +316,20 @@ nav {
   padding: 20px;
 }
 
-.scorecard-table {
+.scorecard-div-table {
   width: 90%;
   margin-left: auto;
   margin-right: auto;
   background-color: var(--table-body-bg-color);
 }
 
-.scorecard-text {
-  font-size:xx-large;
+.scorecard-table-text {
+  font-size: 1.8rem;
   color: var(--table-text-color);
+}
+
+.scorecard-table {
+  table-layout: fixed;
 }
 
 #range {
@@ -343,7 +347,6 @@ nav {
 
 .clickable-button {
   cursor: pointer;
-  
 }
 
 .clickable-button:active {
@@ -420,6 +423,30 @@ nav {
   background-color: var(--border-color);
   border-top-right-radius: 10px;
   border-bottom-right-radius: 10px;
+}
+
+/*
+ * Drive Distances Page
+ */
+
+ .drive-distance-table {
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+  /* Separate the rows of the table by 2rem */
+  border-collapse: separate;
+  border-spacing: 0 2em;
+}
+
+.drive-distance-banner {
+  border: 2px var(--border-color) solid;
+  background: var(--banner-bg-color);
+  font-family: "Montserrat";
+  font-size: 3rem;
+  color: var(--banner-text-color);
+  border-radius: 1rem;
+  width: 100%;
+  padding: 20px;
 }
 
 /*

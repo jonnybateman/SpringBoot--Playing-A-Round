@@ -19,8 +19,21 @@
     <h1 th:text="${playerDetails.getGameName() + ' - ' + playerDetails.getTeamName()}"></h1>
   </div>
 
-  <div class="scorecard-table scorecard-text card" style="margin-top: 50px;">
-    <table class="table table-bordered scorecard-text">
+  <div class="scorecard-div-table scorecard-text card" style="margin-top: 50px;">
+    <table class="table table-bordered scorecard-table-text scorecard-table">
+        <colgroup>
+          <col style="width: 11%;">
+          <col style="width: 9%;">
+          <col style="width: 9%;">
+          <col style="width: 9%;">
+          <col style="width: 9%;">
+          <col style="width: 9%;">
+          <col style="width: 9%;">
+          <col style="width: 9%;">
+          <col style="width: 9%;">
+          <col style="width: 9%;">
+          <col style="width: 8%;">
+        </colgroup>
       
         <tr style="background-color: var(--table-header-bg-color);">
           <th>Hole</th>
@@ -91,27 +104,35 @@
         </tr>
         <tr>
           <th></th>
-          <th><input id="inputHole1" type="number" min="0" max="12"
-              onfocus="holeInputOnFocusEvent()" onblur="holeInputOnBlurEvent()"
+          <th><input id="inputHole1" type="number" min="0" max="12" size="1" style="width: 100%;"
+              onfocus="holeInputOnFocusEvent(1)" onblur="holeInputOnBlurEvent(1)"
               th:value="${scoresHelper.getHoleScore(scores, 1)}" readonly /></th>
-          <th><input id="inputHole2" type="number" min="0" max="12" onblur="holeInputOnBlurEvent()"
+          <th><input id="inputHole2" type="number" min="0" max="12" size="1" style="width: 100%;"
+              onfocus="holeInputOnFocusEvent(2)" onblur="holeInputOnBlurEvent(2)"
               th:value="${scoresHelper.getHoleScore(scores, 2)}" readonly /></th>
-          <th><input id="inputHole3" type="number" min="0" max="12" onblur="holeInputOnBlurEvent()"
+          <th><input id="inputHole3" type="number" min="0" max="12" size="1" style="width: 100%;"
+              onfocus="holeInputOnFocusEvent(3)" onblur="holeInputOnBlurEvent(3)"
               th:value="${scoresHelper.getHoleScore(scores, 3)}" readonly /></th>
-          <th><input id="inputHole4" type="number" min="0" max="12" onblur="holeInputOnBlurEvent()"
+          <th><input id="inputHole4" type="number" min="0" max="12" size="1" style="width: 100%;"
+              onfocus="holeInputOnFocusEvent(4)" onblur="holeInputOnBlurEvent(4)"
               th:value="${scoresHelper.getHoleScore(scores, 4)}" readonly /></th>
-          <th><input id="inputHole5" type="number" min="0" max="12" onblur="holeInputOnBlurEvent()"
+          <th><input id="inputHole5" type="number" min="0" max="12" size="1" style="width: 100%;"
+              onfocus="holeInputOnFocusEvent(5)" onblur="holeInputOnBlurEvent(5)"
               th:value="${scoresHelper.getHoleScore(scores, 5)}" readonly /></th>
-          <th><input id="inputHole6" type="number" min="0" max="12" onblur="holeInputOnBlurEvent()"
+          <th><input id="inputHole6" type="number" min="0" max="12" size="1" style="width: 100%;"
+              onfocus="holeInputOnFocusEvent(6)" onblur="holeInputOnBlurEvent(6)"
               th:value="${scoresHelper.getHoleScore(scores, 6)}" readonly /></th>
-          <th><input id="inputHole7" type="number" min="0" max="12" onblur="holeInputOnBlurEvent()"
+          <th><input id="inputHole7" type="number" min="0" max="12" size="1" style="width: 100%;"
+              onfocus="holeInputOnFocusEvent(7)" onblur="holeInputOnBlurEvent(7)"
               th:value="${scoresHelper.getHoleScore(scores, 7)}" readonly /></th>
-          <th><input id="inputHole8" type="number" min="0" max="12" onblur="holeInputOnBlurEvent()"
+          <th><input id="inputHole8" type="number" min="0" max="12" size="1" style="width: 100%;"
+              onfocus="holeInputOnFocusEvent(8)" onblur="holeInputOnBlurEvent(8)"
               th:value="${scoresHelper.getHoleScore(scores, 8)}" readonly /></th>
-          <th><input id="inputHole9" type="number" min="0" max="12" onblur="holeInputOnBlurEvent()"
+          <th><input id="inputHole9" type="number" min="0" max="12" size="1" style="width: 100%;"
+              onfocus="holeInputOnFocusEvent(9)" onblur="holeInputOnBlurEvent(9)"
               th:value="${scoresHelper.getHoleScore(scores, 9)}" readonly /></th>
-          <th><input id="inputOut" type="number" min="0" max="90" readonly
-              th:value="0" /></th>
+          <th><input id="inputOut" type="number" min="0" max="90" size="1" style="width: 100%;"
+              readonly th:value="0" /></th>
         </tr>
         <tr style="background-color: var(--table-header-bg-color);">
           <th>Hole</th>
@@ -182,26 +203,35 @@
         </tr>
         <tr>
           <th></th>
-          <th><input id="inputHole10" type="number" min="0" max="12" onblur="holeInputOnBlurEvent()"
+          <th><input id="inputHole10" type="number" min="0" max="12" size="1" style="width: 100%;"
+              onfocus="holeInputOnFocusEvent(10)" onblur="holeInputOnBlurEvent(10)"
               th:value="${scoresHelper.getHoleScore(scores, 10)}" readonly /></th>
-          <th><input id="inputHole11" type="number" min="0" max="12" onblur="holeInputOnBlurEvent()"
+          <th><input id="inputHole11" type="number" min="0" max="12" size="1" style="width: 100%;"
+              onfocus="holeInputOnFocusEvent(11)" onblur="holeInputOnBlurEvent(11)"
               th:value="${scoresHelper.getHoleScore(scores, 11)}" readonly /></th>
-          <th><input id="inputHole12" type="number" min="0" max="12" onblur="holeInputOnBlurEvent()"
+          <th><input id="inputHole12" type="number" min="0" max="12" size="1" style="width: 100%;"
+              onfocus="holeInputOnFocusEvent(12)" onblur="holeInputOnBlurEvent(12)"
               th:value="${scoresHelper.getHoleScore(scores, 12)}" readonly /></th>
-          <th><input id="inputHole13" type="number" min="0" max="12" onblur="holeInputOnBlurEvent()"
+          <th><input id="inputHole13" type="number" min="0" max="12" size="1" style="width: 100%;"
+              onfocus="holeInputOnFocusEvent(13)" onblur="holeInputOnBlurEvent(13)"
               th:value="${scoresHelper.getHoleScore(scores, 13)}" readonly /></th>
-          <th><input id="inputHole14" type="number" min="0" max="12" onblur="holeInputOnBlurEvent()"
+          <th><input id="inputHole14" type="number" min="0" max="12" size="1" style="width: 100%;"
+              onfocus="holeInputOnFocusEvent(14)" onblur="holeInputOnBlurEvent(14)"
               th:value="${scoresHelper.getHoleScore(scores, 14)}" readonly /></th>
-          <th><input id="inputHole15" type="number" min="0" max="12" onblur="holeInputOnBlurEvent()"
+          <th><input id="inputHole15" type="number" min="0" max="12" size="1" style="width: 100%;"
+              onfocus="holeInputOnFocusEvent(15)" onblur="holeInputOnBlurEvent(15)"
               th:value="${scoresHelper.getHoleScore(scores, 15)}" readonly /></th>
-          <th><input id="inputHole16" type="number" min="0" max="12" onblur="holeInputOnBlurEvent()"
+          <th><input id="inputHole16" type="number" min="0" max="12" size="1" style="width: 100%;"
+              onfocus="holeInputOnFocusEvent(16)" onblur="holeInputOnBlurEvent(16)"
               th:value="${scoresHelper.getHoleScore(scores, 16)}" readonly /></th>
-          <th><input id="inputHole17" type="number" min="0" max="12" onblur="holeInputOnBlurEvent()"
+          <th><input id="inputHole17" type="number" min="0" max="12" size="1" style="width: 100%;"
+              onfocus="holeInputOnFocusEvent(17)" onblur="holeInputOnBlurEvent(17)"
               th:value="${scoresHelper.getHoleScore(scores, 17)}" readonly /></th>
-          <th><input id="inputHole18" type="number" min="0" max="12" onblur="holeInputOnBlurEvent()"
+          <th><input id="inputHole18" type="number" min="0" max="12" size="1" style="width: 100%;"
+              onfocus="holeInputOnFocusEvent(18)" onblur="holeInputOnBlurEvent(18)"
               th:value="${scoresHelper.getHoleScore(scores, 18)}" readonly /></th>
-          <th><input id="inputIn" type="number" min="0" max="90" readonly
-              th:value="0" /></th>
+          <th><input id="inputIn" type="number" min="0" max="90" size="1" style="width: 100%;"
+              readonly th:value="0" /></th>
         </tr>
       <tbody>
 

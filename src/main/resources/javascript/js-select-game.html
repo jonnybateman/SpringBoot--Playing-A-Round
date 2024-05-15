@@ -13,8 +13,8 @@
 
   // Apply username and handicap cookie values to the appropriate elements in
   // the navigation panel.
-  document.getElementById("username").innerHTML = "User: " + getCookie(getCookieNameUser());
-  let handicap = getCookie(getCookieNameHandicap());
+  document.getElementById("username").innerHTML = "User: " + getSessionStorageValue(getNameUser());
+  let handicap = getSessionStorageValue(getNameHandicap());
   if (handicap == 0.0) {
     document.getElementById("handicap").innerHTML = "Handicap: 0.0";
   } else {
@@ -29,16 +29,17 @@
    * so call retrieveGames() to return a list of games based on the
    * supplied input string.
    */
-  inputGame.addEventListener("keyup", event => {
+  inputGame.addEventListener("input", event => {
     // If the form's error alert is displayed remove it.
-    var divError = document.getElementById('error');
+    let divError = document.getElementById('error');
     if (divError != null) {
       divError.parentElement.remove(divError);
     }
-
-    var searchString = document.getElementById('gameName').value;
+    
+    let searchString = document.getElementById('gameName').value;
+    /*
     if (searchString != null) {
-      if (event.keyCode != 8) { // If event is not backspace/delete. 
+      if (event.which != '8') { // If event is not backspace/delete. 
         if (searchString.length == 3 && !divGameList.hasChildNodes()) {
           retrieveGames(searchString);
         }
@@ -47,6 +48,12 @@
           closeGameList();
         }
       }
+    }
+    */
+    if (searchString.length == 3 && !divGameList.hasChildNodes()) {
+      retrieveGames(searchString);
+    } else if (searchString.length < 3 && divGameList.hasChildNodes) {
+      closeGameList();
     }
   });
 
@@ -59,7 +66,7 @@
     // Use JQuery Ajax to make call to controller.
     $.ajax({
       type: "GET",
-      url: "/retrieveMatchingGames",
+      url: "[(@{/retrieveMatchingGames})]",
       contentType: "application/json",
       dataType: "json",
       data: {search: searchString},
@@ -67,7 +74,6 @@
         // result contains a JSON array of game names.
         //    [{gameId: "game-id-1", gameName: "game-name-1"},
         //          {gameId: "game-id-2", gameName: "game-name-2"},...]
-
         divFeedback.setAttribute("class", "alert alert-danger col-xs-offset-1 col-xs-10");
 
         if (result != null && result.length > 0) {
@@ -138,7 +144,7 @@
       if (searchString != null && searchString != "") {
         $.ajax({
           type: "GET",
-          url: "/retrieveGame",
+          url: "[(@{/retrieveGame})]",
           contentType: "application/json",
           dataType: "json",
           data: { gameName: searchString },

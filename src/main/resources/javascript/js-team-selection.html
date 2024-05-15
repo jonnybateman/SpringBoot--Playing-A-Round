@@ -18,8 +18,8 @@
   
   // Apply username and handicap cookie values to the appropriate elements in
   // the navigation panel.
-  document.getElementById("username").innerHTML = "User: " + getCookie(getCookieNameUser());
-  let handicap = getCookie(getCookieNameHandicap());
+  document.getElementById("username").innerHTML = "User: " + getSessionStorageValue(getNameUser());
+  let handicap = getSessionStorageValue(getNameHandicap());
   if (handicap == 0.0) {
     document.getElementById("handicap").innerHTML = "Handicap: 0.0";
   } else {
@@ -38,17 +38,17 @@
         var teamId = this.dataset.value;
 
         // Create cookie with the team id indicating that the player has joined a game.
-        setCookie(getCookieNameTeamId(), teamId);
+        setSessionStorageValue(getNameTeamId(), teamId);
 
         // Send team id to controller to add user to the specified team.
         $.ajax({
           type: "GET",
-          url: "/addPlayerToGame",
+          url: "[(@{/addPlayerToGame})]",
           dataType: "json",
           data: {"teamId": teamId, "gameId": instructionContainer.dataset.value},
           success: function(result) {
             if (result == true) {
-              window.location.href = "/score-card?gameId=" + instructionContainer.dataset.value +
+              window.location.href = "[(@{/score-card})]?gameId=" + instructionContainer.dataset.value +
                   "&teamId=" + teamId;
             }
           }  

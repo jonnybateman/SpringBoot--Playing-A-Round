@@ -28,7 +28,7 @@ public class NewUserDTO {
   private int active;
   private String firstName;
   private String lastName;
-  private float handicap;
+  private Float handicap;
 
   /*
    * Define class constructors
@@ -41,7 +41,7 @@ public class NewUserDTO {
                     String password2,
                     String firstName,
                     String lastName,
-                    float handicap) {
+                    Float handicap) {
     this.username = username;
     this.password1 = password1;
     this.password2 = password2;
@@ -103,11 +103,11 @@ public class NewUserDTO {
     this.lastName = lastName;
   }
 
-  public float getHandicap() {
+  public Float getHandicap() {
     return handicap;
   }
 
-  public void setHandicap(float handicap) {
+  public void setHandicap(Float handicap) {
     this.handicap = handicap;
   }
   

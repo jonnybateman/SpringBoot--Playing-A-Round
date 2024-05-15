@@ -58,9 +58,6 @@ public class Team {
   @Column(name="matchplay_mode")
   private String matchplayMode;
 
-  @Column(name="holes_played")
-  private int holesPlayed;
-
   @Column(name="matchplay")
   private String matchplay;
 
@@ -122,14 +119,6 @@ public class Team {
 
   public void setMatchplayMode(String matchplayMode) {
     this.matchplayMode = matchplayMode;
-  }
-
-  public int getHolesPlayed() {
-    return holesPlayed;
-  }
-
-  public void setHolesPlayed(int holesPlayed) {
-    this.holesPlayed = holesPlayed;
   }
 
   public String getMatchplay() {
