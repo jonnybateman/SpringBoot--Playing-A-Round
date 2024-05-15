@@ -20,7 +20,8 @@
         <td style="text-align: right;">
           <!--<a class="fa-solid fa-circle-plus fa-5x" th:href="@{/create-team}"></a>-->
           <button type="button" class="fa-solid fa-circle-plus fa-5x"
-              style="background-color: transparent; border: none;" th:onclick="|window.location.href='/create-team?gameId=${gameId}'|"></button>
+              style="background-color: transparent; border: none;"
+              th:onclick="|window.location.href='@{/create-team}?gameId=${gameId}'|"></button>
         </td>
       </tr>
     </table>

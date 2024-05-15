@@ -49,8 +49,8 @@
 
   // Apply username and handicap cookie values to the appropriate elements in
   // the navigation panel.
-  document.getElementById("username").innerHTML = "User: " + getCookie(getCookieNameUser());
-  let handicap = getCookie(getCookieNameHandicap());
+  document.getElementById("username").innerHTML = "User: " + getSessionStorageValue(getNameUser());
+  let handicap = getSessionStorageValue(getNameHandicap());
   if (handicap == 0.0) {
     document.getElementById("handicap").innerHTML = "Handicap: 0.0";
   } else {
@@ -61,7 +61,7 @@
   /*
    * Check if supplied course name already matches a course in the database.
    */
-  function doesCourseExist(value) {
+  function doesCourseExist(value, event) {
     if (event.type == "keypress") {
       closeFeedbackError();
     } else if (event.type == "focusout") {
@@ -69,7 +69,7 @@
       // and check if course already exists.
       $.ajax({
         type: "GET",
-        url: "/retrieveMatchingCourses",
+        url: "[(@{/retrieveMatchingCourses})]",
         contentType: "applcation/json",
         dataType: "json",
         data: {search: value},

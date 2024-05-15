@@ -1,5 +1,6 @@
 <meta charset="utf-8">
-<link rel="canonical" href="http://cqueltech.com/index.html">
+<!-- Set security policy so any http requests via $.ajax are processed as https rather than http -->
+<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
 <!-- BootStrap stylesheet must go before your own stylesheet so that any custom changes to bootstrap can be rendered. -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
   integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
@@ -14,4 +15,4 @@
 <script src="https://kit.fontawesome.com/93ce6a331e.js" crossorigin="anonymous"></script>
 <!--Website Custom Stylesheet-->
 <link rel="stylesheet" media="screen" href="css/styles.css">
-<div th:replace="~{../javascript/js-cookie-management}" />
+<div th:replace="~{../javascript/js-storage-management}" />

@@ -12,6 +12,7 @@ import java.util.List;
 import com.cqueltech.playingaround.dto.CourseDTO;
 import com.cqueltech.playingaround.dto.CourseDataWrapperDTO;
 import com.cqueltech.playingaround.dto.CourseParSiDTO;
+import com.cqueltech.playingaround.dto.DriveDistanceDTO;
 import com.cqueltech.playingaround.dto.ScoresDTO;
 import com.cqueltech.playingaround.dto.GameDTO;
 import com.cqueltech.playingaround.dto.GamePlayerDTO;
@@ -75,5 +76,7 @@ public interface UserService {
   Float getHandicapIndex(String username);
 
   void postHandicapIndex(int playerId, float handicapIndex);
+
+  List<DriveDistanceDTO> getLongestDrives(int gameId);
   
 }

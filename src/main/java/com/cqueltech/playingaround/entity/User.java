@@ -35,7 +35,7 @@ public class User {
   private String lastName;
 
   @Column(name = "handicap")
-  private float handicap;
+  private Float handicap;
 
   // To declare a side as not responsible for the relationship, the attribute mappedBy
   // is used. mappedBy refers to the property name of the association on the owner side
@@ -54,7 +54,7 @@ public class User {
               int active,
               String firstName,
               String lastName,
-              float handicap) {
+              Float handicap) {
     this.username = username;
     this.password = password;
     this.active = active;
@@ -107,11 +107,11 @@ public class User {
     this.lastName = lastName;
   }
 
-  public float getHandicap() {
+  public Float getHandicap() {
     return handicap;
   }
 
-  public void setHandicap(float handicap) {
+  public void setHandicap(Float handicap) {
     this.handicap = handicap;
   }
 

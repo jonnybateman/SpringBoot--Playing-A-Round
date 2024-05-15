@@ -10,8 +10,8 @@
 
   // Apply username and handicap cookie values to the appropriate elements in
   // the navigation panel.
-  document.getElementById("username").innerHTML = "User: " + getCookie(getCookieNameUser());
-  let handicap = getCookie(getCookieNameHandicap());
+  document.getElementById("username").innerHTML = "User: " + getSessionStorageValue(getNameUser());
+  let handicap = getSessionStorageValue(getNameHandicap());
   if (handicap == 0.0) {
     document.getElementById("handicap").innerHTML = "Handicap: 0.0";
   } else {
@@ -26,7 +26,7 @@
    * so call retrieveCourses() to return a list of courses based on the
    * supplied input string.
    */
-  inputCourse.addEventListener("keyup", event => {
+  inputCourse.addEventListener("input", event => {
     // If the form's error alert is displayed remove it.
     var divError = document.getElementById('error');
     if (divError != null) {
@@ -34,16 +34,10 @@
     }
 
     var searchString = document.getElementById('courseName').value;
-    if (searchString != null) {
-      if (event.keyCode != 8) { // If event is not backspace/delete. 
-        if (searchString.length == 3 && !divCourseList.hasChildNodes()) {
-          retrieveCourses(searchString);
-        }
-      } else {
-        if (searchString.length < 3 && divCourseList.hasChildNodes) {
-          closeCourseList();
-        }
-      }
+    if (searchString.length == 3 && !divCourseList.hasChildNodes()) {
+      retrieveCourses(searchString);
+    } else if (searchString.length < 3 && divCourseList.hasChildNodes) {
+      closeCourseList();
     }
   });
 
@@ -56,7 +50,7 @@
     // Use JQuery Ajax to make call to controller.
     $.ajax({
       type: "GET",
-      url: "/retrieveMatchingCourses",
+      url: "[(@{/retrieveMatchingCourses})]",
       contentType: "applcation/json",
       dataType: "json",
       data: {search: searchString},

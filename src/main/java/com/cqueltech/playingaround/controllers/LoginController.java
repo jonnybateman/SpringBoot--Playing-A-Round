@@ -14,8 +14,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.apache.catalina.authenticator.SpnegoAuthenticator.AuthenticateAction;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+
 import com.cqueltech.playingaround.dto.NewUserDTO;
 import com.cqueltech.playingaround.service.UserService;
 import jakarta.validation.Valid;
@@ -55,8 +60,14 @@ public class LoginController {
   @GetMapping("/showMyLoginPage")
   public String showMyLoginPage() {
 
-    // Dislplay the login html page. 'fancy-login' is the name of the login HTML file.
-    return "login";
+    // Check if the user has already been logged in. If so call the login-redirect mapping,
+    // otherwise go to the login page.
+    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    if (auth == null || auth instanceof AnonymousAuthenticationToken) {
+      // Dislplay the login html page. 'fancy-login' is the name of the login HTML file.
+      return "login";
+    }
+    return "/login-redirect";
   }
 
   /*

@@ -1,7 +1,12 @@
 package com.cqueltech.playingaround.controllers;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.cqueltech.playingaround.config.HandicapIndexCalculator;
+import com.cqueltech.playingaround.dto.*;
+import com.cqueltech.playingaround.entity.Course;
+import com.cqueltech.playingaround.helper.ScoresHelper;
+import com.cqueltech.playingaround.service.UserService;
+import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -9,35 +14,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import com.cqueltech.playingaround.config.HandicapIndexCalculator;
-import com.cqueltech.playingaround.dto.CourseDTO;
-import com.cqueltech.playingaround.dto.CourseDataWrapperDTO;
-import com.cqueltech.playingaround.dto.ScoresDTO;
-import com.cqueltech.playingaround.dto.GameDTO;
-import com.cqueltech.playingaround.dto.GameDataDTO;
-import com.cqueltech.playingaround.dto.GamePlayerDTO;
-import com.cqueltech.playingaround.dto.PlayerDetailsDTO;
-import com.cqueltech.playingaround.dto.HoleDataDTO;
-import com.cqueltech.playingaround.dto.HoleScoreDTO;
-import com.cqueltech.playingaround.dto.ScorecardDTO;
-import com.cqueltech.playingaround.dto.TeamDTO;
-import com.cqueltech.playingaround.dto.TeamPlayersDTO;
-import com.cqueltech.playingaround.entity.Course;
-import com.cqueltech.playingaround.entity.HoleScore;
-import com.cqueltech.playingaround.helper.ScoresHelper;
-import com.cqueltech.playingaround.service.UserService;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotEmpty;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
-//@Slf4j
+@Slf4j
 public class AppController {
 
   private UserService userService;
@@ -484,7 +466,7 @@ public class AppController {
   }
 
   /*
-   * Mapping to dislay the Stableford scoring template.
+   * Mapping to display the Stableford scoring template.
    */
   @GetMapping("/stableford")
   public String showStableford(@RequestParam int gameId,
@@ -495,6 +477,20 @@ public class AppController {
     model.addAttribute("teamScoresList", stablefordTeamScoresList);
 
     return "daytona-stableford";
+  }
+
+  /*
+   * Mapping to display the longest recorded drives for each player in the game.
+   */
+  @GetMapping("/drive-distance")
+  public String showDriveDistances(@RequestParam int gameId,
+                                  Model model) {
+
+    // Retrieve the longest drive data for each player from the database.
+    List<DriveDistanceDTO> players = userService.getLongestDrives(gameId);
+    model.addAttribute("players", players);
+
+    return "drive-distance";
   }
 
 }

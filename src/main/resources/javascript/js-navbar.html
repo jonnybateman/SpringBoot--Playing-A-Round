@@ -1,51 +1,70 @@
 <script  th:inline="javascript">
 
-let handicap = getCookie(getCookieNameHandicap());
-document.getElementById("username").innerHTML = "User: " + getCookie(getCookieNameUser());
+let handicap = getSessionStorageValue(getNameHandicap());
+document.getElementById("username").innerHTML = "User: " + getSessionStorageValue(getNameUser());
 document.getElementById("handicap").innerHTML =
     "Handicap: " + (handicap == 'null' ? '' : handicap);
 
 function endGame() {
-  let gameId = getCookie(getCookieNameGameId());
-  let teamId = getCookie(getCookieNameTeamId());
+  let gameId = getSessionStorageValue(getNameGameId());
+  let teamId = getSessionStorageValue(getNameTeamId());
 
   // Delete cookies associated with the game.
-  deleteCookie(getCookieNameGameId());
-  deleteCookie(getCookieNameTeamId());
-  deleteCookie(getCookieNameTeamName());
-  deleteCookie(getCookieNameHoleNo());
-  deleteCookie(getCookieNameHoleId());
+  deleteSessionStorageValue(getNameGameId());
+  deleteSessionStorageValue(getNameTeamId());
+  deleteSessionStorageValue(getNameTeam());
+  deleteSessionStorageValue(getNameHoleNo());
+  deleteSessionStorageValue(getNameHoleId());
+  deleteSessionStorageValue(getNameDriveDistance());
 
+  let objectUrl = new URL("[(@{/calculateHandicapIndex})]", document.location);
   if (gameId == "") {
-    document.getElementById("endGame").href += "?gameId=0&teamId=0";
+    objectUrl.searchParams.append("gameId", 0);
+    objectUrl.searchParams.append("teamId", 0);
   } else {
-    document.getElementById("endGame").href += "?gameId=" + gameId + "&teamId=" + teamId;
+    objectUrl.searchParams.append("gameId", gameId);
+    objectUrl.searchParams.append("teamId", teamId);
   }
+  document.getElementById("endGame").href = objectUrl;
 
   return true;
 }
 
 function hasJoinedGame(link) {
-  if (getCookie(getCookieNameGameId()) == "") {
+  if (getSessionStorageValue(getNameGameId()) == "") {
     return false;
   }
 
+  let objectUrl;
   switch (link) {
     case "scorecard":
-      document.getElementById("scorecard").href +=
-          "?gameId=" + getCookie(getCookieNameGameId()) +
-          "&teamId=" + getCookie(getCookieNameTeamId());
+      objectUrl = new URL("[(@{/score-card})]", document.location);
+      objectUrl.searchParams.append("gameId", getSessionStorageValue(getNameGameId()));
+      objectUrl.searchParams.append("teamId", getSessionStorageValue(getNameTeamId()));
+      document.getElementById("scorecard").href = objectUrl;
     case "strokeplay":
-      document.getElementById("strokeplay").href += "?gameId=" + getCookie(getCookieNameGameId());
+      objectUrl = new URL("[(@{/strokeplay})]", document.location);
+      objectUrl.searchParams.append("gameId", getSessionStorageValue(getNameGameId()));
+      console.log("URL:" + objectUrl);
+      document.getElementById("strokeplay").href = objectUrl;
     case "matchplay":
-      document.getElementById("matchplay").href +=
-          "?gameId=" + getCookie(getCookieNameGameId()) +
-          "&teamId=" + getCookie(getCookieNameTeamId()) +
-          "&teamName=" + getCookie(getCookieNameTeamName());
+      objectUrl = new URL("[(@{/matchplay})]", document.location);
+      objectUrl.searchParams.append("gameId", getSessionStorageValue(getNameGameId()));
+      objectUrl.searchParams.append("teamId", getSessionStorageValue(getNameTeamId()));
+      objectUrl.searchParams.append("teamName", getSessionStorageValue(getNameTeam()));
+      document.getElementById("matchplay").href = objectUrl;
     case "daytona":
-      document.getElementById("daytona").href += "?gameId=" + getCookie(getCookieNameGameId());
+      objectUrl = new URL("[(@{/daytona})]", document.location);
+      objectUrl.searchParams.append("gameId", getSessionStorageValue(getNameGameId()));
+      document.getElementById("daytona").href = objectUrl;
     case "stableford":
-      document.getElementById("stableford").href += "?gameId=" + getCookie(getCookieNameGameId());
+      objectUrl = new URL("[(@{/stableford})]", document.location);
+      objectUrl.searchParams.append("gameId", getSessionStorageValue(getNameGameId()));
+      document.getElementById("stableford").href = objectUrl;
+    case "drive-distance":
+      objectUrl = new URL("[(@{/drive-distance})]", document.location);
+      objectUrl.searchParams.append("gameId", getSessionStorageValue(getNameGameId()));
+      document.getElementById("driveDistance").href = objectUrl;
   }
   
   return true;

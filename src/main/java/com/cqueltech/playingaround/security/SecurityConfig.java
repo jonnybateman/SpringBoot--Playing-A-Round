@@ -6,20 +6,27 @@ package com.cqueltech.playingaround.security;
  * to the login form, and so on.
  */
 
-import javax.sql.DataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.logout.HeaderWriterLogoutHandler;
+import org.springframework.security.web.header.writers.ClearSiteDataHeaderWriter;
+import org.springframework.security.web.header.writers.ClearSiteDataHeaderWriter.Directive;
+import org.springframework.security.web.session.HttpSessionEventPublisher;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
+@EnableWebSecurity
 public class SecurityConfig {
 
   /*
@@ -47,6 +54,17 @@ public class SecurityConfig {
   }
 
   /*
+   * Add a listener bean to your configuration to keep Spring Security updated about
+   * session lifecycle events. Allows us to configure concurrent session control (see
+   * .sessionManagement). Can now place constraints on a single user's ability to log
+   * into application.
+   */
+  @Bean
+  public HttpSessionEventPublisher httpSessionEventPublisher() {
+    return new HttpSessionEventPublisher();
+  }
+
+  /*
    * Configure security of http requests for web application.
    */
   @Bean
@@ -57,22 +75,23 @@ public class SecurityConfig {
         .authorizeHttpRequests(configurer -> configurer
             // Configure the CSS and IMG directories to be accesible to all without authentication.
             // Ensures directories are accessible even when user has not bee authenticated.
-            .requestMatchers("/css/**").permitAll()
-            .requestMatchers("/img/**").permitAll()
+            .requestMatchers(AntPathRequestMatcher.antMatcher("/css/**")).permitAll()
+            .requestMatchers(AntPathRequestMatcher.antMatcher("/img/**")).permitAll()
             // Allow anyone to access the register new user page.
-            .requestMatchers("/register-user").permitAll()
-            .requestMatchers("/authenticateNewUser").permitAll()
-            .requestMatchers("/login-redirect").hasAuthority("GOLFER")
-            .requestMatchers("/home").hasAuthority("GOLFER")
-            .requestMatchers("/access-denied").hasAuthority("GOLFER")
-            .requestMatchers("/create-game").hasAuthority("GOLFER")
-            .requestMatchers("/create-course").hasAuthority("GOLFER")
-            .requestMatchers("/select-game").hasAuthority("GOLFER")
-            .requestMatchers("/join-game").hasAuthority("GOLFER")
-            .requestMatchers("/create-team").hasAuthority("GOLFER")
-            .requestMatchers("/score-card").hasAuthority("GOLFER")
-            .requestMatchers("/daytona").hasAuthority("GOLFER")
-            .requestMatchers("/matchplay").hasAuthority("GOLFER")
+            .requestMatchers(AntPathRequestMatcher.antMatcher("/register-user")).permitAll()
+            .requestMatchers(AntPathRequestMatcher.antMatcher("/authenticateNewUser")).permitAll()
+            .requestMatchers(AntPathRequestMatcher.antMatcher("/login-redirect")).hasAuthority("GOLFER")
+            .requestMatchers(AntPathRequestMatcher.antMatcher("/home")).hasAuthority("GOLFER")
+            .requestMatchers(AntPathRequestMatcher.antMatcher("/access-denied")).hasAuthority("GOLFER")
+            .requestMatchers(AntPathRequestMatcher.antMatcher("/create-game")).hasAuthority("GOLFER")
+            .requestMatchers(AntPathRequestMatcher.antMatcher("/create-course")).hasAuthority("GOLFER")
+            .requestMatchers(AntPathRequestMatcher.antMatcher("/select-game")).hasAuthority("GOLFER")
+            .requestMatchers(AntPathRequestMatcher.antMatcher("/join-game")).hasAuthority("GOLFER")
+            .requestMatchers(AntPathRequestMatcher.antMatcher("/create-team")).hasAuthority("GOLFER")
+            .requestMatchers(AntPathRequestMatcher.antMatcher("/score-card")).hasAuthority("GOLFER")
+            .requestMatchers(AntPathRequestMatcher.antMatcher("/daytona")).hasAuthority("GOLFER")
+            .requestMatchers(AntPathRequestMatcher.antMatcher("/matchplay")).hasAuthority("GOLFER")
+            .requestMatchers(AntPathRequestMatcher.antMatcher("/drive-distance")).hasAuthority("GOLFER")
             // Any request to the app must be authenticated
             .anyRequest().authenticated())
         // Customize the form login process.
@@ -87,10 +106,17 @@ public class SecurityConfig {
             // Allow everyone one to see the login page
             .permitAll())
         // Add logout support for default URL (/logout).
-        .logout(logout -> logout.permitAll())
+        .logout(logout -> logout
+            .permitAll()
+            // Delete the session's cookies.
+            .addLogoutHandler(new HeaderWriterLogoutHandler(new ClearSiteDataHeaderWriter(Directive.COOKIES)))
+            .invalidateHttpSession(true))
         // Setup exception handling for access denied based on role of user.
         .exceptionHandling(configurer -> configurer
-            .accessDeniedPage("/access-denied"));
+            .accessDeniedPage("/access-denied"))
+        .sessionManagement(session -> session
+            // Ensure user can have only one active session at a time.
+            .maximumSessions(1));
 
     return http.build();
   }
