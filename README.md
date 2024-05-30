@@ -4,5 +4,5 @@ The online Playing-A-Round Spring Boot web application is a golf scorecard, stat
 
 |Screenshot 1|Screenshot 2|Screenshot 3|
 |------|--------|-----------|
-|![Alt Text](path)|![Alt Text](path)|![Alt Text](path)|
+|![Alt Text](./Screenshot1.png)|![Alt Text](./Screenshot2.png)|![Alt Text](./Screenshot3.png)|
 
