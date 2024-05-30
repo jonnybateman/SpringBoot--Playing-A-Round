@@ -10,5 +10,5 @@ Playing-A-Round is ideally suited for large groups on a golf outing. Players are
 
 Should a particular golf course not exist in the server database a user has the ability to add the course statistics to the database via the app. On completion of a round a players course handicap will be calculated and used to determine their overall handicap as set out by the World Handicap System 2020.
 
-This GitHub repository contains all code relating to both server and client sides of the application.
+This GitHub repository contains all code relating to both server and client sides of the application as well as .sql scripts for database setup, triggers, and stored functions and procedures.
 
