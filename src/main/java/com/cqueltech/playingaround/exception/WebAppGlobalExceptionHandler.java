@@ -42,7 +42,7 @@ public class WebAppGlobalExceptionHandler<T> {
   public String handleException(Exception exc, Model model) {
 
     // Find which class and method of the app threw the exception.
-    Writer writer = new StringWriter();
+    Writer writer = new StringWriter(); 
     exc.printStackTrace(new PrintWriter(writer));
     String stackTrace = writer.toString();
     String[] stackTraceArray = stackTrace.split("\n");

@@ -1,5 +1,4 @@
-<script  th:inline="javascript">
-
+/*<![CDATA[*/
 const expires = 8*60*60*1000;  // Cookie will expire in 8 hours.
 const nameUser = "PlayingAroundUser";
 const nameHandicap = "PlayinAroundHandicap";
@@ -121,5 +120,4 @@ function deleteAllCookies() {
 function deleteAllSessionStorageValues() {
   sessionStorage.clear();
 }
-
-</script>
+/*]]>*/

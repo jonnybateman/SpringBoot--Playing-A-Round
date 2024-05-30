@@ -1,5 +1,4 @@
-<script  th:inline="javascript">
-
+/*<![CDATA[*/
 // Apply username and handicap cookie values to the appropriate elements in
 // the navigation panel.
 document.getElementById("username").innerHTML = "User: " + getSessionStorageValue(getNameUser());
@@ -21,5 +20,4 @@ function isTeamNameEmpty() {
   }
   return true;
 }
-
-</script>
+/*]]>*/

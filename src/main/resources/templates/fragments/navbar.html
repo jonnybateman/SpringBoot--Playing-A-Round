@@ -55,4 +55,11 @@
     </div>
   </div>
 </nav>
-<div th:replace="~{../javascript/js-navbar}" />
+
+<!-- Assign model attributes as global variables so they can be used in external -->
+<!-- javascript file. -->
+<script type="text/javascript" th:inline="javascript">
+  window.contextPath = /*[[@{/}]]*/ "/";
+</script>
+
+<script th:inline="javascript" th:src="@{/js/navbar.js}"></script>

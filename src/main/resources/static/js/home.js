@@ -1,14 +1,10 @@
-<script  th:inline="javascript">
-
-// Set the username cookie.
-let user = /*[[${user}]]*/ {};
+/*<![CDATA[*/
+// Set the username session storage value.
 setSessionStorageValue(getNameUser(), user);
 
 // Set the handicap cookie for user.
-let handicap = /*[[${handicap}]]*/ {};
 setSessionStorageValue(getNameHandicap(), handicap);
 
 document.getElementById("username").innerHTML = "User: " + user;
 document.getElementById("handicap").innerHTML = "Handicap: " + (handicap == null ? "" : handicap);
-
-</script>
+/*]]>*/

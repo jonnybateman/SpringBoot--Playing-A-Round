@@ -334,12 +334,16 @@ public class UserDAOImpl implements UserDAO {
       callUpdateStablefordStoredProc(teamId, gameId, hole, score);
     } else {
       if (holeScore.getScore() != score) {
-        // Hole score has changed update score in database.
+        // Hole score has changed update score.
         holeScore.setScore(score);
         entityManager.merge(holeScore);
-        // Call stored procedure to update daytona scores in database as required.
+        // Flush entity data to the database as transaction is yet to be committed.
+        // Data will then be available in database when the stored database procedures
+        // are executed.
+        entityManager.flush();
+        // Call database stored procedure to update daytona scores in database as required.
         callUpdateDaytonaStoredProc(teamId, playerId, hole, score);
-        // Call stored procedure to update Stableford scores for team.
+        // Call dataase stored procedure to update Stableford scores for team.
         callUpdateStablefordStoredProc(teamId, gameId, hole, score);
       }
     }

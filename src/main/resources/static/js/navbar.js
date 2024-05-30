@@ -1,4 +1,6 @@
-<script  th:inline="javascript">
+/*<![CDATA[*/
+// Get the context path for call to app controller.
+//var contextPath = /*[[@{/}]]*/ "/";
 
 let handicap = getSessionStorageValue(getNameHandicap());
 document.getElementById("username").innerHTML = "User: " + getSessionStorageValue(getNameUser());
@@ -17,7 +19,7 @@ function endGame() {
   deleteSessionStorageValue(getNameHoleId());
   deleteSessionStorageValue(getNameDriveDistance());
 
-  let objectUrl = new URL("[(@{/calculateHandicapIndex})]", document.location);
+  let objectUrl = new URL(contextPath + "calculateHandicapIndex", document.location);
   if (gameId == "") {
     objectUrl.searchParams.append("gameId", 0);
     objectUrl.searchParams.append("teamId", 0);
@@ -38,36 +40,34 @@ function hasJoinedGame(link) {
   let objectUrl;
   switch (link) {
     case "scorecard":
-      objectUrl = new URL("[(@{/score-card})]", document.location);
+      objectUrl = new URL(contextPath + "score-card", document.location);
       objectUrl.searchParams.append("gameId", getSessionStorageValue(getNameGameId()));
       objectUrl.searchParams.append("teamId", getSessionStorageValue(getNameTeamId()));
       document.getElementById("scorecard").href = objectUrl;
     case "strokeplay":
-      objectUrl = new URL("[(@{/strokeplay})]", document.location);
+      objectUrl = new URL(contextPath + "strokeplay", document.location);
       objectUrl.searchParams.append("gameId", getSessionStorageValue(getNameGameId()));
-      console.log("URL:" + objectUrl);
       document.getElementById("strokeplay").href = objectUrl;
     case "matchplay":
-      objectUrl = new URL("[(@{/matchplay})]", document.location);
+      objectUrl = new URL(contextPath + "matchplay", document.location);
       objectUrl.searchParams.append("gameId", getSessionStorageValue(getNameGameId()));
       objectUrl.searchParams.append("teamId", getSessionStorageValue(getNameTeamId()));
       objectUrl.searchParams.append("teamName", getSessionStorageValue(getNameTeam()));
       document.getElementById("matchplay").href = objectUrl;
     case "daytona":
-      objectUrl = new URL("[(@{/daytona})]", document.location);
+      objectUrl = new URL(contextPath + "daytona", document.location);
       objectUrl.searchParams.append("gameId", getSessionStorageValue(getNameGameId()));
       document.getElementById("daytona").href = objectUrl;
     case "stableford":
-      objectUrl = new URL("[(@{/stableford})]", document.location);
+      objectUrl = new URL(contextPath + "stableford", document.location);
       objectUrl.searchParams.append("gameId", getSessionStorageValue(getNameGameId()));
       document.getElementById("stableford").href = objectUrl;
     case "drive-distance":
-      objectUrl = new URL("[(@{/drive-distance})]", document.location);
+      objectUrl = new URL(contextPath + "drive-distance", document.location);
       objectUrl.searchParams.append("gameId", getSessionStorageValue(getNameGameId()));
       document.getElementById("driveDistance").href = objectUrl;
   }
   
   return true;
 }
-
-</script>
+/*]]>*/

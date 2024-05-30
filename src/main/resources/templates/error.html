@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-  <title>Playing-A-Round-Error</title>
+  <title>cqueltech.com - Playing-A-Round Error</title>
   <div th:replace="~{/fragments/head}" />
 </head>
 
@@ -20,14 +20,14 @@
     <p th:text="'Timestamp: ' + ${errorResponse.getTimestamp()}"></p>
     <p style="white-space: pre-wrap;" th:text="${errorResponse.getStackTrace()}"></p>
     <hr>
-    <a href="@{/home}">home</a>
+    <a th:href="@{/logout}">Login</a>
   </div>
 
   <section id="footer">
     <div th:replace="~{/fragments/footer}" />
   </section>
 
-  <div th:replace="~{../javascript/js-error}" />
+  <script type="text/javascript" th:inline="javascript" th:src="@{/js/error.js}"></script>
 
 </body>
 </html>

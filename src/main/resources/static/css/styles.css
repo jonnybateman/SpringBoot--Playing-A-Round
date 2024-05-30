@@ -4,6 +4,7 @@
   --navbar-text-color: #D0E7D2;
   --btn-highlight-color: red;
   --btn-color: #419197;
+  --btn-icon-color: #272626;
   --btn-form-color: #005B41;
   --hover-color: #005B41;
   --border-color: #005B41;
@@ -29,6 +30,10 @@ body {
 /*
  * Multi-Page - Classes
  */
+
+ .disable-dbl-tap-zoom {
+  touch-action:none;
+}
 
 /* Bootstrap class */
 .btn {
@@ -332,7 +337,7 @@ nav {
   table-layout: fixed;
 }
 
-#range {
+.range-text {
   text-align: center;
   font-size: 4rem;
 }
@@ -343,6 +348,10 @@ nav {
   background-color: var(--btn-color);
   border-radius: 1rem;
   padding: 10px;
+}
+
+.btn-icon-color {
+  color: var(--btn-icon-color);
 }
 
 .clickable-button {
