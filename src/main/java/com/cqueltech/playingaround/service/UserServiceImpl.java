@@ -31,7 +31,6 @@ import com.cqueltech.playingaround.dto.PlayerDetailsDTO;
 import com.cqueltech.playingaround.entity.Course;
 import com.cqueltech.playingaround.entity.Game;
 import com.cqueltech.playingaround.entity.Hole;
-import com.cqueltech.playingaround.entity.HoleScore;
 import com.cqueltech.playingaround.entity.Player;
 import com.cqueltech.playingaround.entity.Role;
 import com.cqueltech.playingaround.entity.Team;

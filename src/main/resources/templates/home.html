@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Playing-A-Round-Home</title>
+    <title>cqueltech.com - Playing-A-Round Home</title>
     <div th:replace="~{/fragments/head}" />
   </head>
 
@@ -29,6 +29,13 @@
       <div th:replace="~{/fragments/footer}" />
     </section>
 
-    <div th:replace="~{../javascript/js-home}" />
+    <!-- Assign model attributes as global variables so they can be used in external -->
+    <!-- javascript file. -->
+    <script type="text/javascript" th:inline="javascript">
+      window.user = /*[[${user}]]*/ '';
+      window.handicap = /*[[${handicap}]]*/ '';
+    </script>
+    
+    <script type="text/javascript" th:inline="javascript" th:src="@{/js/home.js}"></script>
   </body>
 </html>

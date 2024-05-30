@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-  <title>Score Card Page</title>
+  <title>cqueltech.com - Playing-A-Round Score Card</title>
   <div th:replace="~{/fragments/head}" />
 </head>
 
@@ -36,7 +36,7 @@
         </colgroup>
       
         <tr style="background-color: var(--table-header-bg-color);">
-          <th>Hole</th>
+          <th id="hole">Hole</th>
           <th id="hole1" th:attr="data-hole-id=${scorecardData.get(0).getHoleId()},
               data-loc-lat=${scorecardData.get(0).getLocLat()},
               data-loc-long=${scorecardData.get(0).getLocLong()}">1</th>
@@ -105,31 +105,22 @@
         <tr>
           <th></th>
           <th><input id="inputHole1" type="number" min="0" max="12" size="1" style="width: 100%;"
-              onfocus="holeInputOnFocusEvent(1)" onblur="holeInputOnBlurEvent(1)"
               th:value="${scoresHelper.getHoleScore(scores, 1)}" readonly /></th>
           <th><input id="inputHole2" type="number" min="0" max="12" size="1" style="width: 100%;"
-              onfocus="holeInputOnFocusEvent(2)" onblur="holeInputOnBlurEvent(2)"
               th:value="${scoresHelper.getHoleScore(scores, 2)}" readonly /></th>
           <th><input id="inputHole3" type="number" min="0" max="12" size="1" style="width: 100%;"
-              onfocus="holeInputOnFocusEvent(3)" onblur="holeInputOnBlurEvent(3)"
               th:value="${scoresHelper.getHoleScore(scores, 3)}" readonly /></th>
           <th><input id="inputHole4" type="number" min="0" max="12" size="1" style="width: 100%;"
-              onfocus="holeInputOnFocusEvent(4)" onblur="holeInputOnBlurEvent(4)"
               th:value="${scoresHelper.getHoleScore(scores, 4)}" readonly /></th>
           <th><input id="inputHole5" type="number" min="0" max="12" size="1" style="width: 100%;"
-              onfocus="holeInputOnFocusEvent(5)" onblur="holeInputOnBlurEvent(5)"
               th:value="${scoresHelper.getHoleScore(scores, 5)}" readonly /></th>
           <th><input id="inputHole6" type="number" min="0" max="12" size="1" style="width: 100%;"
-              onfocus="holeInputOnFocusEvent(6)" onblur="holeInputOnBlurEvent(6)"
               th:value="${scoresHelper.getHoleScore(scores, 6)}" readonly /></th>
           <th><input id="inputHole7" type="number" min="0" max="12" size="1" style="width: 100%;"
-              onfocus="holeInputOnFocusEvent(7)" onblur="holeInputOnBlurEvent(7)"
               th:value="${scoresHelper.getHoleScore(scores, 7)}" readonly /></th>
           <th><input id="inputHole8" type="number" min="0" max="12" size="1" style="width: 100%;"
-              onfocus="holeInputOnFocusEvent(8)" onblur="holeInputOnBlurEvent(8)"
               th:value="${scoresHelper.getHoleScore(scores, 8)}" readonly /></th>
           <th><input id="inputHole9" type="number" min="0" max="12" size="1" style="width: 100%;"
-              onfocus="holeInputOnFocusEvent(9)" onblur="holeInputOnBlurEvent(9)"
               th:value="${scoresHelper.getHoleScore(scores, 9)}" readonly /></th>
           <th><input id="inputOut" type="number" min="0" max="90" size="1" style="width: 100%;"
               readonly th:value="0" /></th>
@@ -204,31 +195,22 @@
         <tr>
           <th></th>
           <th><input id="inputHole10" type="number" min="0" max="12" size="1" style="width: 100%;"
-              onfocus="holeInputOnFocusEvent(10)" onblur="holeInputOnBlurEvent(10)"
               th:value="${scoresHelper.getHoleScore(scores, 10)}" readonly /></th>
           <th><input id="inputHole11" type="number" min="0" max="12" size="1" style="width: 100%;"
-              onfocus="holeInputOnFocusEvent(11)" onblur="holeInputOnBlurEvent(11)"
               th:value="${scoresHelper.getHoleScore(scores, 11)}" readonly /></th>
           <th><input id="inputHole12" type="number" min="0" max="12" size="1" style="width: 100%;"
-              onfocus="holeInputOnFocusEvent(12)" onblur="holeInputOnBlurEvent(12)"
               th:value="${scoresHelper.getHoleScore(scores, 12)}" readonly /></th>
           <th><input id="inputHole13" type="number" min="0" max="12" size="1" style="width: 100%;"
-              onfocus="holeInputOnFocusEvent(13)" onblur="holeInputOnBlurEvent(13)"
               th:value="${scoresHelper.getHoleScore(scores, 13)}" readonly /></th>
           <th><input id="inputHole14" type="number" min="0" max="12" size="1" style="width: 100%;"
-              onfocus="holeInputOnFocusEvent(14)" onblur="holeInputOnBlurEvent(14)"
               th:value="${scoresHelper.getHoleScore(scores, 14)}" readonly /></th>
           <th><input id="inputHole15" type="number" min="0" max="12" size="1" style="width: 100%;"
-              onfocus="holeInputOnFocusEvent(15)" onblur="holeInputOnBlurEvent(15)"
               th:value="${scoresHelper.getHoleScore(scores, 15)}" readonly /></th>
           <th><input id="inputHole16" type="number" min="0" max="12" size="1" style="width: 100%;"
-              onfocus="holeInputOnFocusEvent(16)" onblur="holeInputOnBlurEvent(16)"
               th:value="${scoresHelper.getHoleScore(scores, 16)}" readonly /></th>
           <th><input id="inputHole17" type="number" min="0" max="12" size="1" style="width: 100%;"
-              onfocus="holeInputOnFocusEvent(17)" onblur="holeInputOnBlurEvent(17)"
               th:value="${scoresHelper.getHoleScore(scores, 17)}" readonly /></th>
           <th><input id="inputHole18" type="number" min="0" max="12" size="1" style="width: 100%;"
-              onfocus="holeInputOnFocusEvent(18)" onblur="holeInputOnBlurEvent(18)"
               th:value="${scoresHelper.getHoleScore(scores, 18)}" readonly /></th>
           <th><input id="inputIn" type="number" min="0" max="90" size="1" style="width: 100%;"
               readonly th:value="0" /></th>
@@ -243,41 +225,75 @@
     <tr>
       <th style="width: 20%; text-align: left;">
         <span class="span-btn-scorecard">
-        <i id="prevHole" class="fa-solid fa-backward fa-5x fa-fw clickable-button"></i>
+          <i id="prevHole" class="fa-solid fa-backward fa-5x fa-fw
+              disable-dbl-tap-zoom btn-icon-color" onclick="onClickHighlight(this)"></i>
         </span>
       </th>
       <th style="width: 20%; text-align: right;">
         <span class="span-btn-scorecard">
-        <i id="measureDrive" class="fa-solid fa-golf-ball-tee fa-fw fa-5x clickable-button"></i>
+          <i id="measureDrive" class="fa-solid fa-golf-ball-tee fa-fw fa-5x
+              clickable-button btn-icon-color"></i>
         </span>
       </th>
       <th style="width: 20%; text-align: center;">
         <span class="span-btn-scorecard">
-        <i id="setPinLocation" class="fa-solid fa-location-crosshairs fa-fw fa-5x clickable-button"></i>
+          <i id="setPinLocation" class="fa-solid fa-location-crosshairs fa-fw fa-5x
+              clickable-button btn-icon-color"></i>
         </span>
       </th>
       <th style="width: 20%; text-align: left;">
         <span class="span-btn-scorecard">
-        <i id="rangeToPin" class="fa-solid fa-flag fa-fw fa-5x clickable-button"></i>
+          <i id="rangeToPin" class="fa-solid fa-flag fa-fw fa-5x
+              clickable-button btn-icon-color"></i>
         </div>
       </th>
       <th style="width: 20%; text-align: right;">
         <span class="span-btn-scorecard">
-        <i id="nextHole" class="fa-solid fa-forward  fa-fw fa-5x clickable-button"></i>
+          <i id="nextHole" class="fa-solid fa-forward  fa-fw fa-5x
+              disable-dbl-tap-zoom btn-icon-color" onclick="onClickHighlight(this)"></i>
         </span>
       </th>
     </tr>
   </table>
 
-  <div class="banner" style="margin-top: 50px;">
-    <h1 id="range">- - - yards</h1>
-  </div>
+  <table style="width: 90%; margin-left: auto; margin-right: auto; margin-top: 50px;">
+    <tr>
+      <th style="width: 15%; text-align: left;">
+        <span class="span-btn-scorecard">
+          <i id="deleteStroke" class="fa-solid fa-circle-minus fa-5x fa-fw
+              disable-dbl-tap-zoom btn-icon-color" onclick="onClickHighlight(this)"></i>
+        </span>
+      </th>
+      <th style="width: 70%; text-align: center;">
+        <span class="span-btn-scorecard" style="width: 100%;">
+          <h1 id="range" class="range-text">- - - yards</h1>
+        </span>
+      </th>
+      <th style="width: 15%; text-align: right;">
+        <span class="span-btn-scorecard">
+          <i id="addStroke" class="fa-solid fa-circle-plus fa-5x fa-fw
+              disable-dbl-tap-zoom btn-icon-color" onclick="onClickHighlight(this)"></i>
+        </span>
+      </th>
+    </tr>
+  </table>
 
   <section id="footer">
     <div th:replace="~{/fragments/footer}" />
   </section>
 
-  <div th:replace="~{../javascript/js-score-card}" />
+  <!-- Assign model attributes as global variables so they can be used in external -->
+  <!-- javascript file. -->
+  <script type="text/javascript" th:inline="javascript">
+    window.playerId = /*[[${playerDetails.playerId}]]*/ {};
+    window.teamId = /*[[${playerDetails.teamId}]]*/ {};
+    window.gameId = /*[[${scorecardData[0].gameId}]]*/ {};
+    window.teamName = /*[[${playerDetails.teamName}]]*/ {};
+    window.scores = /*[[${scores}]]*/ {};
+    window.contextPath = /*[[@{/}]]*/ "/";
+  </script>
+
+  <script type="text/javascript" th:inline="javascript" th:src="@{/js/scorecard.js}"></script>
 </body>
 
 </html>

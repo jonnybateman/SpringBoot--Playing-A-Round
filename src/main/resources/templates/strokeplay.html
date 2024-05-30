@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-  <title>Strokeplay Scores Page</title>
+  <title>cqueltech.com - Playing-A-Round Strokeplay Scores</title>
   <div th:replace="~{/fragments/head}" />
 </head>
 
@@ -80,7 +80,7 @@
 
   <div id="footer" th:replace="~{/fragments/footer}" />
 
-  <div th:replace="~{../javascript/js-daytona-strokeplay}" />
+  <script type="text/javascript" th:inline="javascript" th:src="@{/js/format-card-container.js}"></script>
 
 </body>
 

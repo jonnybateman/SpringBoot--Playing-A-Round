@@ -1,34 +1,24 @@
-<script  th:inline="javascript">
-
-var oldHoleScore;
+/*<![CDATA[*/
+var scoreChanged = false;
 
 // Get the document's root element so that css variables can be utilized.
 var root = document.documentElement;
 var styles = getComputedStyle(root);
 
-// Get the player id from model attribute.
-var playerId = /*[[${playerDetails.playerId}]]*/ {};
-
-// Get the team id from model attribute and set it as a cookie.
-var teamId = /*[[${playerDetails.teamId}]]*/ {};
+// Set teamId as a session storage value.
 setSessionStorageValue(getNameTeamId(), teamId);
 
-// Get the game id from model attribute and set it as a cookie.
-var gameId = /*[[${scorecardData[0].gameId}]]*/ {};
+// Set gameId as a session storage value.
 setSessionStorageValue(getNameGameId(), gameId);
 
-// Set the cookie for the team name.
-var teamName = /*[[${playerDetails.teamName}]]*/ {};
+// Set the session storage value for the team name.
 setSessionStorageValue(getNameTeam(), teamName);
 
-// Set the cookie for drive distance if not already set.
+// Set the session storage value for drive distance if not already set.
 var driveDistance = getSessionStorageValue(getNameDriveDistance());
 if (driveDistance == null || driveDistance == "") {
   setSessionStorageValue(getNameDriveDistance(), 0);
 }
-
-// Get the player scores from the model attribute.
-var scores = /*[[${scores}]]*/ {};
 
 // Calculate the Out and In score totals for the hole scores and assign to the
 // applicable input fields in the web view.
@@ -39,17 +29,20 @@ var navHeight = document.querySelector("nav").offsetHeight;
 var divScorecardCourse = document.getElementById("divScorecardCourse");
 divScorecardCourse.style.cssText = "margin-top: " + (navHeight + 50) + "px;";
 
-// Set the cookies for default hole on page load if not already set.
+// Set the session storage value for default hole on page load if not already set.
 if (getSessionStorageValue(getNameHoleNo()) == null) {
   setSessionStorageValue(getNameHoleNo(), 1);
   setSessionStorageValue(getNameHoleId(), document.getElementById("hole1").dataset.holeId);
                 // element attribute data-hole-id  => holeId
 }
 
+// Get the element to store hole number as a data attribute.
+var hole = document.getElementById("hole");
+hole.setAttribute("data-hole-no", getSessionStorageValue(getNameHoleNo()));
+
 // Highlight applicable hole as the current hole, deduced from session storage value.
 document.getElementById("hole" + getSessionStorageValue(getNameHoleNo())).style.backgroundColor =
     styles.getPropertyValue('--table-body-bg-color');
-document.getElementById("inputHole" + getSessionStorageValue(getNameHoleNo())).readOnly = false;
 
 // Setup an event listener for when the document content has been loaded. It will
 // create a GeoLocation WatchPosition object to return the device's current position
@@ -63,7 +56,6 @@ const geolocationOptions = {
 };
 document.addEventListener("DOMContentLoaded", function() {
     if (navigator.geolocation) {
-      console.log("WatchPosition activated");
       watchId = navigator.geolocation.watchPosition(
                     onGeoSuccessCallback, showError, geolocationOptions);
     } else {
@@ -72,11 +64,32 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 );
 
-// If a Geolocation WatchPosition object has been created, deactivate it on page unload.
+// Events to occur prior to redirecting to a different URL.
 window.addEventListener("beforeunload", function() {
+    // If a Geolocation WatchPosition object has been created, deactivate it on page unload.
     if (watchId != null) {
-      console.log("WatchPosition deactivated");
       navigator.geolocation.clearWatch(watchId);
+    }
+
+    // Before redirect, post score for current hole to the database if it has changed.
+    if (scoreChanged) {
+      let holeNo = hole.dataset.holeNo;
+      let holeScore = document.getElementById("inputHole" + holeNo).value;
+
+      if (holeScore != "" && holeScore > 0 && scoreChanged) {
+        // Send hole score to the app controller.
+        $.ajax({
+            type: "POST",
+            url: contextPath + "setHoleScore",
+            dataType: "json",
+            data: { "gameId": gameId,
+                    "teamId": teamId,
+                    "playerId": playerId,
+                    "holeId": holeNo,
+                    "score": holeScore
+                  }
+        });
+      }
     }
   }
 );
@@ -84,25 +97,32 @@ window.addEventListener("beforeunload", function() {
 // Setup event listeners for 'next' and 'previous' hole buttons.
 var prevHoleButton = document.getElementById("prevHole");
 prevHoleButton.addEventListener("click", function() {
-  // Highlight the new current hole and set value of hole number cookie accordingly.
-  let cHoleNo = parseInt(getSessionStorageValue(getNameHoleNo()));
+  let holeNo = parseInt(getSessionStorageValue(getNameHoleNo()));
+
+  // If the score has changed for the previously selected hole post the score to the
+  // database.
+  if (scoreChanged) {
+    scoreChanged = false;
+    postHoleScore(holeNo);
+  }
   
-  if (cHoleNo > 1) {
-    let currHole = document.getElementById("hole" + (cHoleNo - 1));
-    setSessionStorageValue(getNameHoleNo(), cHoleNo - 1);
+  if (holeNo > 1) {
+    // Highlight the new current hole and set value of hole session storage key value
+    // pair accordingly.
+    let currHole = document.getElementById("hole" + (holeNo - 1));
+    setSessionStorageValue(getNameHoleNo(), holeNo - 1);
+    hole.setAttribute("data-hole-no", holeNo - 1);
 
     currHole.style.backgroundColor = styles.getPropertyValue('--table-body-bg-color');
-    document.getElementById("hole" + cHoleNo).style.backgroundColor =
+    document.getElementById("hole" + holeNo).style.backgroundColor =
         styles.getPropertyValue('--table-header-bg-color');
-    document.getElementById("inputHole" + (cHoleNo - 1)).readOnly = false;
-    document.getElementById("inputHole" + (cHoleNo)).readOnly = true;
     document.getElementById("range").innerHTML = "- - - yards";
 
     // If we do not have pin location data for hole, query database to see if it is now available.
     if (currHole.dataset.locLat == null) {
       $.ajax({
         type: "GET",
-        url: "[(@{/getPinLocationData})]",
+        url: contextPath + "getPinLocationData",
         dataType: "json",
         data: { "holeId": currHole.dataset.holeId },
         success: function (result) {
@@ -118,25 +138,31 @@ prevHoleButton.addEventListener("click", function() {
 
 var nextHoleButton = document.getElementById("nextHole");
 nextHoleButton.addEventListener("click", function() {
-  // Highlight the new current hole and set value of hole number cookie accordingly.
-  let cHoleNo = parseInt(getSessionStorageValue(getNameHoleNo()));
+  let holeNo = parseInt(getSessionStorageValue(getNameHoleNo()));
+
+  // If the score has changed for the previously selected hole post the score to the
+  // database.
+  if (scoreChanged) {
+    scoreChanged = false;
+    postHoleScore(holeNo);
+  }
   
-  if (cHoleNo < 18) {
-    let currHole = document.getElementById("hole" + (cHoleNo + 1));
-    setSessionStorageValue(getNameHoleNo(), cHoleNo + 1);
+  if (holeNo < 18) {
+    // Highlight the new current hole and set value of hole number cookie accordingly.
+    let currHole = document.getElementById("hole" + (holeNo + 1));
+    setSessionStorageValue(getNameHoleNo(), holeNo + 1);
+    hole.setAttribute("data-hole-no", holeNo + 1);
 
     currHole.style.backgroundColor = styles.getPropertyValue('--table-body-bg-color');
-    document.getElementById("hole" + cHoleNo).style.backgroundColor =
+    document.getElementById("hole" + holeNo).style.backgroundColor =
         styles.getPropertyValue('--table-header-bg-color');
-    document.getElementById("inputHole" + (cHoleNo + 1)).readOnly = false;
-    document.getElementById("inputHole" + (cHoleNo)).readOnly = true;
     document.getElementById("range").innerHTML = "- - - yards";
 
     // If we do not have pin location data for hole, query database to see if it is now available.
     if (currHole.dataset.locLat == null) {
       $.ajax({
         type: "GET",
-        url: "[(@{/getPinLocationData})]",
+        url: contextPath + "getPinLocationData",
         dataType: "json",
         data: { "holeId": currHole.dataset.holeId },
         success: function (result) {
@@ -163,7 +189,7 @@ setPinLocation.addEventListener("click", function () {
         // app controller.
         $.ajax({
           type: "post",
-          url: "[(@{/addLocationToHole})]",
+          url: contextPath + "addLocationToHole",
           dataType: "json",
           data: {
             "holeId": hole.dataset.holeId,
@@ -222,7 +248,7 @@ measureDrive.addEventListener("click", function() {
         // updated in the database.
         $.ajax({
           type: "post",
-          url: "[(@{/setLongestDrive})]",
+          url: contextPath + "setLongestDrive",
           dataType: "json",
           data: {
             "playerId": playerId,
@@ -267,6 +293,26 @@ rangeToPin.addEventListener("click", function() {
   } else {
     document.getElementById("range").innerHTML = "Range data not available";
   }
+});
+
+// Setup event listener to reduce score for the current hole by 1.
+var strokeMinus = document.getElementById("deleteStroke");
+strokeMinus.addEventListener("click", function() {
+  let scoreInputValue = document.getElementById("inputHole" + getSessionStorageValue(getNameHoleNo())).value;
+  scoreInputValue = Number(scoreInputValue == null ? 0 : scoreInputValue);
+  if (scoreInputValue > 0) {
+    document.getElementById("inputHole" + getSessionStorageValue(getNameHoleNo())).value = scoreInputValue - 1;
+    scoreChanged = true;
+  }
+});
+
+// Setup event listener to increase score for current hole by 1.
+var strokeMinus = document.getElementById("addStroke");
+strokeMinus.addEventListener("click", function() {
+  let scoreInputValue = document.getElementById("inputHole" + getSessionStorageValue(getNameHoleNo())).value;
+  scoreInputValue = Number(scoreInputValue == null ? 0 : scoreInputValue);
+  document.getElementById("inputHole" + getSessionStorageValue(getNameHoleNo())).value = scoreInputValue + 1;
+  scoreChanged = true;
 });
 
 /*
@@ -320,7 +366,6 @@ function calculateYardage(lat1, long1, lat2, long2) {
     dist = dist * 180/Math.PI;
     dist = dist * 60 * 1.1515;
     var yardage = dist * 1760;
-    console.log("Yardage:" + yardage);
     return yardage;
   }
 
@@ -353,7 +398,7 @@ function calculateOutInTotals() {
  * input. The variable can then be compared to the new value entered during the
  * onblur event. If the values are the same no need to send to the app controller.
  */
-function holeInputOnFocusEvent(holeNo) {
+function getCurrentHoleScore(holeNo) {
 
   // Get the score set for the hole.
   let holeInput = document.getElementById("inputHole" + (holeNo));
@@ -364,30 +409,43 @@ function holeInputOnFocusEvent(holeNo) {
  * When a hole input element loses focus send the score to the app controller
  * so that it can be posted to the database.
  */
-function holeInputOnBlurEvent(holeNo) {
+function postHoleScore(holeNo) {
 
   // Get the score set for the hole.
-  let newHoleScore = document.getElementById("inputHole" + (holeNo)).value;
+  let holeScore = document.getElementById("inputHole" + (holeNo)).value;
 
-  if (newHoleScore != "" && newHoleScore > 0 && newHoleScore != oldHoleScore) {
-    console.log("Hole value has changed!")
+  if (holeScore != "" && holeScore > 0) {
     // Calculate new Out and In totals
     calculateOutInTotals();
 
     // Send hole score to the app controller.
     $.ajax({
         type: "POST",
-        url: "[(@{/setHoleScore})]",
+        url: contextPath + "setHoleScore",
         dataType: "json",
         data: { "gameId": gameId,
                 "teamId": teamId,
                 "playerId": playerId,
                 "holeId": holeNo,
-                "score": newHoleScore
-              },
-        success: function(result) {}
+                "score": holeScore
+              }
     });
+  }
+
+  if (holeScore == 0) {
+    document.getElementById("inputHole" + (holeNo)).value = null;
   }
 }
 
-</script>
+/*
+ * Function to highlight button onclick event for set period of time. Used when
+ * 'double-tap-zoom' has been disabled for the button via css styling. Using the
+ * normal method of css styling to highlight a button click would leave it highlighted.
+ */
+function onClickHighlight(element) {
+  element.style.color = styles.getPropertyValue('--btn-highlight-color');
+  setTimeout(function() {
+      element.style.color = styles.getPropertyValue('--btn-icon-color');
+    }, 200);
+}
+/*]]>*/

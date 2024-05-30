@@ -1,5 +1,4 @@
-<script  th:inline="javascript">
-
+/*<![CDATA[*/
   var divFeedback = document.getElementById("feedback");
   var inputCourse = document.getElementById("courseName");
   var inputGame = document.getElementById("gameName");
@@ -50,7 +49,7 @@
     // Use JQuery Ajax to make call to controller.
     $.ajax({
       type: "GET",
-      url: "[(@{/retrieveMatchingCourses})]",
+      url: contextPath + "retrieveMatchingCourses",
       contentType: "applcation/json",
       dataType: "json",
       data: {search: searchString},
@@ -99,5 +98,4 @@
       divFeedback.setAttribute("class", "");
     }
   }
-
-</script>
+/*]]>*/

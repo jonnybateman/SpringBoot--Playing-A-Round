@@ -1,15 +1,10 @@
-<script  th:inline="javascript">
-
+/*<![CDATA[*/
   var numberOfHoles = 18;
 
   // Set margin height for first element below nav bar.
   var navHeight = document.querySelector("nav").offsetHeight;
   var divContainer = document.getElementById("container");
   divContainer.style.cssText = "margin-top: " + (navHeight + 50) + "px;";
-
-  // Retrive model attributes that have been exposed to the web view.
-  var matchplayTeamScores = /*[[${matchplayTeamScores}]]*/ {};
-  var matchplayTeamsScoresList = /*[[${matchplayTeamsScoresList}]]*/ {};
 
   // Compare user's team hole scores against every other team's hole scores.
   for (let i=0; i<matchplayTeamsScoresList.length; i++) {
@@ -66,5 +61,4 @@
       return 1;
     }
   }
-
-</script>
+/*]]>*/

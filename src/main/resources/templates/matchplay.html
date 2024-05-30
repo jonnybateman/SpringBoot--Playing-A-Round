@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-  <title>Daytona Scores Page</title>
+  <title>cqueltech.com - Playing-A-Round Matchplay</title>
   <div th:replace="~{/fragments/head}" />
 </head>
 
@@ -32,7 +32,14 @@
 
   <div id="footer" th:replace="~{/fragments/footer}" />
 
-  <div th:replace="~{../javascript/js-matchplay}" />
+  <!-- Assign model attributes as global variables so they can be used in external -->
+  <!-- javascript file. -->
+  <script type="text/javascript" th:inline="javascript">
+    window.matchplayTeamScores = /*[[${matchplayTeamScores}]]*/ {};
+    window.matchplayTeamsScoresList = /*[[${matchplayTeamsScoresList}]]*/ {};
+  </script>
+
+  <script type="text/javascript" th:inline="javascript" th:src="@{/js/matchplay.js}"></script>
 
 </body>
 

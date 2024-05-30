@@ -120,7 +120,7 @@ public class AppController {
     // Save the game to the database.
     userService.saveGame(course, game.getGameName());
 
-    return "home";
+    return "redirect:/home";
   }
 
   /*
@@ -171,7 +171,7 @@ public class AppController {
     // Submit the new course and hole data to the database.
     userService.saveCourse(courseDataWrapper);
     
-    return "home";
+    return "redirect:/home";
   }
 
   /*
@@ -411,7 +411,7 @@ public class AppController {
                                         @RequestParam int score) {
 
     userService.setHoleScore(gameId, teamId, playerId, holeId, score);
-    return ResponseEntity.ok(true);
+    return ResponseEntity.ok(null);
   }
 
   /*

@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-  <title>Create Course Page</title>
+  <title>cqueltech.com - Playing-A-Round Create Course</title>
   <div th:replace="~{/fragments/head}" />
 </head>
 
@@ -110,7 +110,13 @@
     <div th:replace="~{/fragments/footer}" />
   </section>
 
-  <div th:replace="~{../javascript/js-create-course}" />
+  <!-- Assign model attributes as global variables so they can be used in external -->
+  <!-- javascript file. -->
+  <script type="text/javascript" th:inline="javascript">
+    window.contextPath = /*[[@{/}]]*/ "/";
+  </script>
+
+  <script type="text/javascript" th:inline="javascript" th:src="@{/js/create-course.js}"></script>
 
 </body>
 </html>

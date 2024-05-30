@@ -73,10 +73,12 @@ public class SecurityConfig {
     http
         .csrf((csrf) -> csrf.disable())
         .authorizeHttpRequests(configurer -> configurer
-            // Configure the CSS and IMG directories to be accesible to all without authentication.
+            // Configure the CSS, IMG, and JS directories to be accesible to all without authentication.
             // Ensures directories are accessible even when user has not bee authenticated.
             .requestMatchers(AntPathRequestMatcher.antMatcher("/css/**")).permitAll()
             .requestMatchers(AntPathRequestMatcher.antMatcher("/img/**")).permitAll()
+            .requestMatchers(AntPathRequestMatcher.antMatcher("/js/**")).permitAll()
+            //.requestMatchers(AntPathRequestMatcher.antMatcher("/favicon/**")).permitAll()
             // Allow anyone to access the register new user page.
             .requestMatchers(AntPathRequestMatcher.antMatcher("/register-user")).permitAll()
             .requestMatchers(AntPathRequestMatcher.antMatcher("/authenticateNewUser")).permitAll()

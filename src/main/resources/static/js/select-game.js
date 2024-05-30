@@ -1,6 +1,5 @@
-<script  th:inline="javascript">
-
-  var divGameCard = document.getElementById("selectGameCard");
+/*<![CDATA[*/
+var divGameCard = document.getElementById("selectGameCard");
   var divFeedback = document.getElementById("feedback");
   var inputGame = document.getElementById("gameName");
   var inputGameId = document.getElementById("gameId");
@@ -11,7 +10,7 @@
   // Apply game drop down div to it's parent inputGame.
   inputGame.parentNode.append(divGameList);
 
-  // Apply username and handicap cookie values to the appropriate elements in
+  // Apply username and handicap session storage values to the appropriate elements in
   // the navigation panel.
   document.getElementById("username").innerHTML = "User: " + getSessionStorageValue(getNameUser());
   let handicap = getSessionStorageValue(getNameHandicap());
@@ -37,19 +36,7 @@
     }
     
     let searchString = document.getElementById('gameName').value;
-    /*
-    if (searchString != null) {
-      if (event.which != '8') { // If event is not backspace/delete. 
-        if (searchString.length == 3 && !divGameList.hasChildNodes()) {
-          retrieveGames(searchString);
-        }
-      } else {
-        if (searchString.length < 3 && divGameList.hasChildNodes) {
-          closeGameList();
-        }
-      }
-    }
-    */
+  
     if (searchString.length == 3 && !divGameList.hasChildNodes()) {
       retrieveGames(searchString);
     } else if (searchString.length < 3 && divGameList.hasChildNodes) {
@@ -66,7 +53,7 @@
     // Use JQuery Ajax to make call to controller.
     $.ajax({
       type: "GET",
-      url: "[(@{/retrieveMatchingGames})]",
+      url: contextPath + "retrieveMatchingGames",
       contentType: "application/json",
       dataType: "json",
       data: {search: searchString},
@@ -144,7 +131,7 @@
       if (searchString != null && searchString != "") {
         $.ajax({
           type: "GET",
-          url: "[(@{/retrieveGame})]",
+          url: contextPath + "retrieveGame",
           contentType: "application/json",
           dataType: "json",
           data: { gameName: searchString },
@@ -166,5 +153,4 @@
       gameForm.submit();
     }
   }
-
-</script>
+/*]]>*/

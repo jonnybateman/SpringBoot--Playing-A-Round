@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-  <title>Team Selection Page</title>
+  <title>cqueltech.com - Playing-A-Round Team Selection</title>
   <div th:replace="~{/fragments/head}" />
 </head>
 
@@ -42,11 +42,15 @@
     </div>
   </div>
   
-  <!--</div>-->
-  
   <div id="footer" th:replace="~{/fragments/footer}" />
+
+  <!-- Assign model attributes as global variables so they can be used in external -->
+  <!-- javascript file. -->
+  <script type="text/javascript" th:inline="javascript">
+    window.contextPath = /*[[@{/}]]*/ "/";
+  </script>
   
-  <div th:replace="~{../javascript/js-team-selection}" />
+  <script type="text/javascript" th:inline="javascript" th:src="@{/js/team-selection.js}"></script>
 
 </body>
 

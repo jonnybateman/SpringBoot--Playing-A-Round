@@ -1,5 +1,4 @@
-<script  th:inline="javascript">
-
+/*<![CDATA[*/
   var navHeight = document.querySelector("nav").offsetHeight;
   var footerHeight = document.getElementById("footer").offsetHeight;
   var screenHeight = document.documentElement.clientHeight;
@@ -43,12 +42,12 @@
         // Send team id to controller to add user to the specified team.
         $.ajax({
           type: "GET",
-          url: "[(@{/addPlayerToGame})]",
+          url: contextPath + "addPlayerToGame",
           dataType: "json",
           data: {"teamId": teamId, "gameId": instructionContainer.dataset.value},
           success: function(result) {
             if (result == true) {
-              window.location.href = "[(@{/score-card})]?gameId=" + instructionContainer.dataset.value +
+              window.location.href = contextPath + "score-card?gameId=" + instructionContainer.dataset.value +
                   "&teamId=" + teamId;
             }
           }  
@@ -56,5 +55,4 @@
       });
     }
   }
-
-</script>
+/*]]>*/

@@ -2,12 +2,19 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-  <title>Login Redirect Page</title>
-  <div th:replace="~{../javascript/js-storage-management}" />
+  <title>cqueltech.com - Playing-A-Round Login Redirect</title>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+  <script type="text/javascript" th:inline="javascript" th:src="@{/js/storage-management.js}"></script>
 </head>
 
 <body>
-  <div th:replace="~{../javascript/js-login-redirect}" />
+  <!-- Assign model attributes as global variables so they can be used in external -->
+  <!-- javascript file. -->
+  <script type="text/javascript" th:inline="javascript">
+    window.contextPath = /*[[@{/}]]*/ "/";
+  </script>
+  
+  <script th:inline="javascript" th:src="@{/js/login-redirect.js}"></script>
 </body>
 
 </html>
