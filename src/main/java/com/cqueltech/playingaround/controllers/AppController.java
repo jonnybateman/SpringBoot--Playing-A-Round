@@ -410,6 +410,8 @@ public class AppController {
                                         @RequestParam int holeId,
                                         @RequestParam int score) {
 
+    log.info("setHoleScore");
+
     userService.setHoleScore(gameId, teamId, playerId, holeId, score);
     return ResponseEntity.ok(null);
   }

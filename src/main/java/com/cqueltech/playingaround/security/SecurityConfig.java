@@ -117,8 +117,11 @@ public class SecurityConfig {
         .exceptionHandling(configurer -> configurer
             .accessDeniedPage("/access-denied"))
         .sessionManagement(session -> session
+            // If request is made and session has timed out request user to log back in.
+            .invalidSessionUrl("/logout")
             // Ensure user can have only one active session at a time.
-            .maximumSessions(1));
+            .maximumSessions(1)
+            .maxSessionsPreventsLogin(true));
 
     return http.build();
   }

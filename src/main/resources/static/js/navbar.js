@@ -1,6 +1,4 @@
 /*<![CDATA[*/
-// Get the context path for call to app controller.
-//var contextPath = /*[[@{/}]]*/ "/";
 
 let handicap = getSessionStorageValue(getNameHandicap());
 document.getElementById("username").innerHTML = "User: " + getSessionStorageValue(getNameUser());
