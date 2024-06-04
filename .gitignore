@@ -5,6 +5,7 @@ target/
 !**/src/test/**/target/
 /out
 application.properties
+/127.0.0.1:8080
 
 ### STS ###
 .apt_generated

@@ -11,5 +11,5 @@ public class AppConfig {
   public HandicapIndexCalculator handicapIndexCalculator() {
     return new HandicapIndexCalculator();
   }
-
+  
 }
