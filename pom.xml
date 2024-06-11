@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.cqueltech</groupId>
     <artifactId>playingaround</artifactId>
-    <version>1.2.1</version>
+    <version>1.2.2</version>
     <packaging>jar</packaging> <!-- value of jar for .jar file, or, value of war for .war package -->
     <name>playingaround</name>
     <description>Playing-A-Round golf web application</description>
