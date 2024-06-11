@@ -322,19 +322,19 @@ nav {
 }
 
 .scorecard-div-table {
-  width: 90%;
+  width: 94%;
   margin-left: auto;
   margin-right: auto;
   background-color: var(--table-body-bg-color);
 }
 
 .scorecard-table-text {
-  font-size: 1.8rem;
+  font-size: 1.7rem;
   color: var(--table-text-color);
 }
 
 .scorecard-table {
-  table-layout: fixed;
+  table-layout:auto;
 }
 
 .range-text {

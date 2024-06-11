@@ -257,6 +257,7 @@ CREATE TABLE `players` (
   `username` varchar(45) NOT NULL,
   `drive_distance` int,
   `handicap_index` float,
+  `entry_date` timestamp DEFAULT now(),
   PRIMARY KEY (`id`),
   KEY `FK_TEAM_ID_idx` (`team_id`),
   CONSTRAINT `FK_TEAM_ID` FOREIGN KEY (`team_id`)
@@ -293,33 +294,34 @@ delimiter $$
 CREATE TRIGGER trg_au_player AFTER UPDATE ON `playing-a-round`.players
 FOR EACH ROW
 BEGIN
-    DECLARE v_score_differentials_used INT;
-    DECLARE v_handicap_adjustment INT;
-    DECLARE v_calculated_handicap FLOAT;
+  DECLARE v_score_differentials_used INT;
+  DECLARE v_handicap_adjustment INT;
+  DECLARE v_calculated_handicap FLOAT;
     
-    IF NEW.handicap_index <> OLD.handicap_index THEN
+  IF NEW.handicap_index <> IFNULL(OLD.handicap_index, -99) THEN
 		SELECT score_differentials_used, adjustment
 			INTO v_score_differentials_used, v_handicap_adjustment
 		FROM handicap_calculation_parameters
 		WHERE no_of_score_differentials = (SELECT count(*)
-										   FROM players
-                                           WHERE username = NEW.username
-                                           AND handicap_index <> 0 LIMIT 20);
+										                  FROM players
+                                      WHERE username = NEW.username
+                                      AND handicap_index <> 0 LIMIT 20);
 
 		IF v_score_differentials_used IS NOT NULL THEN
-			SELECT avg(handicap_index) AS average
+			SELECT ROUND(AVG(handicap_index), 1) AS average
 				INTO v_calculated_handicap
 			FROM (SELECT handicap_index
 				  FROM players
 				  WHERE username = NEW.username
-				  ORDER BY handicap_index ASC LIMIT v_score_differentials_used) AS players;
+          AND handicap_index IS NOT NULL
+				  ORDER BY entry_date ASC, handicap_index ASC LIMIT v_score_differentials_used) AS players;
                   
 			SET v_calculated_handicap := v_calculated_handicap - v_handicap_adjustment;
             
-            UPDATE users
-            SET handicap = v_calculated_handicap
-            WHERE username = NEW.username;
-        END IF;
+      UPDATE users
+      SET handicap = v_calculated_handicap
+      WHERE username = NEW.username;
+    END IF;
 	END IF;
 END;$$
 delimiter ;
@@ -681,3 +683,4 @@ delimiter ;
 
 GRANT EXECUTE ON PROCEDURE proc_update_daytona TO playingaround;
 GRANT EXECUTE ON PROCEDURE proc_update_stableford TO playingaround;
+GRANT TRIGGER ON trg_au_player TO playingaround;
