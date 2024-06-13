@@ -10,6 +10,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -64,6 +66,11 @@ public class SecurityConfig {
     return new HttpSessionEventPublisher();
   }
 
+  @Bean
+  public SessionRegistry sessionRegistry() {
+    return new SessionRegistryImpl();
+  }
+
   /*
    * Configure security of http requests for web application.
    */
@@ -78,7 +85,6 @@ public class SecurityConfig {
             .requestMatchers(AntPathRequestMatcher.antMatcher("/css/**")).permitAll()
             .requestMatchers(AntPathRequestMatcher.antMatcher("/img/**")).permitAll()
             .requestMatchers(AntPathRequestMatcher.antMatcher("/js/**")).permitAll()
-            //.requestMatchers(AntPathRequestMatcher.antMatcher("/favicon/**")).permitAll()
             // Allow anyone to access the register new user page.
             .requestMatchers(AntPathRequestMatcher.antMatcher("/register-user")).permitAll()
             .requestMatchers(AntPathRequestMatcher.antMatcher("/authenticateNewUser")).permitAll()
@@ -107,21 +113,24 @@ public class SecurityConfig {
             .defaultSuccessUrl("/login-redirect", true)
             // Allow everyone one to see the login page
             .permitAll())
-        // Add logout support for default URL (/logout).
+        // Add logout support for default URL (/logout).  
         .logout(logout -> logout
             .permitAll()
             // Delete the session's cookies.
             .addLogoutHandler(new HeaderWriterLogoutHandler(new ClearSiteDataHeaderWriter(Directive.COOKIES)))
-            .invalidateHttpSession(true))
+            .deleteCookies("JSESSIONID")
+            .invalidateHttpSession(false))
         // Setup exception handling for access denied based on role of user.
         .exceptionHandling(configurer -> configurer
             .accessDeniedPage("/access-denied"))
-        .sessionManagement(session -> session
-            // If request is made and session has timed out request user to log back in.
-            .invalidSessionUrl("/logout")
+        .sessionManagement((session) -> session
+            // If session has expired direct the user back to the login page.
+            .invalidSessionUrl("/showMyLoginPage?logout")
             // Ensure user can have only one active session at a time.
             .maximumSessions(1)
-            .maxSessionsPreventsLogin(true));
+            // If session already exists still allow user to log back in. Existing session
+            // will be expired and new session created.
+            .maxSessionsPreventsLogin(false));
 
     return http.build();
   }
