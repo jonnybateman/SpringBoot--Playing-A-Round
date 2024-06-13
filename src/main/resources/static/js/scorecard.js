@@ -222,61 +222,8 @@ setPinLocation.addEventListener("click", function () {
   }
 });
 
-// Create click listener for measureDrive icon.
-/*
-var measureDriveFlag = false;
-var driveLocLat;
-var driveLocLong;
-var measureDrive = document.getElementById("measureDrive");
-measureDrive.addEventListener("click", function() {
-  if (!measureDriveFlag) {
-    if (confirm("Do you want to measure your drive?\nHold ball location button for 3s to cancel.")) {
-      // Get the GPS location for drive position.
-      if (navigator.geolocation) {
-        driveLocLat = loc_lat;
-        driveLocLong = loc_long;
-        measureDrive.classList.remove("fa-golf-ball-tee");
-        measureDrive.classList.add("fa-arrows-to-circle");
-        measureDriveFlag = true;
-      } else {
-        document.getElementById("range").innerHTML = "Sorry, geolocation not supported";
-      }
-    }
-  } else {
-    // Get the GPS location for where the ball ended up and calculate distance.
-    if (navigator.geolocation) {
-      // Calculate drive distance
-      let distance = Math.round(calculateYardage(loc_lat, loc_long, driveLocLat, driveLocLong));
-
-      // Display the distance driven on scorecard.
-      document.getElementById("range").innerHTML = "Drive: " + distance + " yards";
-
-      if (distance > getSessionStorageValue(getNameDriveDistance())) {
-        // Post the distance to the database. If the distance is longer than the
-        // current longest drive for the player then the distance value will be
-        // updated in the database.
-        $.ajax({
-          type: "post",
-          url: contextPath + "setLongestDrive",
-          dataType: "json",
-          data: {
-            "playerId": playerId,
-            "distance": distance
-          },
-          success: function (result) {
-            setSessionStorageValue(getNameDriveDistance(), distance);
-          }
-        });
-      }
-      measureDrive.classList.remove("fa-arrows-to-circle");
-      measureDrive.classList.add("fa-golf-ball-tee");
-      measureDriveFlag = false;
-    } else {
-      document.getElementById("range").innerHTML = "Sorry, geolocation not supported";
-    }
-  }
-});
-*/
+// Create click listener for measureDrive icon. A long press of >500ms will cancel
+// the drive measurement action.
 var measureDriveFlag = false;
 var driveLocLat;
 var driveLocLong;
@@ -285,7 +232,6 @@ var touchStartTime;
 measureDrive.addEventListener("touchstart", function(e) {
   touchStartTime = Date.now();
 });
-
 measureDrive.addEventListener("touchend", function () {
   let touchTimeLength = Date.now() - touchStartTime;
   if (touchTimeLength < 500) {

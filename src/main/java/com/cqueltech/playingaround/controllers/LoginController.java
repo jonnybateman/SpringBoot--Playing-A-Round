@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -66,7 +65,7 @@ public class LoginController {
       // Dislplay the login html page. 'fancy-login' is the name of the login HTML file.
       return "login";
     }
-    return "/login-redirect";
+    return "redirect:/login-redirect";
   }
 
   /*
