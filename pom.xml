@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.cqueltech</groupId>
     <artifactId>playingaround</artifactId>
-    <version>1.2.3</version>
+    <version>1.2.4</version>
     <packaging>jar</packaging> <!-- value of jar for .jar file, or, value of war for .war package -->
     <name>playingaround</name>
     <description>Playing-A-Round golf web application</description>
@@ -88,10 +88,10 @@
             <version>2.2.4</version>
         </dependency>
     
-      <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-webmvc</artifactId>
-      </dependency>
+        <dependency>
+          <groupId>org.springframework</groupId>
+          <artifactId>spring-webmvc</artifactId>
+        </dependency>
     
     </dependencies>
 
@@ -125,15 +125,13 @@
         </plugins>
     </build>
 
-
-
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-webmvc</artifactId>
-        <version>6.0.11</version>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-webmvc</artifactId>
+                <version>6.0.11</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 </project>

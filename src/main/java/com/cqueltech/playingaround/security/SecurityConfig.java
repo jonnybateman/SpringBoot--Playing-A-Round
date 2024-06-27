@@ -116,8 +116,9 @@ public class SecurityConfig {
         // Add logout support for default URL (/logout).  
         .logout(logout -> logout
             .permitAll()
-            // Delete the session's cookies.
-            .addLogoutHandler(new HeaderWriterLogoutHandler(new ClearSiteDataHeaderWriter(Directive.COOKIES)))
+            // Use Clear-Site-Data HTTP response header to instruct browser to remove data
+            // cached in local storage.
+            .addLogoutHandler(new HeaderWriterLogoutHandler(new ClearSiteDataHeaderWriter(Directive.ALL)))
             .deleteCookies("JSESSIONID")
             .invalidateHttpSession(false))
         // Setup exception handling for access denied based on role of user.
