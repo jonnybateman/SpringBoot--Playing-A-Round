@@ -316,15 +316,25 @@ BEGIN
                                       AND handicap_index <> 0 LIMIT 20);
 
 		IF v_score_differentials_used IS NOT NULL THEN
-			SELECT ROUND(AVG(handicap_index), 1) AS average
-				INTO v_calculated_handicap
-			FROM (SELECT handicap_index
-				  FROM players
-				  WHERE username = NEW.username
-          AND handicap_index IS NOT NULL
-				  ORDER BY entry_date ASC, handicap_index ASC LIMIT v_score_differentials_used) AS players;
+      IF v_score_differentials_used < 20 THEN
+			  SELECT ROUND(AVG(handicap_index), 1) AS average
+				  INTO v_calculated_handicap
+			  FROM (SELECT handicap_index
+				    FROM players
+				    WHERE username = NEW.username
+            AND handicap_index IS NOT NULL
+	  			  ORDER BY handicap_index ASC LIMIT v_score_differentials_used) AS players;
                   
-			SET v_calculated_handicap := v_calculated_handicap - v_handicap_adjustment;
+		  	SET v_calculated_handicap := v_calculated_handicap - v_handicap_adjustment;
+      ELSE
+        SELECT ROUND(AVG(handicap_index), 1) AS average
+				  INTO v_calculated_handicap
+			  FROM (SELECT handicap_index
+				    FROM players
+				    WHERE username = NEW.username
+            AND handicap_index IS NOT NULL
+	  			  ORDER BY entry_date ASC LIMIT v_score_differentials_used) AS players;
+      END IF;
             
       UPDATE users
       SET handicap = v_calculated_handicap
