@@ -6,6 +6,7 @@ package com.cqueltech.playingaround.security;
  * to the login form, and so on.
  */
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -19,6 +20,9 @@ import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.HeaderWriterLogoutHandler;
+import org.springframework.security.web.authentication.rememberme.InMemoryTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.security.web.header.writers.ClearSiteDataHeaderWriter;
 import org.springframework.security.web.header.writers.ClearSiteDataHeaderWriter.Directive;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
@@ -30,6 +34,9 @@ import java.util.Map;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+
+  @Autowired
+  DataSource dataSource;
 
   /*
    * Add support for JDBC...no more hard coded users. Tells Spring Boot that we are
@@ -75,7 +82,7 @@ public class SecurityConfig {
    * Configure security of http requests for web application.
    */
   @Bean
-  public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+  public SecurityFilterChain filterChain(HttpSecurity http, PersistentTokenRepository persistentTokenRepository) throws Exception {
 
     http
         .csrf((csrf) -> csrf.disable())
@@ -100,6 +107,7 @@ public class SecurityConfig {
             .requestMatchers(AntPathRequestMatcher.antMatcher("/daytona")).hasAuthority("GOLFER")
             .requestMatchers(AntPathRequestMatcher.antMatcher("/matchplay")).hasAuthority("GOLFER")
             .requestMatchers(AntPathRequestMatcher.antMatcher("/drive-distance")).hasAuthority("GOLFER")
+            .requestMatchers(AntPathRequestMatcher.antMatcher("/ariel")).hasAnyAuthority("GOLFER")
             // Any request to the app must be authenticated
             .anyRequest().authenticated())
         // Customize the form login process.
@@ -119,7 +127,7 @@ public class SecurityConfig {
             // Use Clear-Site-Data HTTP response header to instruct browser to remove data
             // cached in local storage.
             .addLogoutHandler(new HeaderWriterLogoutHandler(new ClearSiteDataHeaderWriter(Directive.ALL)))
-            .deleteCookies("JSESSIONID")
+            .deleteCookies("JSESSIONID", "remember-me-cookie")
             .invalidateHttpSession(false))
         // Setup exception handling for access denied based on role of user.
         .exceptionHandling(configurer -> configurer
@@ -131,7 +139,12 @@ public class SecurityConfig {
             .maximumSessions(1)
             // If session already exists still allow user to log back in. Existing session
             // will be expired and new session created.
-            .maxSessionsPreventsLogin(false));
+            .maxSessionsPreventsLogin(false))
+        .rememberMe(rememberMe -> rememberMe
+            .tokenValiditySeconds(1*24*60*60)
+            .tokenRepository(persistentTokenRepositoryDatabase())
+            .rememberMeCookieName("remember-me-cookie")
+            .rememberMeParameter("remember-me"));
 
     return http.build();
   }
@@ -149,5 +162,20 @@ public class SecurityConfig {
 
     //return new BCryptPasswordEncoder();
     return new DelegatingPasswordEncoder(idForEncode, encoders);
+  }
+
+  /*
+  @Bean
+  public PersistentTokenRepository persistentTokenRepositoryMemory() {
+    InMemoryTokenRepositoryImpl tokenRepositoryImpl = new InMemoryTokenRepositoryImpl();
+    return tokenRepositoryImpl;
+  }
+  */
+
+  @Bean
+  public PersistentTokenRepository persistentTokenRepositoryDatabase() {
+    JdbcTokenRepositoryImpl db = new JdbcTokenRepositoryImpl();
+    db.setDataSource(dataSource);
+    return db;
   }
 }

@@ -8,6 +8,10 @@ const nameTeam = "PlayingAroundTeamName";
 const nameHoleNo = "PlayingAroundHoleNo";
 const nameHoleId = "PlayingAroundHoleId";
 const nameDriveDistance = "PlayingAroundDriveDistance";
+const nameLocLat = "PlayingAroundLocLat";
+const nameLocLng = "PlayingAroundLocLon";
+const namePinLat = "PlayingAroundPinLat";
+const namePinLng = "PlayingAroundPinLng";
 
 function getNameUser() {
   return nameUser;
@@ -39,6 +43,22 @@ function getNameHoleId() {
 
 function getNameDriveDistance() {
   return nameDriveDistance;
+}
+
+function getNameLocLat() {
+  return nameLocLat;
+}
+
+function getNameLocLon() {
+  return nameLocLng;
+}
+
+function getNamePinLat() {
+  return namePinLat;
+}
+
+function getNamePinLng() {
+  return namePinLng
 }
 
 /*

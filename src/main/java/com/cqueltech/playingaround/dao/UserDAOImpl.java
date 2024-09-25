@@ -19,7 +19,7 @@ import com.cqueltech.playingaround.dto.GameDTO;
 import com.cqueltech.playingaround.dto.GamePlayerDTO;
 import com.cqueltech.playingaround.dto.HoleScoreDTO;
 import com.cqueltech.playingaround.dto.PlayerDetailsDTO;
-import com.cqueltech.playingaround.dto.PinLocationDTO;
+import com.cqueltech.playingaround.dto.LocationDTO;
 import com.cqueltech.playingaround.dto.ScorecardDTO;
 import com.cqueltech.playingaround.entity.Course;
 import com.cqueltech.playingaround.entity.Game;
@@ -263,16 +263,16 @@ public class UserDAOImpl implements UserDAO {
   /*
    * Retrieve pin location data from database for specified hole.
    */
-  public PinLocationDTO getPinLocationData(int holeId) {
+  public LocationDTO getPinLocationData(int holeId) {
 
     // Create HQL query.
-    TypedQuery<PinLocationDTO> query = entityManager.createQuery(
+    TypedQuery<LocationDTO> query = entityManager.createQuery(
         "SELECT new com.cqueltech.playingaround.dto.PinLocationDTO(locLat, locLong) " +
         "FROM Hole WHERE id = " + holeId,
-        PinLocationDTO.class);
+        LocationDTO.class);
 
     // Execute the query.
-    PinLocationDTO pinLocationData = query.getSingleResult();
+    LocationDTO pinLocationData = query.getSingleResult();
 
     return pinLocationData;
   }
