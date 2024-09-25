@@ -39,6 +39,14 @@ VALUES
 (3,'mike','GOLFER'),
 (4,'susan','GOLFER');
 
+CREATE TABLE `persistent_logins` (
+  `username` varchar(64) NOT NULL,
+  `series` varchar(64) NOT NULL,
+  `token` varchar(64) NOT NULL,
+  `last_used` timestamp NOT NULL,
+  PRIMARY KEY (`series`)
+);
+
 CREATE TABLE `courses` (
   `id` int NOT NULL AUTO_INCREMENT,
   `course_name` varchar(60) NOT NULL,

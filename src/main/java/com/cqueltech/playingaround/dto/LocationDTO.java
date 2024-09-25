@@ -6,7 +6,7 @@ package com.cqueltech.playingaround.dto;
  * Thymeleaf template.
  */
 
-public class PinLocationDTO {
+public class LocationDTO {
 
   /*
    * Define class variables
@@ -20,9 +20,9 @@ public class PinLocationDTO {
    * Define class constructors
    */
 
-  public PinLocationDTO() {}
+  public LocationDTO() {}
 
-  public PinLocationDTO(String locLat, String locLong) {
+  public LocationDTO(String locLat, String locLong) {
     this.locLat = locLat;
     this.locLong = locLong;
   }

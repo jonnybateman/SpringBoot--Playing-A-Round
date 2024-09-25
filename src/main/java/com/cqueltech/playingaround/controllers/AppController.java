@@ -493,4 +493,13 @@ public class AppController {
     return "drive-distance";
   }
 
+  /*
+   * Mapping to display the current position on gogle maps.
+   */
+  @GetMapping("/ariel")
+  public String showArielView() {
+
+    return "ariel";
+  }
+
 }

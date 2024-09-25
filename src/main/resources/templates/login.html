@@ -6,7 +6,7 @@
   <div th:replace="~{/fragments/head}" />
 </head>
 
-<body>
+<body class="body-bg-img">
   <!-- Display the title navigation bar -->
   <section id="title">
     <div th:replace="~{/fragments/header}" />
@@ -66,6 +66,12 @@
               <div style="margin-bottom: 25px;" class="input-group">
                 <input type="password" name="password" placeholder="password"
                     class="form-control field card-input-text" />
+              </div>
+
+              <!-- Remember Me checkbox-->
+              <div style="margin-bottom: 25px;" class="form-check">
+                <input id="rememberMe" type="checkbox" name="remember-me" class="form-check-input"/>
+                <label for="rememberMe" class="form-check-label">Remember Me</label>
               </div>
 
               <!-- Login/Submit Button -->

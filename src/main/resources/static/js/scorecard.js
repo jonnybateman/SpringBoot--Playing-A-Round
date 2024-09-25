@@ -45,6 +45,8 @@ if (getSessionStorageValue(getNameHoleNo()) == null) {
   setSessionStorageValue(getNameHoleNo(), 1);
   setSessionStorageValue(getNameHoleId(), document.getElementById("hole1").dataset.holeId);
                 // element attribute data-hole-id  => holeId
+  setSessionStorageValue(getNamePinLat(), document.getElementById("hole1").dataset.locLat);
+  setSessionStorageValue(getNamePinLng(), document.getElementById("hole1").dataset.locLong);
 }
 
 // Get the element to store hole number as a data attribute.
@@ -55,33 +57,8 @@ hole.setAttribute("data-hole-no", getSessionStorageValue(getNameHoleNo()));
 document.getElementById("hole" + getSessionStorageValue(getNameHoleNo())).style.backgroundColor =
     styles.getPropertyValue('--table-body-bg-color');
 
-// Setup an event listener for when the document content has been loaded. It will
-// create a GeoLocation WatchPosition object to return the device's current position
-// when a change in position has been detected.
-var watchId = null;
-var loc_lat = null;
-var loc_long = null;
-const geolocationOptions = {
-  enableHighAccuracy: true,
-  maximumAge: 0
-};
-document.addEventListener("DOMContentLoaded", function() {
-    if (navigator.geolocation) {
-      watchId = navigator.geolocation.watchPosition(
-                    onGeoSuccessCallback, showError, geolocationOptions);
-    } else {
-      alert("Sorry, GPS location not available.")
-    }
-  }
-);
-
 // Events to occur prior to redirecting to a different URL.
 window.addEventListener("beforeunload", function() {
-    // If a Geolocation WatchPosition object has been created, deactivate it on page unload.
-    if (watchId != null) {
-      navigator.geolocation.clearWatch(watchId);
-    }
-
     // Before redirect, post score for current hole to the database if it has changed.
     if (scoreChanged) {
       let holeNo = hole.dataset.holeNo;
@@ -144,6 +121,10 @@ prevHoleButton.addEventListener("click", function() {
         }
       });
     }
+
+    // Update the session storage pin location values for the new hole.
+    setSessionStorageValue(getNamePinLat(), currHole.dataset.locLat);
+    setSessionStorageValue(getNamePinLng(), currHole.dataset.locLong);
   }
 });
 
@@ -184,6 +165,10 @@ nextHoleButton.addEventListener("click", function() {
         }
       });
     }
+
+    // Update the session storage pin location values for the new hole.
+    setSessionStorageValue(getNamePinLat(), currHole.dataset.locLat);
+    setSessionStorageValue(getNamePinLng(), currHole.dataset.locLong);
   }
 });
 
@@ -204,8 +189,8 @@ setPinLocation.addEventListener("click", function () {
           dataType: "json",
           data: {
             "holeId": hole.dataset.holeId,
-            "lat": loc_lat,
-            "lon": loc_long
+            "lat": getSessionStorageValue(getNameLocLat),
+            "lon": getSessionStorageValue(getNameLocLon)
           },
           success: function (result) {
             if (result == true) {
@@ -239,8 +224,8 @@ measureDrive.addEventListener("touchend", function () {
       if (confirm("Do you want to measure your drive?\nLong press ball location button to cancel.")) {
         // Get the GPS location for drive position.
         if (navigator.geolocation) {
-          driveLocLat = loc_lat;
-          driveLocLong = loc_long;
+          driveLocLat = Number(getSessionStorageValue(getNameLocLat()));
+          driveLocLong = Number(getSessionStorageValue(getNameLocLon()));
           measureDrive.classList.remove("fa-golf-ball-tee");
           measureDrive.classList.add("fa-arrows-to-circle");
           measureDriveFlag = true;
@@ -252,7 +237,10 @@ measureDrive.addEventListener("touchend", function () {
       // Get the GPS location for where the ball ended up and calculate distance.
       if (navigator.geolocation) {
         // Calculate drive distance
-        let distance = Math.round(calculateYardage(loc_lat, loc_long, driveLocLat, driveLocLong));
+        let distance = Math.round(calculateYardage(Number(getSessionStorageValue(getNameLocLat())),
+                                                  Number(getSessionStorageValue(getNameLocLon())),
+                                                  driveLocLat,
+                                                  driveLocLong));
 
         // Display the distance driven on scorecard.
         document.getElementById("range").innerHTML = "Drive: " + distance + " yards";
@@ -300,7 +288,10 @@ rangeToPin.addEventListener("click", function() {
   if (pinLocLat != null) {
     // If GeoLocation is available calculate distance to the pin.
     if (navigator.geolocation) {
-      let yardage = calculateYardage(loc_lat, loc_long, Number(pinLocLat), Number(pinLocLong));
+      let yardage = calculateYardage(Number(getSessionStorageValue(getNameLocLat())),
+                                    Number(getSessionStorageValue(getNameLocLon())),
+                                    Number(pinLocLat),
+                                    Number(pinLocLong));
 
       if (yardage != null) {
         document.getElementById("range").innerHTML = Math.round(yardage) + " yards to pin";
@@ -334,36 +325,6 @@ strokeMinus.addEventListener("click", function() {
   document.getElementById("inputHole" + getSessionStorageValue(getNameHoleNo())).value = scoreInputValue + 1;
   scoreChanged = true;
 });
-
-/*
- * Callback method when geolocation.watchPosition has successfully detected a change
- * in the device's location.
- */
-function onGeoSuccessCallback(position) {
-  loc_lat = position.coords.latitude;
-  loc_long = position.coords.longitude;
-}
-
-/*
- * Callback method to show any errors raised when attempting to use geo location.
- */
- function showError(error) {
-  switch(error.code) {
-    case error.PERMISSION_DENIED:
-      alert("User denied the request for Geolocation.");
-      break;
-    case error.POSITION_UNAVAILABLE:
-      alert("Location information is unavailable.");
-      break;
-    case error.TIMEOUT:
-      alert("The request to get user location timed out.");
-      break;
-    case error.UNKNOWN_ERROR:
-      alert("An unknown error occurred.");
-      break;
-  }
-  navigator.geolocation.clearWatch(watchId);
-}
 
 /*
  * Calculate the distance in yards between two sets of GPS coordinates.

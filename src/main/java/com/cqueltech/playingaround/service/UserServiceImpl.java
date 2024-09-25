@@ -24,7 +24,7 @@ import com.cqueltech.playingaround.dto.GamePlayerDTO;
 import com.cqueltech.playingaround.dto.HoleDataDTO;
 import com.cqueltech.playingaround.dto.HoleScoreDTO;
 import com.cqueltech.playingaround.dto.NewUserDTO;
-import com.cqueltech.playingaround.dto.PinLocationDTO;
+import com.cqueltech.playingaround.dto.LocationDTO;
 import com.cqueltech.playingaround.dto.ScorecardDTO;
 import com.cqueltech.playingaround.dto.TeamDTO;
 import com.cqueltech.playingaround.dto.PlayerDetailsDTO;
@@ -230,7 +230,7 @@ public class UserServiceImpl implements UserService {
    * Get the pin GPS coordinates for the specified hole.
    */
   @Override
-  public PinLocationDTO getPinLocationData(int holeId) {
+  public LocationDTO getPinLocationData(int holeId) {
 
     return userDAO.getPinLocationData(holeId);
   }

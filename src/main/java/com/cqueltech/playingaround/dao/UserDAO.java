@@ -9,7 +9,7 @@ import com.cqueltech.playingaround.dto.GameDTO;
 import com.cqueltech.playingaround.dto.GamePlayerDTO;
 import com.cqueltech.playingaround.dto.HoleScoreDTO;
 import com.cqueltech.playingaround.dto.PlayerDetailsDTO;
-import com.cqueltech.playingaround.dto.PinLocationDTO;
+import com.cqueltech.playingaround.dto.LocationDTO;
 import com.cqueltech.playingaround.dto.ScorecardDTO;
 import com.cqueltech.playingaround.entity.Course;
 import com.cqueltech.playingaround.entity.Game;
@@ -47,7 +47,7 @@ public interface UserDAO {
 
   List<ScorecardDTO> getScorecard(int gameId);
 
-  PinLocationDTO getPinLocationData(int holeId);
+  LocationDTO getPinLocationData(int holeId);
 
   int updatePinLocation(int holeId, String locLat, String locLong);
 

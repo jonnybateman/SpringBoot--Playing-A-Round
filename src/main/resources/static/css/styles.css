@@ -20,7 +20,6 @@
 }
 
 body {
-  background-image: url('../img/bg-img.jpeg');
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -31,7 +30,11 @@ body {
  * Multi-Page - Classes
  */
 
- .disable-dbl-tap-zoom {
+.body-bg-img {
+  background-image: url('../img/bg-img.jpeg');
+}
+
+.disable-dbl-tap-zoom {
   touch-action:none;
 }
 
@@ -222,7 +225,7 @@ nav {
  * Loging Page - Classes
  */
 
- .card-login-width {
+.card-login-width {
   width: 60%;
 }
 
@@ -468,4 +471,13 @@ nav {
   margin-left: 20px;
   margin-right: 20px;
   word-break: break-all;
+}
+
+/*
+ * Ariel View Page
+ */
+
+/* Set font size for google maps info window */
+.iw-font-size {
+  font-size: 30px;
 }
