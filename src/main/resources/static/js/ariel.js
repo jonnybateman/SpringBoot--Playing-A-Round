@@ -25,7 +25,7 @@ async function initMap() {
     zoom: 18,
     mapTypeId: google.maps.MapTypeId.SATELLITE,
     disableDefaultUI: true,
-    mapId: "57d9afdedad430ee"
+    mapId: "google-map-api-id"
   };
 
   // Create a map object to be displayed.
